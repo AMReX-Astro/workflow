@@ -1,0 +1,358 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Working at NERSC &mdash; AMReX-Astro 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="AMReX-Astro 1.0 documentation" href="index.html"/>
+        <link rel="prev" title="AMReX Astrophysics Suite" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> AMReX-Astro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Working at NERSC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#edison">Edison</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#intel">Intel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cray">Cray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gnu">GNU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hypre">Hypre</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preferred-configuration">Preferred configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cori-haswell">Cori Haswell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cori-knl">Cori KNL</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AMReX-Astro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Working at NERSC</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/nersc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="working-at-nersc">
+<h1>Working at NERSC<a class="headerlink" href="#working-at-nersc" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="edison">
+<h2>Edison<a class="headerlink" href="#edison" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="intel">
+<h3>Intel<a class="headerlink" href="#intel" title="Permalink to this headline">¶</a></h3>
+<p>Intel is the default programming environment on edison and appear to
+be the preferred compilers.  The Intel 18.0.2 compilers seem to work
+well at NERSC.  These are not currently the default, so you will need
+to do a <code class="docutils literal"><span class="pre">module</span> <span class="pre">swap</span></code> to load them.  Note: 18.0.1 do not seem to work.</p>
+</div>
+<div class="section" id="cray">
+<h3>Cray<a class="headerlink" href="#cray" title="Permalink to this headline">¶</a></h3>
+<p>No current information.</p>
+</div>
+<div class="section" id="gnu">
+<h3>GNU<a class="headerlink" href="#gnu" title="Permalink to this headline">¶</a></h3>
+<p>You need to swap environments:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">swap</span> <span class="n">PrgEnv</span><span class="o">-</span><span class="p">{</span><span class="n">intel</span><span class="p">,</span><span class="n">gnu</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>There are no known issues with GNU.</p>
+</div>
+<div class="section" id="hypre">
+<h3>Hypre<a class="headerlink" href="#hypre" title="Permalink to this headline">¶</a></h3>
+<p>On Edison, the Cray _Third Party Scientific <a href="#id1"><span class="problematic" id="id2">Libraries_</span></a> provide <code class="docutils literal"><span class="pre">hypre</span></code>
+in a form that works directly with the compiler wrappers used on that
+machine (<code class="docutils literal"><span class="pre">CC</span></code>, <code class="docutils literal"><span class="pre">ftn</span></code>, …).  To use this, simply do:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">cray</span><span class="o">-</span><span class="n">tpsl</span>
+</pre></div>
+</div>
+<p>There is no need to set <code class="docutils literal"><span class="pre">HYPRE_DIR</span></code>, but note however that the
+dependency checker script (<code class="docutils literal"><span class="pre">BoxLib/Tools/C_scripts/mkdep</span></code>) will
+complain about:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">Hypre</span><span class="o">--</span><span class="k">with</span><span class="o">-</span><span class="n">openmp</span><span class="o">/</span><span class="n">include</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">exist</span>
+</pre></div>
+</div>
+<p>This can be ignored an compilation will finish.  If you do wish to
+silence it, you can set <code class="docutils literal"><span class="pre">HYPRE_DIR</span></code> to the path shown by:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">show</span> <span class="n">cray</span><span class="o">-</span><span class="n">tpsl</span>
+</pre></div>
+</div>
+<p>as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>export HYPRE_DIR=${CRAY_TPSL_PREFIX_DIR}
+</pre></div>
+</div>
+<p>This path will change dynamically to reflect which compiler programming
+environment you have loaded.  (You can also see that this is the path
+sent to the compilation by doing <code class="docutils literal"><span class="pre">ftn</span> <span class="pre">-craype-verbose</span></code>).</p>
+</div>
+<div class="section" id="preferred-configuration">
+<h3>Preferred configuration<a class="headerlink" href="#preferred-configuration" title="Permalink to this headline">¶</a></h3>
+<p>There are 24 cores per node on Edison.  Generally, using 4 or 6 OpenMP
+threads with 6 or 4 MPI tasks works best.</p>
+</div>
+</div>
+<div class="section" id="cori-haswell">
+<h2>Cori Haswell<a class="headerlink" href="#cori-haswell" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="cori-knl">
+<h2>Cori KNL<a class="headerlink" href="#cori-knl" title="Permalink to this headline">¶</a></h2>
+<p>Regardless of the compiler, you need to swap the compiler weappers to
+use the AVX-512 instruction set supported on the Intel Phi processors
+(instead of the AVX-2 on the Haswell chips).  This is done as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">swap</span> <span class="n">craype</span><span class="o">-</span><span class="p">{</span><span class="n">haswell</span><span class="p">,</span><span class="n">mic</span><span class="o">-</span><span class="n">knl</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>It could happen that even when the various verbosities are set to 0,
+when using several nodes (more than 64) in a run compiled with Intel,
+the follwing error shows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">forrtl</span><span class="p">:</span> <span class="n">severe</span> <span class="p">(</span><span class="mi">40</span><span class="p">):</span> <span class="n">recursive</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">operation</span><span class="p">,</span> <span class="n">unit</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">file</span> <span class="n">unknown</span>
+</pre></div>
+</div>
+<p>Seems like the error is due to all threads printing to stdout. Adding
+the following to the <code class="docutils literal"><span class="pre">inputs</span></code> file, prevents this error to occur:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">castro</span><span class="o">.</span><span class="n">print_fortran_warnings</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="AMReX Astrophysics Suite" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, AMReX-Astro development tem.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
