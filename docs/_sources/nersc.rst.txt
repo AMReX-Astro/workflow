@@ -4,6 +4,7 @@ Working at NERSC
 Edison
 ------
 
+
 Intel
 ^^^^^
 
@@ -94,3 +95,14 @@ Seems like the error is due to all threads printing to stdout. Adding
 the following to the ``inputs`` file, prevents this error to occur::
 
   castro.print_fortran_warnings = 0
+
+
+Intel
+^^^^^
+
+When running MAESTROeX, we seem to need::
+
+  amrex.signal_handling = 0
+
+otherwise we get an ``Erroneous arithmetic error``.
+

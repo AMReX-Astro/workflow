@@ -103,7 +103,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#cori-haswell">Cori Haswell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cori-knl">Cori KNL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cori-knl">Cori KNL</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Intel</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -228,7 +231,7 @@ to do a <code class="docutils literal"><span class="pre">module</span> <span cla
 </div>
 <div class="section" id="hypre">
 <h3>Hypre<a class="headerlink" href="#hypre" title="Permalink to this headline">¶</a></h3>
-<p>On Edison, the Cray _Third Party Scientific <a href="#id1"><span class="problematic" id="id2">Libraries_</span></a> provide <code class="docutils literal"><span class="pre">hypre</span></code>
+<p>On Edison, the Cray _Third Party Scientific <a href="#id2"><span class="problematic" id="id3">Libraries_</span></a> provide <code class="docutils literal"><span class="pre">hypre</span></code>
 in a form that works directly with the compiler wrappers used on that
 machine (<code class="docutils literal"><span class="pre">CC</span></code>, <code class="docutils literal"><span class="pre">ftn</span></code>, …).  To use this, simply do:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">cray</span><span class="o">-</span><span class="n">tpsl</span>
@@ -280,6 +283,14 @@ the follwing error shows:</p>
 the following to the <code class="docutils literal"><span class="pre">inputs</span></code> file, prevents this error to occur:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">castro</span><span class="o">.</span><span class="n">print_fortran_warnings</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
+</div>
+<div class="section" id="id1">
+<h3>Intel<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>When running MAESTROeX, we seem to need:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">amrex</span><span class="o">.</span><span class="n">signal_handling</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>otherwise we get an <code class="docutils literal"><span class="pre">Erroneous</span> <span class="pre">arithmetic</span> <span class="pre">error</span></code>.</p>
 </div>
 </div>
 </div>
