@@ -1,15 +1,10 @@
+.. highlight:: bash
+
+***************
 Working at OLCF
-===============
+***************
 
-Titan
------
+.. toctree::
 
-
-
-Summitdev
----------
-
-
-
-Summit
-------
+   olcf-compilers
+   olcf-workflow
