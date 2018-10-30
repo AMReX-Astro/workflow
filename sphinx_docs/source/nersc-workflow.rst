@@ -19,6 +19,9 @@ directory (``Util/job_scripts``) and includes logic to automatically
 add the correct restart options to the run to continue a simulation
 from the last checkpoint file in the submission directory.
 
+Jobs are submitted as::
+
+  sbatch script.slurm
 
 To chain jobs, such that one queues up after the previous job
 finished, use the ``chainslurm.sh`` script in that same directory::
@@ -32,9 +35,9 @@ used originally most likely). You can view the job dependency using::
 
   squeue -l -j job-id
 
-where ``job-id`` is the number of the job.  Jobs are submitted with
-``sbatch``. A job can be canceled using ``scancel``, and the status
-can be checked using ``squeue -u username``.
+where ``job-id`` is the number of the job.  A job can be canceled
+using ``scancel``, and the status can be checked using ``squeue -u
+username``.
 
 
 Archiving Data to HPSS

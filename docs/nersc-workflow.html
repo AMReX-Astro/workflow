@@ -216,6 +216,10 @@ Castro <a class="reference external" href="https://github.com/AMReX-Astro/Castro
 directory (<code class="docutils literal notranslate"><span class="pre">Util/job_scripts</span></code>) and includes logic to automatically
 add the correct restart options to the run to continue a simulation
 from the last checkpoint file in the submission directory.</p>
+<p>Jobs are submitted as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch script.slurm
+</pre></div>
+</div>
 <p>To chain jobs, such that one queues up after the previous job
 finished, use the <code class="docutils literal notranslate"><span class="pre">chainslurm.sh</span></code> script in that same directory:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chainslurm.sh jobid number script
@@ -228,9 +232,9 @@ used originally most likely). You can view the job dependency using:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>squeue -l -j job-id
 </pre></div>
 </div>
-<p>where <code class="docutils literal notranslate"><span class="pre">job-id</span></code> is the number of the job.  Jobs are submitted with
-<code class="docutils literal notranslate"><span class="pre">sbatch</span></code>. A job can be canceled using <code class="docutils literal notranslate"><span class="pre">scancel</span></code>, and the status
-can be checked using <code class="docutils literal notranslate"><span class="pre">squeue</span> <span class="pre">-u</span> <span class="pre">username</span></code>.</p>
+<p>where <code class="docutils literal notranslate"><span class="pre">job-id</span></code> is the number of the job.  A job can be canceled
+using <code class="docutils literal notranslate"><span class="pre">scancel</span></code>, and the status can be checked using <code class="docutils literal notranslate"><span class="pre">squeue</span> <span class="pre">-u</span>
+<span class="pre">username</span></code>.</p>
 </div>
 <div class="section" id="archiving-data-to-hpss">
 <h1>Archiving Data to HPSS<a class="headerlink" href="#archiving-data-to-hpss" title="Permalink to this headline">¶</a></h1>
