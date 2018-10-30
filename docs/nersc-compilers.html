@@ -226,7 +226,7 @@
 <p>Intel is the default programming environment on edison and appear to
 be the preferred compilers.  The Intel 18.0.2 compilers seem to work
 well at NERSC.  Note: the default 18.0.1 do not seem to work.  To swap:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>module swap intel intel/18.0.2.199
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module swap intel intel/18.0.2.199
 </pre></div>
 </div>
 </div>
@@ -234,7 +234,7 @@ well at NERSC.  Note: the default 18.0.1 do not seem to work.  To swap:</p>
 <h3>Cray<a class="headerlink" href="#cray" title="Permalink to this headline">¶</a></h3>
 <p>The Cray compilers version 8.6.4 or later work.  As of May 2018, you
 can do:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>module swap PrgEnv-<span class="o">{</span>intel,cray<span class="o">}</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module swap PrgEnv-<span class="o">{</span>intel,cray<span class="o">}</span>
 module swap cce cce/8.6.5
 </pre></div>
 </div>
@@ -242,7 +242,7 @@ module swap cce cce/8.6.5
 <div class="section" id="gnu">
 <h3>GNU<a class="headerlink" href="#gnu" title="Permalink to this headline">¶</a></h3>
 <p>You need to swap environments:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>module swap PrgEnv-<span class="o">{</span>intel,gnu<span class="o">}</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module swap PrgEnv-<span class="o">{</span>intel,gnu<span class="o">}</span>
 </pre></div>
 </div>
 <p>There are no known issues with GNU.</p>
@@ -251,28 +251,28 @@ module swap cce cce/8.6.5
 <h3>Hypre<a class="headerlink" href="#hypre" title="Permalink to this headline">¶</a></h3>
 <p>On Edison, the Cray <em>Third Party Scientific Libraries</em> provide Hypre
 in a form that works directly with the compiler wrappers used on that
-machine (<code class="docutils literal"><span class="pre">CC</span></code>, <code class="docutils literal"><span class="pre">ftn</span></code>, …).  To use this, simply do:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>module load cray-tpsl
+machine (<code class="docutils literal notranslate"><span class="pre">CC</span></code>, <code class="docutils literal notranslate"><span class="pre">ftn</span></code>, …).  To use this, simply do:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load cray-tpsl
 </pre></div>
 </div>
-<p>There is no need to set <code class="docutils literal"><span class="pre">HYPRE_DIR</span></code>, but note however that the
-dependency checker script (<code class="docutils literal"><span class="pre">BoxLib/Tools/C_scripts/mkdep</span></code>) will
+<p>There is no need to set <code class="docutils literal notranslate"><span class="pre">HYPRE_DIR</span></code>, but note however that the
+dependency checker script (<code class="docutils literal notranslate"><span class="pre">BoxLib/Tools/C_scripts/mkdep</span></code>) will
 complain about:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>/path/to/Hypre--with-openmp/include does not exist
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/path/to/Hypre--with-openmp/include does not exist
 </pre></div>
 </div>
 <p>This can be ignored an compilation will finish.  If you do wish to
-silence it, you can set <code class="docutils literal"><span class="pre">HYPRE_DIR</span></code> to the path shown by:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>module show cray-tpsl
+silence it, you can set <code class="docutils literal notranslate"><span class="pre">HYPRE_DIR</span></code> to the path shown by:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module show cray-tpsl
 </pre></div>
 </div>
 <p>as:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">HYPRE_DIR</span><span class="o">=</span><span class="si">${</span><span class="nv">CRAY_TPSL_PREFIX_DIR</span><span class="si">}</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">HYPRE_DIR</span><span class="o">=</span><span class="si">${</span><span class="nv">CRAY_TPSL_PREFIX_DIR</span><span class="si">}</span>
 </pre></div>
 </div>
 <p>This path will change dynamically to reflect which compiler programming
 environment you have loaded.  (You can also see that this is the path
-sent to the compilation by doing <code class="docutils literal"><span class="pre">ftn</span> <span class="pre">-craype-verbose</span></code>).</p>
+sent to the compilation by doing <code class="docutils literal notranslate"><span class="pre">ftn</span> <span class="pre">-craype-verbose</span></code>).</p>
 </div>
 <div class="section" id="preferred-configuration">
 <h3>Preferred configuration<a class="headerlink" href="#preferred-configuration" title="Permalink to this headline">¶</a></h3>
@@ -288,27 +288,27 @@ threads with 6 or 4 MPI tasks works best.</p>
 <p>Regardless of the compiler, you need to swap the compiler weappers to
 use the AVX-512 instruction set supported on the Intel Phi processors
 (instead of the AVX-2 on the Haswell chips).  This is done as:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>module swap craype-<span class="o">{</span>haswell,mic-knl<span class="o">}</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module swap craype-<span class="o">{</span>haswell,mic-knl<span class="o">}</span>
 </pre></div>
 </div>
 <p>It could happen that even when the various verbosities are set to 0,
 when using several nodes (more than 64) in a run compiled with Intel,
 the follwing error shows:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>forrtl: severe <span class="o">(</span><span class="m">40</span><span class="o">)</span>: recursive I/O operation, unit -1, file unknown
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>forrtl: severe <span class="o">(</span><span class="m">40</span><span class="o">)</span>: recursive I/O operation, unit -1, file unknown
 </pre></div>
 </div>
 <p>Seems like the error is due to all threads printing to stdout. Adding
-the following to the <code class="docutils literal"><span class="pre">inputs</span></code> file, prevents this error to occur:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>castro.print_fortran_warnings <span class="o">=</span> <span class="m">0</span>
+the following to the <code class="docutils literal notranslate"><span class="pre">inputs</span></code> file, prevents this error to occur:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>castro.print_fortran_warnings <span class="o">=</span> <span class="m">0</span>
 </pre></div>
 </div>
 <div class="section" id="id1">
 <h3>Intel<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>When running MAESTROeX, we seem to need:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>amrex.signal_handling <span class="o">=</span> <span class="m">0</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>amrex.signal_handling <span class="o">=</span> <span class="m">0</span>
 </pre></div>
 </div>
-<p>otherwise we get an <code class="docutils literal"><span class="pre">Erroneous</span> <span class="pre">arithmetic</span> <span class="pre">error</span></code>.</p>
+<p>otherwise we get an <code class="docutils literal notranslate"><span class="pre">Erroneous</span> <span class="pre">arithmetic</span> <span class="pre">error</span></code>.</p>
 </div>
 </div>
 </div>

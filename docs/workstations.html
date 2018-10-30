@@ -203,12 +203,12 @@ community edition 18.4 compilers also are known to work well.</p>
 <div class="section" id="gpu-offloading">
 <h2>GPU offloading<a class="headerlink" href="#gpu-offloading" title="Permalink to this headline">¶</a></h2>
 <p>Compile as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">CUDA_VERSION</span><span class="o">=</span><span class="n">cc60</span> <span class="n">COMPILE_CUDA_PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">cuda</span><span class="o">-</span><span class="mf">9.2</span> \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">CUDA_VERSION</span><span class="o">=</span><span class="n">cc60</span> <span class="n">COMPILE_CUDA_PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">cuda</span><span class="o">-</span><span class="mf">9.2</span> \
   <span class="n">USE_CUDA</span><span class="o">=</span><span class="n">TRUE</span> <span class="n">COMP</span><span class="o">=</span><span class="n">PGI</span> <span class="o">-</span><span class="n">j</span> <span class="mi">4</span>
 </pre></div>
 </div>
 <p>To run the CUDA code path without GPU launching, do:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="o">-</span><span class="n">j4</span> <span class="n">COMP</span><span class="o">=</span><span class="n">PGI</span> <span class="n">USE_CUDA</span><span class="o">=</span><span class="n">TRUE</span> <span class="n">USE_MPI</span><span class="o">=</span><span class="n">FALSE</span> <span class="n">DEBUG</span><span class="o">=</span><span class="n">TRUE</span> \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="o">-</span><span class="n">j4</span> <span class="n">COMP</span><span class="o">=</span><span class="n">PGI</span> <span class="n">USE_CUDA</span><span class="o">=</span><span class="n">TRUE</span> <span class="n">USE_MPI</span><span class="o">=</span><span class="n">FALSE</span> <span class="n">DEBUG</span><span class="o">=</span><span class="n">TRUE</span> \
   <span class="n">NO_DEVICE_LAUNCH</span><span class="o">=</span><span class="n">TRUE</span> <span class="n">CUDA_VERSION</span><span class="o">=</span><span class="n">cc</span>
 </pre></div>
 </div>
