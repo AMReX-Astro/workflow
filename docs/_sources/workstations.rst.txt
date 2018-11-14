@@ -3,8 +3,12 @@
 Linux Workstations
 ******************
 
-In general GCC 7.x or 8.x work well on Linux workstations.  The PGI
-community edition 18.4 compilers also are known to work well.
+In general GCC 7.x work well on Linux workstations.  CUDA 10.0 does
+not support the GCC 8.x compilers, so you may need to install an older
+GCC 7.3 compiler to get the code to compile.
+
+The PGI community edition 18.4 and 18.10 compilers also are known to
+work well.
 
 
 GPU offloading
