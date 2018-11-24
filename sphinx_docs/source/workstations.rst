@@ -19,13 +19,12 @@ bender
 
 Compile as::
 
-  make CUDA_VERSION=cc60 COMPILE_CUDA_PATH=/usr/local/cuda-9.2 \
+  make CUDA_VERSION=cc60 COMPILE_CUDA_PATH=/usr/local/cuda-10.0 \
     USE_CUDA=TRUE COMP=pgi -j 4
 
-To run the CUDA code path without GPU launching, do::
+To run the CUDA code path without GPU launching, add::
 
-  make -j4 COMP=PGI USE_CUDA=TRUE USE_MPI=FALSE DEBUG=TRUE \
-    NO_DEVICE_LAUNCH=TRUE CUDA_VERSION=cc
+  NO_DEVICE_LAUNCH=TRUE
 
 
 groot
