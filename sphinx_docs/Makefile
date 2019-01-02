@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    = -E -a
 SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = pyro
+SPHINXPROJ    = workflow
 SOURCEDIR     = source
 BUILDDIR      = build
 
@@ -16,7 +16,6 @@ help:
 
 html: 
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-	cp -r build/html/* ../docs/
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
