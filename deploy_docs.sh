@@ -43,7 +43,7 @@ git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
 cd ..
 
 # Clean out existing contents
-rm -rf out/docs/**/* || exit 0
+rm -rf out/**/* || exit 0
 
 # Pull from SOURCE_BRANCH again
 git pull || true
@@ -53,8 +53,8 @@ cd sphinx_docs
 make html
 cd ../
 
-mkdir -p out/docs/
-mv sphinx_docs/build/html/* out/docs
+#mkdir -p out/docs/
+mv sphinx_docs/build/html/* out/
 touch out/.nojekyll
 
 # Now let's go have some fun with the cloned repo
