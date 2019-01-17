@@ -234,14 +234,18 @@ contains the date-string to allow multiple archives to co-exist.  When
 running at any one time. Sometimes if the machine crashes, the
 <code class="docutils literal notranslate"><span class="pre">process.pid</span></code> file will be left behind, in which case, the script
 aborts. Just delete that if you know the script is not running.</p>
+<p>Access to the xfer queue is done by loading the <code class="docutils literal notranslate"><span class="pre">esslurm</span></code> queue:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load esslurm
+</pre></div>
+</div>
+<p>Then you can use <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> and <code class="docutils literal notranslate"><span class="pre">squeue</span></code> to submit and monitor jobs
+in the <code class="docutils literal notranslate"><span class="pre">xfer</span></code> queue.  Details are provided at:
+<a class="reference external" href="https://docs.nersc.gov/jobs/examples/#xfer-queue">https://docs.nersc.gov/jobs/examples/#xfer-queue</a></p>
 <p>Jobs in the xfer queue start up quickly. The best approach is to start
 one as you start your main job (or make it dependent on the main
 job). The sample <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> script will wait for output and then
 archive it as it is produced, using the techniques described for titan
-above.  To check the status of a job in the xfer queue, use:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>squeue -u username -M all
-</pre></div>
-</div>
+above.</p>
 </div>
 
 
