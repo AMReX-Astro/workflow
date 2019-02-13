@@ -43,6 +43,17 @@ username``.
 Archiving Data to HPSS
 ======================
 
+.. note::
+
+   Access to the xfer queue is done by loading the ``esslurm`` queue::
+
+     module load esslurm
+
+   Then you can use ``sbatch`` and ``squeue`` to submit and monitor
+   jobs in the ``xfer`` queue.  Details are provided at:
+   https://docs.nersc.gov/jobs/examples/#xfer-queue
+
+
 The script ``edison.xfer.slurm`` in ``Castro/Util/job
 scripts/edison/`` can be used to archive data to HPSS
 automatically. This is submitted to the xfer queue and runs the script
@@ -86,15 +97,6 @@ contains the date-string to allow multiple archives to co-exist.  When
 running at any one time. Sometimes if the machine crashes, the
 ``process.pid`` file will be left behind, in which case, the script
 aborts. Just delete that if you know the script is not running.
-
-Access to the xfer queue is done by loading the ``esslurm`` queue::
-
-   module load esslurm
-
-Then you can use ``sbatch`` and ``squeue`` to submit and monitor jobs
-in the ``xfer`` queue.  Details are provided at:
-https://docs.nersc.gov/jobs/examples/#xfer-queue
-
 
 Jobs in the xfer queue start up quickly. The best approach is to start
 one as you start your main job (or make it dependent on the main
