@@ -91,7 +91,6 @@
 <li class="toctree-l1 current"><a class="reference internal" href="olcf.html">Working at OLCF</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Compiling at OLCF</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#titan">Titan</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#summitdev">Summitdev</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#summit">Summit</a></li>
 </ul>
 </li>
@@ -177,11 +176,18 @@ terminal do:</p>
 </div>
 <p>to fix this.</p>
 </div>
-<div class="section" id="summitdev">
-<h2>Summitdev<a class="headerlink" href="#summitdev" title="Permalink to this headline">¶</a></h2>
-</div>
 <div class="section" id="summit">
 <h2>Summit<a class="headerlink" href="#summit" title="Permalink to this headline">¶</a></h2>
+<p>In order to compilei you will need to swap the xl module with pgi:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module swap xl pgi
+</pre></div>
+</div>
+<p>Then load CUDA:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load cuda
+</pre></div>
+</div>
+<p>compile with <code class="docutils literal notranslate"><span class="pre">COMP</span> <span class="pre">=</span> <span class="pre">pgi</span></code> and <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code></p>
+<p>The versions that work for sure currently, pgi/18.10 and cuda/9.2.148</p>
 </div>
 </div>
 
