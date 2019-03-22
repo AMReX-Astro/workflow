@@ -15,10 +15,21 @@ terminal do::
 to fix this.
 
 
-Summitdev
----------
-
-
-
 Summit
 ------
+
+In order to compilei you will need to swap the xl module with pgi::
+
+  module swap xl pgi
+
+Then load CUDA::
+  
+  module load cuda
+
+compile with ``COMP = pgi`` and ``USE_CUDA=TRUE``
+
+The versions that work for sure currently, pgi/18.10 and cuda/9.2.148
+
+  
+
+
