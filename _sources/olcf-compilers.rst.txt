@@ -31,5 +31,6 @@ compile with ``COMP = pgi`` and ``USE_CUDA=TRUE``
 The versions that work for sure currently, pgi/18.10 and cuda/9.2.148
 
   
+Note that ``INTEGRATOR_DIR`` should be set to ``VODE90``, since ``VODE`` will not work with GPUs
 
 
