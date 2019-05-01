@@ -34,9 +34,7 @@ groot
 
 Compile as::
 
-  module load gcc/7.3
-
-  make CUDA_VERSION=cc70 COMPILE_CUDA_PATH=/usr/local/cuda-10.0 \
+  make CUDA_VERSION=cc70 COMPILE_CUDA_PATH=/usr/local/cuda-10.1 \
     USE_CUDA=TRUE COMP=pgi USE_MPI=FALSE -j 4
 
 
