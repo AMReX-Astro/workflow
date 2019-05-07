@@ -169,7 +169,7 @@
 <h1>Compiling at OLCF<a class="headerlink" href="#compiling-at-olcf" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="titan">
 <h2>Titan<a class="headerlink" href="#titan" title="Permalink to this headline">¶</a></h2>
-<p>The default version of python on titan is not recent enough
+<p>The default version of python on Titan is not recent enough
 to support the python scripts in our build system.  At the
 terminal do:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load python
@@ -179,17 +179,25 @@ terminal do:</p>
 </div>
 <div class="section" id="summit">
 <h2>Summit<a class="headerlink" href="#summit" title="Permalink to this headline">¶</a></h2>
-<p>In order to compilei you will need to swap the xl module with pgi:</p>
+<p>In order to compile you will need to swap the xl module with pgi:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module swap xl pgi
 </pre></div>
 </div>
 <p>Then load CUDA:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load cuda
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load cuda/9.1.85
 </pre></div>
 </div>
 <p>compile with <code class="docutils literal notranslate"><span class="pre">COMP</span> <span class="pre">=</span> <span class="pre">pgi</span></code> and <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code></p>
-<p>The versions that work for sure currently, pgi/18.10 and cuda/9.2.148</p>
-<p>Note that <code class="docutils literal notranslate"><span class="pre">INTEGRATOR_DIR</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">VODE90</span></code>, since <code class="docutils literal notranslate"><span class="pre">VODE</span></code> will not work with GPUs</p>
+<p>The versions that work for sure currently are <code class="docutils literal notranslate"><span class="pre">pgi/18.10</span></code> and <code class="docutils literal notranslate"><span class="pre">cuda/9.1.85</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>At present, there is a known compiler bug in CUDA 9.2.148 that
+prevents compilation. Using CUDA 9.1 is a workaround.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">INTEGRATOR_DIR</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">VODE90</span></code>, since <code class="docutils literal notranslate"><span class="pre">VODE</span></code> will not work with GPUs</p>
+</div>
 </div>
 </div>
 
