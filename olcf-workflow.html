@@ -163,6 +163,20 @@
             
   <div class="section" id="managing-jobs-at-olcf">
 <h1>Managing Jobs at OLCF<a class="headerlink" href="#managing-jobs-at-olcf" title="Permalink to this headline">¶</a></h1>
+<p>On Titan, we have a PBS script <code class="docutils literal notranslate"><span class="pre">titan.run</span></code> and a script
+<code class="docutils literal notranslate"><span class="pre">process.titan</span></code> executed by <code class="docutils literal notranslate"><span class="pre">titan.run</span></code> to tar up plot,
+checkpoint, and diagnostic files and store them in HPSS.</p>
+<p>These are here: <a class="reference external" href="https://github.com/AMReX-Astro/workflow/tree/master/job_scripts/titan">https://github.com/AMReX-Astro/workflow/tree/master/job_scripts/titan</a></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">process.titan</span></code> script relies on <code class="docutils literal notranslate"><span class="pre">ftime</span></code>, an AMReX plotfile
+tool that prints the simulation time for a given plotfile.</p>
+<p>You can build <code class="docutils literal notranslate"><span class="pre">ftime</span></code> (tested with GNU) in <code class="docutils literal notranslate"><span class="pre">amrex/Tools/Plotfile</span></code>,
+copy it into the run directory, and set <code class="docutils literal notranslate"><span class="pre">FTIME_EXE</span></code> appropriately in
+<code class="docutils literal notranslate"><span class="pre">process.titan</span></code>. If compiled with GNU, then the <code class="docutils literal notranslate"><span class="pre">PrgEnv-gnu</span></code>
+module should be loaded when you submit the <code class="docutils literal notranslate"><span class="pre">titan.run</span></code> PBS script.</p>
+<p>These scripts will automatically create a directory with the same name
+as your run directory on HPSS where files will be archived.</p>
+<p>To have a look, use the <code class="docutils literal notranslate"><span class="pre">hsi</span></code> command to browse HPSS.</p>
+<p>For more information about using HPSS on Titan see <a class="reference external" href="https://www.olcf.ornl.gov/for-users/system-user-guides/titan/titan-user-guide/#workflow">https://www.olcf.ornl.gov/for-users/system-user-guides/titan/titan-user-guide/#workflow</a></p>
 </div>
 <div class="section" id="error-aprun-not-found">
 <h1>Error: aprun not found<a class="headerlink" href="#error-aprun-not-found" title="Permalink to this headline">¶</a></h1>
