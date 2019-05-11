@@ -6,7 +6,7 @@ Compiling at OLCF
 Titan
 -----
 
-The default version of python on titan is not recent enough
+The default version of python on Titan is not recent enough
 to support the python scripts in our build system.  At the
 terminal do::
 
@@ -18,19 +18,24 @@ to fix this.
 Summit
 ------
 
-In order to compilei you will need to swap the xl module with pgi::
+In order to compile you will need to swap the xl module with pgi::
 
   module swap xl pgi
 
 Then load CUDA::
   
-  module load cuda
+  module load cuda/9.1.85
 
 compile with ``COMP = pgi`` and ``USE_CUDA=TRUE``
 
-The versions that work for sure currently, pgi/18.10 and cuda/9.2.148
+The versions that work for sure currently are ``pgi/18.10`` and ``cuda/9.1.85``.
 
+.. warning::
+
+   At present, there is a known compiler bug in CUDA 9.2.148 that
+   prevents compilation. Using CUDA 9.1 is a workaround.
   
-Note that ``INTEGRATOR_DIR`` should be set to ``VODE90``, since ``VODE`` will not work with GPUs
+.. note::
 
+   ``INTEGRATOR_DIR`` should be set to ``VODE90``, since ``VODE`` will not work with GPUs
 
