@@ -89,15 +89,13 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="nersc.html">Working at NERSC</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Compiling at NERSC</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#edison">Edison</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cori-haswell">Cori Haswell</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#intel">Intel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cray">Cray</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gnu">GNU</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#hypre">Hypre</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#preferred-configuration">Preferred configuration</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#cori-haswell">Cori Haswell</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#cori-knl">Cori KNL</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#id1">Intel</a></li>
 </ul>
@@ -178,23 +176,14 @@
             
   <div class="section" id="compiling-at-nersc">
 <h1>Compiling at NERSC<a class="headerlink" href="#compiling-at-nersc" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="edison">
-<h2>Edison<a class="headerlink" href="#edison" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="cori-haswell">
+<h2>Cori Haswell<a class="headerlink" href="#cori-haswell" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="intel">
 <h3>Intel<a class="headerlink" href="#intel" title="Permalink to this headline">¶</a></h3>
 <p>Intel is the default programming environment on edison and appear to
 be the preferred compilers.  The Intel 18.0.2 compilers seem to work
 well at NERSC.  Note: the default 18.0.1 do not seem to work.  To swap:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module swap intel intel/18.0.2.199
-</pre></div>
-</div>
-</div>
-<div class="section" id="cray">
-<h3>Cray<a class="headerlink" href="#cray" title="Permalink to this headline">¶</a></h3>
-<p>The Cray compilers version 8.6.4 or later work.  As of May 2018, you
-can do:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module swap PrgEnv-<span class="o">{</span>intel,cray<span class="o">}</span>
-module swap cce cce/8.6.5
 </pre></div>
 </div>
 </div>
@@ -208,6 +197,7 @@ module swap cce cce/8.6.5
 </div>
 <div class="section" id="hypre">
 <h3>Hypre<a class="headerlink" href="#hypre" title="Permalink to this headline">¶</a></h3>
+<p>These notes are from Edison.  Need to be confirmed on Cori Haswell.</p>
 <p>On Edison, the Cray <em>Third Party Scientific Libraries</em> provide Hypre
 in a form that works directly with the compiler wrappers used on that
 machine (<code class="docutils literal notranslate"><span class="pre">CC</span></code>, <code class="docutils literal notranslate"><span class="pre">ftn</span></code>, …).  To use this, simply do:</p>
@@ -235,12 +225,9 @@ sent to the compilation by doing <code class="docutils literal notranslate"><spa
 </div>
 <div class="section" id="preferred-configuration">
 <h3>Preferred configuration<a class="headerlink" href="#preferred-configuration" title="Permalink to this headline">¶</a></h3>
-<p>There are 24 cores per node on Edison.  Generally, using 4 or 6 OpenMP
-threads with 6 or 4 MPI tasks works best.</p>
+<p>There are 32 cores per node on Edison.  Generally, using 4 or 8 OpenMP
+threads with 8 or 4 MPI tasks should work best.</p>
 </div>
-</div>
-<div class="section" id="cori-haswell">
-<h2>Cori Haswell<a class="headerlink" href="#cori-haswell" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="cori-knl">
 <h2>Cori KNL<a class="headerlink" href="#cori-knl" title="Permalink to this headline">¶</a></h2>
