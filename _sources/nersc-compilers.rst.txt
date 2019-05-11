@@ -10,7 +10,7 @@ Cori Haswell
 Intel
 ^^^^^
 
-Intel is the default programming environment on edison and appear to
+Intel is the default programming environment on Cori and appear to
 be the preferred compilers.  The Intel 18.0.2 compilers seem to work
 well at NERSC.  Note: the default 18.0.1 do not seem to work.  To swap::
 
@@ -60,7 +60,7 @@ sent to the compilation by doing ``ftn -craype-verbose``).
 Preferred configuration
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-There are 32 cores per node on Edison.  Generally, using 4 or 8 OpenMP
+There are 32 cores per node on Cori Haswell.  Generally, using 4 or 8 OpenMP
 threads with 8 or 4 MPI tasks should work best.
 
 
