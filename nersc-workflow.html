@@ -89,7 +89,10 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="nersc.html">Working at NERSC</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="nersc-compilers.html">Compiling at NERSC</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Managing Jobs at NERSC</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Managing Jobs at NERSC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cori-haswell">Cori Haswell</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#archiving-data-to-hpss">Archiving Data to HPSS</a></li>
 </ul>
 </li>
@@ -163,13 +166,16 @@
             
   <div class="section" id="managing-jobs-at-nersc">
 <h1>Managing Jobs at NERSC<a class="headerlink" href="#managing-jobs-at-nersc" title="Permalink to this headline">¶</a></h1>
-<p>Edison is configured with 24 cores per node split between two Intel
-IvyBridge 12-core processors.  Each processor connects to 1/2 of the
-node’s memory and is called a NUMA node, so there are 2 NUMA nodes per
-edison node. Best performance is seen when running with 4, 6, or 12
-threads.</p>
-<p>Jobs should be run in your <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> or <code class="docutils literal notranslate"><span class="pre">$CSCATCH</span></code> directory. By default,
+<div class="section" id="cori-haswell">
+<h2>Cori Haswell<a class="headerlink" href="#cori-haswell" title="Permalink to this headline">¶</a></h2>
+<p>Cori Haswell is configured with 32 cores per node, split between
+twi Intel Haswell 16-core processors.</p>
+<p>Jobs should be run in your <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> directory. By default,
 SLURM will change directory into the submission directory.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Needs updating</p>
+</div>
 <p>A sample job submission script, <code class="docutils literal notranslate"><span class="pre">edison.MPI.OMP.slurm</span></code> is in the
 Castro <a class="reference external" href="https://github.com/AMReX-Astro/Castro/blob/master/Util/job_scripts/edison/">job scripts</a>
 directory (<code class="docutils literal notranslate"><span class="pre">Util/job_scripts</span></code>) and includes logic to automatically
@@ -194,6 +200,7 @@ used originally most likely). You can view the job dependency using:</p>
 <p>where <code class="docutils literal notranslate"><span class="pre">job-id</span></code> is the number of the job.  A job can be canceled
 using <code class="docutils literal notranslate"><span class="pre">scancel</span></code>, and the status can be checked using <code class="docutils literal notranslate"><span class="pre">squeue</span> <span class="pre">-u</span>
 <span class="pre">username</span></code>.</p>
+</div>
 </div>
 <div class="section" id="archiving-data-to-hpss">
 <h1>Archiving Data to HPSS<a class="headerlink" href="#archiving-data-to-hpss" title="Permalink to this headline">¶</a></h1>
