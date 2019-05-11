@@ -3,9 +3,9 @@
 Compiling at NERSC
 ==================
 
-Edison
-------
 
+Cori Haswell
+------------
 
 Intel
 ^^^^^
@@ -16,17 +16,6 @@ well at NERSC.  Note: the default 18.0.1 do not seem to work.  To swap::
 
   module swap intel intel/18.0.2.199
 
-
-Cray
-^^^^
-
-The Cray compilers version 8.6.4 or later work.  As of May 2018, you
-can do::
-
-  module swap PrgEnv-{intel,cray}
-  module swap cce cce/8.6.5
-
-
 GNU
 ^^^
 
@@ -36,9 +25,10 @@ You need to swap environments::
 
 There are no known issues with GNU.
 
-
 Hypre
 ^^^^^
+
+These notes are from Edison.  Need to be confirmed on Cori Haswell.
 
 On Edison, the Cray *Third Party Scientific Libraries* provide Hypre
 in a form that works directly with the compiler wrappers used on that
@@ -70,16 +60,9 @@ sent to the compilation by doing ``ftn -craype-verbose``).
 Preferred configuration
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-There are 24 cores per node on Edison.  Generally, using 4 or 6 OpenMP
-threads with 6 or 4 MPI tasks works best.
+There are 32 cores per node on Edison.  Generally, using 4 or 8 OpenMP
+threads with 8 or 4 MPI tasks should work best.
 
-
-
-
-
-
-Cori Haswell
-------------
 
 
 
