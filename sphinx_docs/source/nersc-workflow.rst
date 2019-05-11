@@ -3,14 +3,18 @@
 Managing Jobs at NERSC
 ======================
 
-Edison is configured with 24 cores per node split between two Intel
-IvyBridge 12-core processors.  Each processor connects to 1/2 of the
-node’s memory and is called a NUMA node, so there are 2 NUMA nodes per
-edison node. Best performance is seen when running with 4, 6, or 12
-threads.
+Cori Haswell
+^^^^^^^^^^^^
 
-Jobs should be run in your ``$SCRATCH`` or ``$CSCATCH`` directory. By default,
+Cori Haswell is configured with 32 cores per node, split between
+twi Intel Haswell 16-core processors.
+
+Jobs should be run in your ``$SCRATCH`` directory. By default,
 SLURM will change directory into the submission directory.
+
+.. note::
+
+   Needs updating
 
 A sample job submission script, ``edison.MPI.OMP.slurm`` is in the
 Castro `job scripts
