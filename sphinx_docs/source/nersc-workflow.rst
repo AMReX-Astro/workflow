@@ -43,6 +43,10 @@ where ``job-id`` is the number of the job.  A job can be canceled
 using ``scancel``, and the status can be checked using ``squeue -u
 username``.
 
+An estimate of the start time can be found via::
+
+  sqs -u username
+
 
 Archiving Data to HPSS
 ======================
