@@ -22,6 +22,18 @@ as your run directory on HPSS where files will be archived.
 
 To have a look, use the ``hsi`` command to browse HPSS.
 
+Files may be unarchived in bulk from HPSS on OLCF systems using the
+``hpss_xfer.py`` script, which is available in the job_scripts
+directory. It requires Python 3 to be loaded to run. The command::
+    
+    ./hpss_xfer.py plt00000 -s hpss_dir -o plotfile_dir
+    
+will fetch ``hpss_dir/plt00000.tar`` from the HPSS filesystem and
+unpack it in ``plotfile_dir``. If run with no arguments in the problem
+launch directory, the script will attempt to recover all plotfiles
+archived by ``process.titan``. Try running :code:`./hpss_xfer.py --help`
+for a description of usage and arguments.
+
 For more information about using HPSS on Titan see `<https://www.olcf.ornl.gov/for-users/system-user-guides/titan/titan-user-guide/#workflow>`_
 
 Error: aprun not found
