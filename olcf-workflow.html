@@ -176,6 +176,17 @@ module should be loaded when you submit the <code class="docutils literal notran
 <p>These scripts will automatically create a directory with the same name
 as your run directory on HPSS where files will be archived.</p>
 <p>To have a look, use the <code class="docutils literal notranslate"><span class="pre">hsi</span></code> command to browse HPSS.</p>
+<p>Files may be unarchived in bulk from HPSS on OLCF systems using the
+<code class="docutils literal notranslate"><span class="pre">hpss_xfer.py</span></code> script, which is available in the job_scripts
+directory. It requires Python 3 to be loaded to run. The command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./hpss_xfer.py plt00000 -s hpss_dir -o plotfile_dir
+</pre></div>
+</div>
+<p>will fetch <code class="docutils literal notranslate"><span class="pre">hpss_dir/plt00000.tar</span></code> from the HPSS filesystem and
+unpack it in <code class="docutils literal notranslate"><span class="pre">plotfile_dir</span></code>. If run with no arguments in the problem
+launch directory, the script will attempt to recover all plotfiles
+archived by <code class="docutils literal notranslate"><span class="pre">process.titan</span></code>. Try running <code class="code docutils literal notranslate"><span class="pre">./hpss_xfer.py</span> <span class="pre">--help</span></code>
+for a description of usage and arguments.</p>
 <p>For more information about using HPSS on Titan see <a class="reference external" href="https://www.olcf.ornl.gov/for-users/system-user-guides/titan/titan-user-guide/#workflow">https://www.olcf.ornl.gov/for-users/system-user-guides/titan/titan-user-guide/#workflow</a></p>
 </div>
 <div class="section" id="error-aprun-not-found">
