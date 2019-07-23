@@ -24,11 +24,14 @@ In order to compile you will need to swap the xl module with pgi::
 
 Then load CUDA::
   
-  module load cuda/9.1.85
+  module load cuda
 
 compile with ``COMP = pgi`` and ``USE_CUDA=TRUE``
 
-The versions that work for sure currently are ``pgi/18.10`` and ``cuda/9.1.85``.
+Ensure your GNUMakefile uses ``USE_OMP=FALSE`` since AMReX's standard OpenMP strategy conflicts with GPUs.
+
+
+The version pairs that work for sure currently are ``pgi/18.10 + cuda/9.1.85``, ``pgi/19.5 + cuda/10.1.168``, and ``pgi/19.5 + cuda/10.1.105``.
 
 .. warning::
 
@@ -37,5 +40,6 @@ The versions that work for sure currently are ``pgi/18.10`` and ``cuda/9.1.85``.
   
 .. note::
 
-   ``INTEGRATOR_DIR`` should be set to ``VODE90``, since ``VODE`` will not work with GPUs
-
+   - Use ``INTEGRATOR_DIR=VODE90`` if specifying an integrator at compile time, since ``VODE`` will not work with GPUs.
+   - Use ``USE_GPU_PRAGMA=TRUE`` for any code which uses ``#pragma gpu``, this flag is set by default in MAESTROeX and CASTRO's build system when ``USE_CUDA=TRUE``.
+   - OpenMP offloading to the GPU is controlled by ``USE_OMP_OFFLOAD``, which will default to ``FALSE``, AMReX-Astro doesn't use this feature.

@@ -95,7 +95,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-workflow.html">Managing Jobs at OLCF</a></li>
-<li class="toctree-l2"><a class="reference internal" href="olcf-workflow.html#error-aprun-not-found">Error: aprun not found</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="workstations.html">Linux Workstations</a></li>
@@ -184,11 +183,12 @@ terminal do:</p>
 </pre></div>
 </div>
 <p>Then load CUDA:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load cuda/9.1.85
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load cuda
 </pre></div>
 </div>
 <p>compile with <code class="docutils literal notranslate"><span class="pre">COMP</span> <span class="pre">=</span> <span class="pre">pgi</span></code> and <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code></p>
-<p>The versions that work for sure currently are <code class="docutils literal notranslate"><span class="pre">pgi/18.10</span></code> and <code class="docutils literal notranslate"><span class="pre">cuda/9.1.85</span></code>.</p>
+<p>Ensure your GNUMakefile uses <code class="docutils literal notranslate"><span class="pre">USE_OMP=FALSE</span></code> since AMReX’s standard OpenMP strategy conflicts with GPUs.</p>
+<p>The version pairs that work for sure currently are <code class="docutils literal notranslate"><span class="pre">pgi/18.10</span> <span class="pre">+</span> <span class="pre">cuda/9.1.85</span></code>, <code class="docutils literal notranslate"><span class="pre">pgi/19.5</span> <span class="pre">+</span> <span class="pre">cuda/10.1.168</span></code>, and <code class="docutils literal notranslate"><span class="pre">pgi/19.5</span> <span class="pre">+</span> <span class="pre">cuda/10.1.105</span></code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>At present, there is a known compiler bug in CUDA 9.2.148 that
@@ -196,7 +196,11 @@ prevents compilation. Using CUDA 9.1 is a workaround.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">INTEGRATOR_DIR</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">VODE90</span></code>, since <code class="docutils literal notranslate"><span class="pre">VODE</span></code> will not work with GPUs</p>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">INTEGRATOR_DIR=VODE90</span></code> if specifying an integrator at compile time, since <code class="docutils literal notranslate"><span class="pre">VODE</span></code> will not work with GPUs.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">USE_GPU_PRAGMA=TRUE</span></code> for any code which uses <code class="docutils literal notranslate"><span class="pre">#pragma</span> <span class="pre">gpu</span></code>, this flag is set by default in MAESTROeX and CASTRO’s build system when <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code>.</p></li>
+<li><p>OpenMP offloading to the GPU is controlled by <code class="docutils literal notranslate"><span class="pre">USE_OMP_OFFLOAD</span></code>, which will default to <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>, AMReX-Astro doesn’t use this feature.</p></li>
+</ul>
 </div>
 </div>
 </div>
