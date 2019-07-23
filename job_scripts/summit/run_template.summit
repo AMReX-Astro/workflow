@@ -1,0 +1,42 @@
+#!/bin/bash
+### Begin BSUB Options
+#BSUB -P <OLCF_PROJECT_ID>
+#BSUB -J <JOB_NAME>
+#BSUB -W <HH:MM>
+#BSUB -nnodes <NUMBER_OF_NODES>
+#BSUB -alloc_flags "smt4"
+### End BSUB Options and begin shell commands
+
+# =====================
+# BSUB parameters
+# -nnodes = number of nodes
+
+# JSRUN parameters
+# -n:--nrs          number of resource sets
+#   (alternatively,
+# -r:rs_per_host     number of resource sets per node)
+# -a:tasks_per_rs    number of MPI tasks/ranks per resource set
+# -c:cpu_per_rs      number of CPU cores per resource set
+# -g:gpu_per_rs      number of GPUs per resource set
+
+# Summit: Each node has:
+#         2  Sockets
+#         3  GPUs per socket (6 total)
+#         21 CPUs per socket (42 total)
+#         4  Hardware Threads per CPU (168 total)
+#
+# On Summit: AMReX recommended initial configuration:
+#             one GPU per MPI rank,
+#             one resource set per socket.
+#             (-r2 -c21 -g3 -a3)
+# =====================
+
+#MPI + GPU version
+export OMP_NUM_THREADS=1
+jsrun --nrs 6 --tasks_per_rs 1 --cpu_per_rs 7 --gpu_per_rs 1 --rs_per_host 6 --latency_priority CPU-CPU --launch_distribution packed --bind packed:7 js_task_info | sort
+#jsrun -n 6 -a 1 -g 1 -c 7 --bind=packed:1
+
+#MPI + OpenMP version
+export OMP_NUM_THREADS=7
+jsrun --nrs 6 --tasks_per_rs 1 --cpu_per_rs 7 --rs_per_host 6 --latency_priority CPU-CPU --launch_distribution packed --bind packed:7 js_task_info | sort
+#jsrun -n 6 -a 1 -g 1 -c 7 --bind=packed:7

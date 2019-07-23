@@ -10,8 +10,10 @@ AMReX Astrophysics Suite
 `http://github.com/AMReX-Astro <http://github.com/AMReX-Astro>`_
 
 These docs provide information about running the AMReX Astrophysics
-codes, in particular MAESTROeX and CASTRO on various machines,
+codes, in particular Nyx, MAESTROeX and CASTRO on various machines,
 including HPC Centers and workstations.
+
+`Generic AMReX gpu build information <https://amrex-codes.github.io/amrex/docs_html/GPU.html#building-with-gnu-make>`_
 
 .. toctree::
    :maxdepth: 1

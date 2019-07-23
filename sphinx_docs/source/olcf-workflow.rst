@@ -3,6 +3,9 @@
 Managing Jobs at OLCF
 =====================
 
+Titan
+-----
+
 On Titan, we have a PBS script ``titan.run`` and a script
 ``process.titan`` executed by ``titan.run`` to tar up plot,
 checkpoint, and diagnostic files and store them in HPSS.
@@ -36,19 +39,58 @@ for a description of usage and arguments.
 
 For more information about using HPSS on Titan see `<https://www.olcf.ornl.gov/for-users/system-user-guides/titan/titan-user-guide/#workflow>`_
 
-Error: aprun not found
-======================
+.. note::
+   
+   *Error: aprun not found*
+   
+   It is possible (on Titan) that some aspect of the environment on job
+   submission can lead to the job failing with the following error::
 
-It is possible (on Titan) that some aspect of the environment on job
-submission can lead to the job failing with the following error::
+     XALT Error: unable to find aprun
 
-  XALT Error: unable to find aprun
+   Bill Renaud at OLCF advised adding the `-l` shell argument in the
+   script shebang line. This did not work for the `ksh` shell but does
+   work for `bash` as::
 
-Bill Renaud at OLCF advised adding the `-l` shell argument in the
-script shebang line. This did not work for the `ksh` shell but does
-work for `bash` as::
+       #!/bin/bash -l
 
-  #!/bin/bash -l
+   This allows the job to run for the PBS script submitted from either
+   `bash` or `zsh`.
 
-This allows the job to run for the PBS script submitted from either
-`bash` or `zsh`.
+
+Summit
+------
+
+On Summit, we have a few different examples of PBS batch scripts. ``run_amrex_gpu_tutorials.summit`` is a shallow copy of
+the `AMReX tutorial script <https://github.com/AMReX-Codes/amrex/blob/development/Tutorials/GPU/run.summit>`_, and is more verbose about what different flags and options will do.
+The Castro GPU batch script example is ``summit_16nodes.sh``, more job script examples for Castro can be found `here <https://github.com/AMReX-Astro/Castro/tree/master/Util/scaling/sedov/summit_201905>`_.
+The Nyx example shows running MPI+CUDA, MPI+CUDA with one mpi process nvvp output, and MPI+OMP
+``run_3_tests_same_node.summit``. ``run_template.summit`` gives example syntax for jsrun:
+
+.. literalinclude:: ../../job_scripts/summit/run_template.summit
+		    :language: sh
+		    :emphasize-lines: 14-20,34-42
+		    :linenos:
+
+This can be visualized using `<https://jsrunvisualizer.olcf.ornl.gov/index.html>`_
+
+.. |a| image:: ./figs/jsrunVisualizer-MPI+OMP.png
+       :width: 100%
+.. |b| image:: ./figs/jsrunVisualizer-MPI+GPU.png
+       :width: 100%
+
+.. _fig:gpu:threads:
+	       
+.. table:: Comparison of jsrun process assignment for MPI + OpenMP and MPI + GPU work distribution.
+
+	   +-----------------------------------------------------+------------------------------------------------------+
+	   |                        |a|                          |                        |b|                           |
+	   +-----------------------------------------------------+------------------------------------------------------+
+	   | | MPI + OpenMP                                      | | MPI + GPU                                          |
+	   +-----------------------------------------------------+------------------------------------------------------+
+		       
+The example script directory is: `<https://github.com/AMReX-Astro/workflow/tree/master/job_scripts/summit>`_
+
+.. note::
+
+   We are defaulting to one hardware thread per CPU, since this is the configuration suggested by OLCF
