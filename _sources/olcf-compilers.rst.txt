@@ -3,18 +3,6 @@
 Compiling at OLCF
 =================
 
-Titan
------
-
-The default version of python on Titan is not recent enough
-to support the python scripts in our build system.  At the
-terminal do::
-
-  module load python
-
-to fix this.
-
-
 Summit
 ------
 
