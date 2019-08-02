@@ -6,6 +6,11 @@ Managing Jobs at OLCF
 Titan
 -----
 
+.. note::
+
+   Titan is gone, so we need to update these instructions for Summit
+
+
 On Titan, we have a PBS script ``titan.run`` and a script
 ``process.titan`` executed by ``titan.run`` to tar up plot,
 checkpoint, and diagnostic files and store them in HPSS.

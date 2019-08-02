@@ -106,5 +106,4 @@ aborts. Just delete that if you know the script is not running.
 Jobs in the xfer queue start up quickly. The best approach is to start
 one as you start your main job (or make it dependent on the main
 job). The sample ``process.xrb`` script will wait for output and then
-archive it as it is produced, using the techniques described for titan
-above.
+archive it as it is produced.
