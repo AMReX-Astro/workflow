@@ -16,12 +16,13 @@ SLURM will change directory into the submission directory.
 
    Needs updating
 
-A sample job submission script, ``edison.MPI.OMP.slurm`` is in the
-Castro `job scripts
-<https://github.com/AMReX-Astro/Castro/blob/master/Util/job_scripts/edison/>`_
-directory (``Util/job_scripts``) and includes logic to automatically
-add the correct restart options to the run to continue a simulation
-from the last checkpoint file in the submission directory.
+A sample job submission script for pure MPI,
+``cori_haswell.MPI.slurm`` is in the `cori-haswell
+<https://github.com/AMReX-Astro/workflow/blob/master/job_scripts/cori-haswell/>`_
+directory (``workflow/job_scripts/cori-haswell/``) and includes logic
+to automatically add the correct restart options to the run to
+continue a simulation from the last checkpoint file in the submission
+directory.
 
 Jobs are submitted as::
 
@@ -62,11 +63,11 @@ Archiving Data to HPSS
    https://docs.nersc.gov/jobs/examples/#xfer-queue
 
 
-The script ``edison.xfer.slurm`` in ``Castro/Util/job
-scripts/edison/`` can be used to archive data to HPSS
-automatically. This is submitted to the xfer queue and runs the script
-``process.xrb`` which continually looks for output and stores it to
-HPSS.
+The script ``nersc.xfer.slurm`` in
+``workflow/job_scripts/cori-haswell/`` can be used to archive data to
+HPSS automatically. This is submitted to the xfer queue and runs the
+script ``process.xrb`` which continually looks for output and stores
+it to HPSS.
 
 To use the scripts, first create a directory in HPSS that has the same
 name as the directory on lustre you are running in (just the directory

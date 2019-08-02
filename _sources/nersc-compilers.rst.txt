@@ -11,10 +11,8 @@ Intel
 ^^^^^
 
 Intel is the default programming environment on Cori and appear to
-be the preferred compilers.  The Intel 18.0.2 compilers seem to work
-well at NERSC.  Note: the default 18.0.1 do not seem to work.  To swap::
+be the preferred compilers.
 
-  module swap intel intel/18.0.2.199
 
 GNU
 ^^^
