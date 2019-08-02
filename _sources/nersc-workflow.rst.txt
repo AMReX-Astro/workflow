@@ -12,10 +12,6 @@ twi Intel Haswell 16-core processors.
 Jobs should be run in your ``$SCRATCH`` directory. By default,
 SLURM will change directory into the submission directory.
 
-.. note::
-
-   Needs updating
-
 A sample job submission script for pure MPI,
 ``cori_haswell.MPI.slurm`` is in the `cori-haswell
 <https://github.com/AMReX-Astro/workflow/blob/master/job_scripts/cori-haswell/>`_
