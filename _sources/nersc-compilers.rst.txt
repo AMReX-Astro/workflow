@@ -13,6 +13,12 @@ Intel
 Intel is the default programming environment on Cori and appear to
 be the preferred compilers.
 
+When using Intel 18.0.3.222, the default GCC 8.2.0 compilers seem to
+have a conflict that present our codes from compiling Switching to an
+earlier version seems to fix this::
+
+    module swap gcc gcc/7.3.0
+
 
 GNU
 ^^^
