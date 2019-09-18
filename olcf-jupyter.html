@@ -91,7 +91,11 @@
 <li class="toctree-l1 current"><a class="reference internal" href="olcf.html">Working at OLCF</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="olcf-compilers.html">Compiling at OLCF</a></li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-workflow.html">Managing Jobs at OLCF</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Running Jupyter Remotely from OLCF</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Running Jupyter Remotely from OLCF</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#launching-on-the-compute-node">Launching on the compute node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#launching-from-an-interactive-job">Launching from an interactive job</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="workstations.html">Linux Workstations</a></li>
@@ -164,6 +168,8 @@
   <div class="section" id="running-jupyter-remotely-from-olcf">
 <h1>Running Jupyter Remotely from OLCF<a class="headerlink" href="#running-jupyter-remotely-from-olcf" title="Permalink to this headline">¶</a></h1>
 <p>Here we shall outline how to run jupyter notebooks remotely on Summit. These instructions are for jupyter lab, but should work for jupyter notebooks as well by exchanging <code class="docutils literal notranslate"><span class="pre">lab</span></code> for <code class="docutils literal notranslate"><span class="pre">notebook</span></code>.</p>
+<div class="section" id="launching-on-the-compute-node">
+<h2>Launching on the compute node<a class="headerlink" href="#launching-on-the-compute-node" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
 <li><p>If you wish to install extra python libraries (e.g. <code class="docutils literal notranslate"><span class="pre">yt</span></code>), then they can be installed using a conda environment. To do this, make sure you have the correct python module loaded on Summit (e.g. <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">python/3.7.0-anaconda3-5.3.0</span></code>), and create a new conda environment with the modules you require installed. At this point, it’s also a good idea to make sure this environment has the libraries <code class="docutils literal notranslate"><span class="pre">ipykernel</span></code> and <code class="docutils literal notranslate"><span class="pre">nb_conda_kernels</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n my_env -y ipykernel nb_conda_kernels
@@ -195,13 +201,52 @@ conda deactivate my_env
 <p>This will prompt you for your Summit password. If all goes well, it should not print any messages once you hit enter.</p>
 <ol class="arabic" start="5">
 <li><p>Finally, open up <code class="docutils literal notranslate"><span class="pre">localhost:8888</span></code> in your browser. This will prompt you for the token of the jupyter session. You can find this by looking back to when you first launched the jupyter session on Summit. Amongst the output, you should see something like:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>The Jupyter Notebook is running at:
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Copy/paste this URL into your browser when you connect <span class="k">for</span> the first time,
+to login with a token:
 http://login1:8888/?token<span class="o">=</span>kjadhsf8yw9oayfhdfya98wyfhs98hafshuihyf8ohauiuah
 </pre></div>
 </div>
 </li>
 </ol>
-<p>Copy and paste the bit after <code class="docutils literal notranslate"><span class="pre">token=</span></code>.</p>
+<p>Copy and paste the bit after <code class="docutils literal notranslate"><span class="pre">token=</span></code>. When in your jupyter session, make sure to create a notebook with your <code class="docutils literal notranslate"><span class="pre">my_env</span></code> kernel (rather than the default Python 3 kernel).</p>
+</div>
+<div class="section" id="launching-from-an-interactive-job">
+<h2>Launching from an interactive job<a class="headerlink" href="#launching-from-an-interactive-job" title="Permalink to this headline">¶</a></h2>
+<p>It’s probably not a good idea to do any heavy visualization on the login nodes, so instead we’re going to run the notebook in an interactive job. This assumes that you’ve already followed the first 2 steps of the previous section to create the conda environment.</p>
+<ol class="arabic">
+<li><p>First submit your interactive job, e.g. this will launch a job on 1 node for 30 minutes:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bsub -W <span class="m">0</span>:30 -nnodes <span class="m">1</span> -P ast106 -Is /bin/bash
+</pre></div>
+</div>
+</li>
+<li><p>For some reason, if you just try to launch a jupyter session on the compute node, it will give you an error like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>PermissionError: <span class="o">[</span>Errno <span class="m">13</span><span class="o">]</span> Permission denied: <span class="s1">&#39;/run/user/12746&#39;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>We can get around this by setting <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">XDG_RUNTIME_DIR=&quot;&quot;</span></code>.</p>
+<ol class="arabic" start="3">
+<li><p>Now we’re going to launch the jupyter session as before:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jupyter-lab --no-browser --ip<span class="o">=</span><span class="s2">&quot;batch1&quot;</span> &gt; jupyter.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>(make sure the <code class="docutils literal notranslate"><span class="pre">--ip=</span></code> refers to the compute node you’re on).</p>
+<ol class="arabic" start="4">
+<li><p>Create an ssh tunnel that first connects to the login node, then from there connects to the compute node:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh -t -t username@summit.olcf.ornl.gov -L localhost:8888:localhost:8888 ssh login1 -L <span class="m">8888</span>:batch1:8888
+</pre></div>
+</div>
+</li>
+</ol>
+<p>(for the second <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">login1</span></code>, make sure that this corresponds to the login node from which you launched the interactive job).</p>
+<ol class="arabic simple" start="5">
+<li><p>Now navigate to <code class="docutils literal notranslate"><span class="pre">localhost:8888</span></code> in your browser. You can find the token by looking in the <code class="docutils literal notranslate"><span class="pre">jupyter.log</span></code> file into which we redirected the jupyter session output in step 3.</p></li>
+</ol>
+<p>Note: it may be that you run into some issues launching a notebook with your <code class="docutils literal notranslate"><span class="pre">my_env</span></code> kernel. If this happens, try uninstalling and reinstalling <code class="docutils literal notranslate"><span class="pre">pyzmq</span></code>: <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">uninstall</span> <span class="pre">pyzmq</span></code>, <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">pyzmq</span></code>. If it uninstalls any other modules when you do this, make sure to reinstall them as well.</p>
+</div>
 </div>
 
 
