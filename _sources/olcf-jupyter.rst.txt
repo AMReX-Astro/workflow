@@ -11,7 +11,7 @@ Launching on the compute node
 1. If you wish to install extra python libraries (e.g. ``yt``), then they can be installed using a conda environment. To do this, make sure you have the correct python module loaded on Summit (e.g. ``module load python/3.7.0-anaconda3-5.3.0``), and create a new conda environment with the modules you require installed. At this point, it's also a good idea to make sure this environment has the libraries ``ipykernel`` and ``nb_conda_kernels``::
 
     conda create -n my_env -y ipykernel nb_conda_kernels
-    conda install -n my_env -c conda_forge yt 
+    conda install -n my_env -c conda-forge yt 
 
 2. Next, we need to make sure that the environment will be available when we launch our jupyter session::
 
@@ -40,8 +40,8 @@ This will prompt you for your Summit password. If all goes well, it should not p
 Copy and paste the bit after ``token=``. When in your jupyter session, make sure to create a notebook with your ``my_env`` kernel (rather than the default Python 3 kernel). 
 
 
-Launching from an interactive job
----------------------------------
+Launching from an interactive job on Summit
+-------------------------------------------
 
 It's probably not a good idea to do any heavy visualization on the login nodes, so instead we're going to run the notebook in an interactive job. This assumes that you've already followed the first 2 steps of the previous section to create the conda environment.
 
@@ -70,4 +70,27 @@ We can get around this by setting ``export XDG_RUNTIME_DIR=""``.
 
 5. Now navigate to ``localhost:8888`` in your browser. You can find the token by looking in the ``jupyter.log`` file into which we redirected the jupyter session output in step 3. 
 
-Note: it may be that you run into some issues launching a notebook with your ``my_env`` kernel. If this happens, try uninstalling and reinstalling ``pyzmq``: ``conda uninstall pyzmq``, ``conda install pyzmq``. If it uninstalls any other modules when you do this, make sure to reinstall them as well. 
+Note: it may be that you run into some issues launching a notebook with your ``my_env`` kernel. If this happens, activate your environment and try uninstalling and reinstalling ``pyzmq``: ``conda uninstall pyzmq``, ``conda install pyzmq``. If it uninstalls any other modules when you do this, make sure to reinstall them as well. 
+
+Launching from an interactive job on Rhea
+-----------------------------------------
+
+Rhea is a dedicated visualization machine, so it's probably a better idea to use it for doing visualization calculations rather than Summit. Unfortunately, the version of anaconda installed on Rhea is slightly different from the one on Summit, so the libraries installed in our conda environment on Summit will not work on Rhea. It's therefore necessary to repeat steps 1 and 2 on Rhea and create a new Rhea-specific conda environment. As before, you'll probably run into issues with package conflicts in your conda environment, so again you'll need to uninstall/reinstall ``pyzmq`` for this environment.
+
+1. First, take note of the login node you're on. You can find this by running ``hostname``.
+
+2. Submit your interactive job::
+
+    salloc -A ast106 -N 1 -t 0:30:00
+
+will create a 1 node job for 30 minutes. 
+
+3. Repeat steps 2 and 3 from above
+
+4. Create your ssh tunnel::
+
+    ssh username@rhea.ccs.ornl.gov -L localhost:8888:localhost:8888 ssh rhea-login3g -L 8888:rhea184:8888
+
+where ``rhea-login3g`` is the name of the login node you used, and ``rhea184`` is the name of the compute node where you launched the jupyter session.
+
+5. Navigate to ``localhost:8888`` in your browser.

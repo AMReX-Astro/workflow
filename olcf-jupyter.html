@@ -93,7 +93,8 @@
 <li class="toctree-l2"><a class="reference internal" href="olcf-workflow.html">Managing Jobs at OLCF</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Running Jupyter Remotely from OLCF</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#launching-on-the-compute-node">Launching on the compute node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#launching-from-an-interactive-job">Launching from an interactive job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#launching-from-an-interactive-job-on-summit">Launching from an interactive job on Summit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#launching-from-an-interactive-job-on-rhea">Launching from an interactive job on Rhea</a></li>
 </ul>
 </li>
 </ul>
@@ -173,7 +174,7 @@
 <ol class="arabic">
 <li><p>If you wish to install extra python libraries (e.g. <code class="docutils literal notranslate"><span class="pre">yt</span></code>), then they can be installed using a conda environment. To do this, make sure you have the correct python module loaded on Summit (e.g. <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">python/3.7.0-anaconda3-5.3.0</span></code>), and create a new conda environment with the modules you require installed. At this point, it’s also a good idea to make sure this environment has the libraries <code class="docutils literal notranslate"><span class="pre">ipykernel</span></code> and <code class="docutils literal notranslate"><span class="pre">nb_conda_kernels</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n my_env -y ipykernel nb_conda_kernels
-conda install -n my_env -c conda_forge yt
+conda install -n my_env -c conda-forge yt
 </pre></div>
 </div>
 </li>
@@ -210,8 +211,8 @@ http://login1:8888/?token<span class="o">=</span>kjadhsf8yw9oayfhdfya98wyfhs98ha
 </ol>
 <p>Copy and paste the bit after <code class="docutils literal notranslate"><span class="pre">token=</span></code>. When in your jupyter session, make sure to create a notebook with your <code class="docutils literal notranslate"><span class="pre">my_env</span></code> kernel (rather than the default Python 3 kernel).</p>
 </div>
-<div class="section" id="launching-from-an-interactive-job">
-<h2>Launching from an interactive job<a class="headerlink" href="#launching-from-an-interactive-job" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="launching-from-an-interactive-job-on-summit">
+<h2>Launching from an interactive job on Summit<a class="headerlink" href="#launching-from-an-interactive-job-on-summit" title="Permalink to this headline">¶</a></h2>
 <p>It’s probably not a good idea to do any heavy visualization on the login nodes, so instead we’re going to run the notebook in an interactive job. This assumes that you’ve already followed the first 2 steps of the previous section to create the conda environment.</p>
 <ol class="arabic">
 <li><p>First submit your interactive job, e.g. this will launch a job on 1 node for 30 minutes:</p>
@@ -245,7 +246,32 @@ http://login1:8888/?token<span class="o">=</span>kjadhsf8yw9oayfhdfya98wyfhs98ha
 <ol class="arabic simple" start="5">
 <li><p>Now navigate to <code class="docutils literal notranslate"><span class="pre">localhost:8888</span></code> in your browser. You can find the token by looking in the <code class="docutils literal notranslate"><span class="pre">jupyter.log</span></code> file into which we redirected the jupyter session output in step 3.</p></li>
 </ol>
-<p>Note: it may be that you run into some issues launching a notebook with your <code class="docutils literal notranslate"><span class="pre">my_env</span></code> kernel. If this happens, try uninstalling and reinstalling <code class="docutils literal notranslate"><span class="pre">pyzmq</span></code>: <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">uninstall</span> <span class="pre">pyzmq</span></code>, <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">pyzmq</span></code>. If it uninstalls any other modules when you do this, make sure to reinstall them as well.</p>
+<p>Note: it may be that you run into some issues launching a notebook with your <code class="docutils literal notranslate"><span class="pre">my_env</span></code> kernel. If this happens, activate your environment and try uninstalling and reinstalling <code class="docutils literal notranslate"><span class="pre">pyzmq</span></code>: <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">uninstall</span> <span class="pre">pyzmq</span></code>, <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">pyzmq</span></code>. If it uninstalls any other modules when you do this, make sure to reinstall them as well.</p>
+</div>
+<div class="section" id="launching-from-an-interactive-job-on-rhea">
+<h2>Launching from an interactive job on Rhea<a class="headerlink" href="#launching-from-an-interactive-job-on-rhea" title="Permalink to this headline">¶</a></h2>
+<p>Rhea is a dedicated visualization machine, so it’s probably a better idea to use it for doing visualization calculations rather than Summit. Unfortunately, the version of anaconda installed on Rhea is slightly different from the one on Summit, so the libraries installed in our conda environment on Summit will not work on Rhea. It’s therefore necessary to repeat steps 1 and 2 on Rhea and create a new Rhea-specific conda environment. As before, you’ll probably run into issues with package conflicts in your conda environment, so again you’ll need to uninstall/reinstall <code class="docutils literal notranslate"><span class="pre">pyzmq</span></code> for this environment.</p>
+<ol class="arabic">
+<li><p>First, take note of the login node you’re on. You can find this by running <code class="docutils literal notranslate"><span class="pre">hostname</span></code>.</p></li>
+<li><p>Submit your interactive job:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>salloc -A ast106 -N <span class="m">1</span> -t <span class="m">0</span>:30:00
+</pre></div>
+</div>
+</li>
+</ol>
+<p>will create a 1 node job for 30 minutes.</p>
+<ol class="arabic" start="3">
+<li><p>Repeat steps 2 and 3 from above</p></li>
+<li><p>Create your ssh tunnel:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh username@rhea.ccs.ornl.gov -L localhost:8888:localhost:8888 ssh rhea-login3g -L <span class="m">8888</span>:rhea184:8888
+</pre></div>
+</div>
+</li>
+</ol>
+<p>where <code class="docutils literal notranslate"><span class="pre">rhea-login3g</span></code> is the name of the login node you used, and <code class="docutils literal notranslate"><span class="pre">rhea184</span></code> is the name of the compute node where you launched the jupyter session.</p>
+<ol class="arabic simple" start="5">
+<li><p>Navigate to <code class="docutils literal notranslate"><span class="pre">localhost:8888</span></code> in your browser.</p></li>
+</ol>
 </div>
 </div>
 
