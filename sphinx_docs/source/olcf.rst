@@ -8,3 +8,4 @@ Working at OLCF
 
    olcf-compilers
    olcf-workflow
+   olcf-jupyter
