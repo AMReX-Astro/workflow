@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Compiling at OLCF &mdash; AMReX-Astro 1.0 documentation</title>
+  <title>Running Jupyter Remotely from OLCF &mdash; AMReX-Astro 1.0 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Managing Jobs at OLCF" href="olcf-workflow.html" />
-    <link rel="prev" title="Working at OLCF" href="olcf.html" /> 
+    <link rel="next" title="Linux Workstations" href="workstations.html" />
+    <link rel="prev" title="Managing Jobs at OLCF" href="olcf-workflow.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -89,12 +89,9 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="nersc.html">Working at NERSC</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="olcf.html">Working at OLCF</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Compiling at OLCF</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#summit">Summit</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="olcf-compilers.html">Compiling at OLCF</a></li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-workflow.html">Managing Jobs at OLCF</a></li>
-<li class="toctree-l2"><a class="reference internal" href="olcf-jupyter.html">Running Jupyter Remotely from OLCF</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Running Jupyter Remotely from OLCF</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="workstations.html">Linux Workstations</a></li>
@@ -145,13 +142,13 @@
         
           <li><a href="olcf.html">Working at OLCF</a> &raquo;</li>
         
-      <li>Compiling at OLCF</li>
+      <li>Running Jupyter Remotely from OLCF</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/olcf-compilers.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/olcf-jupyter.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -164,35 +161,47 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="compiling-at-olcf">
-<h1>Compiling at OLCF<a class="headerlink" href="#compiling-at-olcf" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="summit">
-<h2>Summit<a class="headerlink" href="#summit" title="Permalink to this headline">¶</a></h2>
-<p>In order to compile you will need to swap the xl module with pgi:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module swap xl pgi
+  <div class="section" id="running-jupyter-remotely-from-olcf">
+<h1>Running Jupyter Remotely from OLCF<a class="headerlink" href="#running-jupyter-remotely-from-olcf" title="Permalink to this headline">¶</a></h1>
+<p>Here we shall outline how to run jupyter notebooks remotely on Summit. These instructions are for jupyter lab, but should work for jupyter notebooks as well by exchanging <code class="docutils literal notranslate"><span class="pre">lab</span></code> for <code class="docutils literal notranslate"><span class="pre">notebook</span></code>.</p>
+<ol class="arabic">
+<li><p>If you wish to install extra python libraries (e.g. <code class="docutils literal notranslate"><span class="pre">yt</span></code>), then they can be installed using a conda environment. To do this, make sure you have the correct python module loaded on Summit (e.g. <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">python/3.7.0-anaconda3-5.3.0</span></code>), and create a new conda environment with the modules you require installed. At this point, it’s also a good idea to make sure this environment has the libraries <code class="docutils literal notranslate"><span class="pre">ipykernel</span></code> and <code class="docutils literal notranslate"><span class="pre">nb_conda_kernels</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n my_env -y ipykernel nb_conda_kernels
+conda install -n my_env -c conda_forge yt
 </pre></div>
 </div>
-<p>Then load CUDA:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load cuda
+</li>
+<li><p>Next, we need to make sure that the environment will be available when we launch our jupyter session:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda activate my_env
+ipython kernel install --user --name<span class="o">=</span>my_env
+conda deactivate my_env
 </pre></div>
 </div>
-<p>compile with <code class="docutils literal notranslate"><span class="pre">COMP</span> <span class="pre">=</span> <span class="pre">pgi</span></code> and <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code></p>
-<p>Ensure your GNUMakefile uses <code class="docutils literal notranslate"><span class="pre">USE_OMP=FALSE</span></code> since AMReX’s standard OpenMP strategy conflicts with GPUs.</p>
-<p>The version pairs that work for sure currently are <code class="docutils literal notranslate"><span class="pre">pgi/18.10</span> <span class="pre">+</span> <span class="pre">cuda/9.1.85</span></code>, <code class="docutils literal notranslate"><span class="pre">pgi/19.5</span> <span class="pre">+</span> <span class="pre">cuda/10.1.168</span></code>, and <code class="docutils literal notranslate"><span class="pre">pgi/19.5</span> <span class="pre">+</span> <span class="pre">cuda/10.1.105</span></code>.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>At present, there is a known compiler bug in CUDA 9.2.148 that
-prevents compilation. Using CUDA 9.1 is a workaround.</p>
+</li>
+<li><p>Now we should be ready to launch our jupyter session. From Summit, launch a <code class="docutils literal notranslate"><span class="pre">no-browser</span></code> session:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>username@login1.summit ~<span class="o">]</span>$ jupyter lab --no-browser --ip<span class="o">=</span><span class="s2">&quot;login1&quot;</span>
+</pre></div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">INTEGRATOR_DIR=VODE90</span></code> if specifying an integrator at compile time, since <code class="docutils literal notranslate"><span class="pre">VODE</span></code> will not work with GPUs.</p></li>
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">USE_GPU_PRAGMA=TRUE</span></code> for any code which uses <code class="docutils literal notranslate"><span class="pre">#pragma</span> <span class="pre">gpu</span></code>, this flag is set by default in MAESTROeX and CASTRO’s build system when <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code>.</p></li>
-<li><p>OpenMP offloading to the GPU is controlled by <code class="docutils literal notranslate"><span class="pre">USE_OMP_OFFLOAD</span></code>, which will default to <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>, AMReX-Astro doesn’t use this feature.</p></li>
-</ul>
+</li>
+</ol>
+<p>(note if you’re on a different node, be sure to change the <code class="docutils literal notranslate"><span class="pre">--ip=</span></code> bit to reflect that).</p>
+<ol class="arabic" start="4">
+<li><p>We can now connect to this from our local workstation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh -N -L localhost:8888:login1:8888 username@summit.olcf.ornl.gov
+</pre></div>
 </div>
+</li>
+</ol>
+<p>This will prompt you for your Summit password. If all goes well, it should not print any messages once you hit enter.</p>
+<ol class="arabic" start="5">
+<li><p>Finally, open up <code class="docutils literal notranslate"><span class="pre">localhost:8888</span></code> in your browser. This will prompt you for the token of the jupyter session. You can find this by looking back to when you first launched the jupyter session on Summit. Amongst the output, you should see something like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>The Jupyter Notebook is running at:
+http://login1:8888/?token<span class="o">=</span>kjadhsf8yw9oayfhdfya98wyfhs98hafshuihyf8ohauiuah
+</pre></div>
 </div>
+</li>
+</ol>
+<p>Copy and paste the bit after <code class="docutils literal notranslate"><span class="pre">token=</span></code>.</p>
 </div>
 
 
@@ -203,10 +212,10 @@ prevents compilation. Using CUDA 9.1 is a workaround.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="olcf-workflow.html" class="btn btn-neutral float-right" title="Managing Jobs at OLCF" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="workstations.html" class="btn btn-neutral float-right" title="Linux Workstations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="olcf.html" class="btn btn-neutral float-left" title="Working at OLCF" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="olcf-workflow.html" class="btn btn-neutral float-left" title="Managing Jobs at OLCF" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
