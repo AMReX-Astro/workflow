@@ -33,9 +33,9 @@ To have a look, use the ``hsi`` command to browse HPSS.
 Files may be unarchived in bulk from HPSS on OLCF systems using the
 ``hpss_xfer.py`` script, which is available in the job_scripts
 directory. It requires Python 3 to be loaded to run. The command::
-    
+
     ./hpss_xfer.py plt00000 -s hpss_dir -o plotfile_dir
-    
+
 will fetch ``hpss_dir/plt00000.tar`` from the HPSS filesystem and
 unpack it in ``plotfile_dir``. If run with no arguments in the problem
 launch directory, the script will attempt to recover all plotfiles
@@ -45,9 +45,9 @@ for a description of usage and arguments.
 For more information about using HPSS on Titan see `<https://www.olcf.ornl.gov/for-users/system-user-guides/titan/titan-user-guide/#workflow>`_
 
 .. note::
-   
+
    *Error: aprun not found*
-   
+
    It is possible (on Titan) that some aspect of the environment on job
    submission can lead to the job failing with the following error::
 
@@ -66,11 +66,18 @@ For more information about using HPSS on Titan see `<https://www.olcf.ornl.gov/f
 Summit
 ------
 
-On Summit, we have a few different examples of PBS batch scripts. ``run_amrex_gpu_tutorials.summit`` is a shallow copy of
-the `AMReX tutorial script <https://github.com/AMReX-Codes/amrex/blob/development/Tutorials/GPU/run.summit>`_, and is more verbose about what different flags and options will do.
-The Castro GPU batch script example is ``summit_16nodes.sh``, more job script examples for Castro can be found `here <https://github.com/AMReX-Astro/Castro/tree/master/Util/scaling/sedov/summit_201905>`_.
-The Nyx example shows running MPI+CUDA, MPI+CUDA with one mpi process nvvp output, and MPI+OMP
-``run_3_tests_same_node.summit``. ``run_template.summit`` gives example syntax for jsrun:
+On Summit, we have a few different examples of PBS batch
+scripts. ``run_amrex_gpu_tutorials.summit`` is a shallow copy of the
+`AMReX tutorial script
+<https://github.com/AMReX-Codes/amrex/blob/development/Tutorials/GPU/run.summit>`_,
+and is more verbose about what different flags and options will do.
+The Castro GPU batch script example is ``summit_16nodes.sh``, more job
+script examples for Castro can be found `here
+<https://github.com/AMReX-Astro/Castro/tree/master/Util/scaling/sedov/summit_201905>`_.
+The Nyx example shows running MPI+CUDA, MPI+CUDA with one mpi process
+nvvp output, and MPI+OMP
+``run_3_tests_same_node.summit``. ``run_template.summit`` gives
+example syntax for jsrun:
 
 .. literalinclude:: ../../job_scripts/summit/run_template.summit
 		    :language: sh
@@ -85,7 +92,7 @@ This can be visualized using `<https://jsrunvisualizer.olcf.ornl.gov/index.html>
        :width: 100%
 
 .. _fig:gpu:threads:
-	       
+
 .. table:: Comparison of jsrun process assignment for MPI + OpenMP and MPI + GPU work distribution.
 
 	   +-----------------------------------------------------+------------------------------------------------------+
@@ -93,9 +100,20 @@ This can be visualized using `<https://jsrunvisualizer.olcf.ornl.gov/index.html>
 	   +-----------------------------------------------------+------------------------------------------------------+
 	   | | MPI + OpenMP                                      | | MPI + GPU                                          |
 	   +-----------------------------------------------------+------------------------------------------------------+
-		       
+
 The example script directory is: `<https://github.com/AMReX-Astro/workflow/tree/master/job_scripts/summit>`_
 
 .. note::
 
    We are defaulting to one hardware thread per CPU, since this is the configuration suggested by OLCF
+
+
+Submitting and monitoring
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Jobs are submitted using the ``bsub`` command::
+
+  bsub script.sh
+
+You can monitor the status of your jobs using ``bjobs``.
+
