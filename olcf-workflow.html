@@ -96,6 +96,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#submitting-and-monitoring">Submitting and monitoring</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#archiving-to-hpss">Archiving to HPSS</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-jupyter.html">Running Jupyter Remotely from OLCF</a></li>
@@ -350,6 +351,35 @@ example syntax for jsrun:</p>
 </pre></div>
 </div>
 <p>You can monitor the status of your jobs using <code class="docutils literal notranslate"><span class="pre">bjobs</span></code>.</p>
+</div>
+</div>
+<div class="section" id="archiving-to-hpss">
+<h2>Archiving to HPSS<a class="headerlink" href="#archiving-to-hpss" title="Permalink to this headline">¶</a></h2>
+<p>You can submit jobs to the data transfer nodes (dtn) directly from
+Summit using:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch -N <span class="m">1</span> -t <span class="m">15</span>:00 -A ast106 --cluster dtn test_hpss.sh
+</pre></div>
+</div>
+<p>This uses <code class="docutils literal notranslate"><span class="pre">slurm</span></code> as the job manager.  An example script
+that uses the <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> looks like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -A ast106</span>
+<span class="c1">#SBATCH -t 02:00:00</span>
+<span class="c1">#SBATCH --cluster dtn</span>
+<span class="c1">#SBATCH -N 1</span>
+
+<span class="c1"># do our archiving</span>
+<span class="nv">pidfile</span><span class="o">=</span>process.pid
+
+<span class="nb">cd</span> <span class="nv">$SLURM_SUBMIT_DIR</span>
+
+./process.xrb
+
+<span class="nv">PID</span><span class="o">=</span><span class="nv">$!</span>
+<span class="nb">trap</span> <span class="s1">&#39;kill -s TERM $PID&#39;</span> EXIT TERM HUP XCPU KILL
+
+rm -f process.pid
+</pre></div>
 </div>
 </div>
 </div>
