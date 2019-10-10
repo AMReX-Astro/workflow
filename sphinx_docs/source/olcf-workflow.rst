@@ -117,3 +117,32 @@ Jobs are submitted using the ``bsub`` command::
 
 You can monitor the status of your jobs using ``bjobs``.
 
+
+Archiving to HPSS
+-----------------
+
+You can submit jobs to the data transfer nodes (dtn) directly from
+Summit using::
+
+  sbatch -N 1 -t 15:00 -A ast106 --cluster dtn test_hpss.sh
+
+This uses ``slurm`` as the job manager.  An example script
+that uses the ``process.xrb`` looks like::
+
+  #!/bin/bash
+  #SBATCH -A ast106
+  #SBATCH -t 02:00:00
+  #SBATCH --cluster dtn
+  #SBATCH -N 1
+
+  # do our archiving
+  pidfile=process.pid
+
+  cd $SLURM_SUBMIT_DIR
+
+  ./process.xrb
+
+  PID=$!
+  trap 'kill -s TERM $PID' EXIT TERM HUP XCPU KILL
+
+  rm -f process.pid
