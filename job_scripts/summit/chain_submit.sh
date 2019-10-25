@@ -1,17 +1,17 @@
 #!/bin/sh -f
 
 if [ ! "$1" ]; then
-  echo "usage: chainslurm.sh jobid number script"
+  echo "usage: chain_submit.sh jobid number script"
   exit -1
 fi
 
 if [ ! "$2" ]; then
-  echo "usage: chainslurm.sh jobid number script"
+  echo "usage: chain_submit.sh jobid number script"
   exit -1
 fi
 
 if [ ! "$3" ]; then
-  echo "usage: chainslurm.sh jobid number script"
+  echo "usage: chain_submit.sh jobid number script"
   exit -1
 fi
 
