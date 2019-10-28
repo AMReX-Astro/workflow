@@ -85,9 +85,11 @@ Rhea is a dedicated visualization machine, so it's probably a better idea to use
 
 will create a 1 node job for 30 minutes. 
 
-3. Repeat steps 2 and 3 from above
+2. Before loading jupyter, set ``LD_PRELOAD=/ccs/home/USERNAME/.conda/envs/yt_conda/lib/libstdc++.so.6`` where ``USERNAME`` is your username on the OLCF systems.
 
-4. Create your ssh tunnel::
+4. Repeat steps 2 and 3 from the Summit instructions above. 
+
+5. Create your ssh tunnel::
 
     ssh username@rhea.ccs.ornl.gov -L localhost:8888:localhost:8888 ssh rhea-login3g -L 8888:rhea184:8888
 
