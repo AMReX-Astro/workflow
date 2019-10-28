@@ -260,8 +260,11 @@ http://login1:8888/?token<span class="o">=</span>kjadhsf8yw9oayfhdfya98wyfhs98ha
 </li>
 </ol>
 <p>will create a 1 node job for 30 minutes.</p>
-<ol class="arabic" start="3">
-<li><p>Repeat steps 2 and 3 from above</p></li>
+<ol class="arabic simple" start="2">
+<li><p>Before loading jupyter, set <code class="docutils literal notranslate"><span class="pre">LD_PRELOAD=/ccs/home/USERNAME/.conda/envs/yt_conda/lib/libstdc++.so.6</span></code> where <code class="docutils literal notranslate"><span class="pre">USERNAME</span></code> is your username on the OLCF systems.</p></li>
+</ol>
+<ol class="arabic" start="4">
+<li><p>Repeat steps 2 and 3 from the Summit instructions above.</p></li>
 <li><p>Create your ssh tunnel:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh username@rhea.ccs.ornl.gov -L localhost:8888:localhost:8888 ssh rhea-login3g -L <span class="m">8888</span>:rhea184:8888
 </pre></div>
