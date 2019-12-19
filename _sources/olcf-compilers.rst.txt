@@ -27,11 +27,11 @@ strategy conflicts with GPUs.  An example compilation line is::
 
 The version pairs that work for sure currently are:
 
-  * ``pgi/18.10 + cuda/9.1.85``
+  * ``pgi/19.5`` + ``cuda/10.1.105``.
 
-  * ``pgi/19.5 + cuda/10.1.105``.
+  * ``pgi/19.5`` + ``cuda/10.1.168``
 
-  * ``pgi/19.5 + cuda/10.1.168``
+  * ``pgi/19.10`` + ``cuda/10.1.168``
 
 .. warning::
 
