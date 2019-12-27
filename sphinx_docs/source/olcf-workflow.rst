@@ -117,6 +117,9 @@ Jobs are submitted using the ``bsub`` command::
 
 You can monitor the status of your jobs using ``bjobs``.
 
+A slightly nicer view of your jobs can be viewed using ``jobstat`` as::
+
+  jobstat -u username
 
 Archiving to HPSS
 -----------------
