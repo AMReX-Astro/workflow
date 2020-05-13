@@ -13,7 +13,15 @@ Launching on the compute node
     conda create -n my_env -y ipykernel nb_conda_kernels
     conda install -n my_env -c conda-forge yt 
 
-2. Next, we need to make sure that the environment will be available when we launch our jupyter session::
+2. Next, we need to make sure that the environment will be available when we launch our jupyter session. Before we do this, make sure that the conda profile ``conda.sh`` is included in your shell environment. To do this for just this session, run::
+
+    source /sw/summit/python/3.7/anaconda3/5.3.0/etc/profile.d/conda.sh
+    
+   This command will need to be re-run for every new session, so it's more useful to instead add this line to your ``.bashrc`` file::
+
+    . /sw/summit/python/3.7/anaconda3/5.3.0/etc/profile.d/conda.sh
+
+   (note you'll need to run ``source .bashrc`` to see this change in your current session). Now we can activate the conda environment::
 
     conda activate my_env
     ipython kernel install --user --name=my_env
@@ -23,13 +31,13 @@ Launching on the compute node
 
     [username@login1.summit ~]$ jupyter lab --no-browser --ip="login1"
 
-(note if you're on a different node, be sure to change the ``--ip=`` bit to reflect that).
+   (note if you're on a different node, be sure to change the ``--ip=`` bit to reflect that).
 
 4. We can now connect to this from our local workstation::
 
     ssh -N -L localhost:8888:login1:8888 username@summit.olcf.ornl.gov
 
-This will prompt you for your Summit password. If all goes well, it should not print any messages once you hit enter. 
+   This will prompt you for your Summit password. If all goes well, it should not print any messages once you hit enter. 
 
 5. Finally, open up ``localhost:8888`` in your browser. This will prompt you for the token of the jupyter session. You can find this by looking back to when you first launched the jupyter session on Summit. Amongst the output, you should see something like::
 
@@ -37,7 +45,7 @@ This will prompt you for your Summit password. If all goes well, it should not p
     to login with a token:
     http://login1:8888/?token=kjadhsf8yw9oayfhdfya98wyfhs98hafshuihyf8ohauiuah
 
-Copy and paste the bit after ``token=``. When in your jupyter session, make sure to create a notebook with your ``my_env`` kernel (rather than the default Python 3 kernel). 
+   Copy and paste the bit after ``token=``. When in your jupyter session, make sure to create a notebook with your ``my_env`` kernel (rather than the default Python 3 kernel). 
 
 
 Launching from an interactive job on Summit
@@ -54,19 +62,19 @@ It's probably not a good idea to do any heavy visualization on the login nodes, 
 
     PermissionError: [Errno 13] Permission denied: '/run/user/12746'
 
-We can get around this by setting ``export XDG_RUNTIME_DIR=""``. 
+   We can get around this by setting ``export XDG_RUNTIME_DIR=""``. 
 
 3. Now we're going to launch the jupyter session as before::
 
     jupyter-lab --no-browser --ip="batch1" > jupyter.log 2>&1 &
 
-(make sure the ``--ip=`` refers to the compute node you're on).
+   (make sure the ``--ip=`` refers to the compute node you're on).
 
 4. Create an ssh tunnel that first connects to the login node, then from there connects to the compute node::
 
     ssh -t -t username@summit.olcf.ornl.gov -L localhost:8888:localhost:8888 ssh login1 -L 8888:batch1:8888
 
-(for the second ``ssh login1``, make sure that this corresponds to the login node from which you launched the interactive job). 
+   (for the second ``ssh login1``, make sure that this corresponds to the login node from which you launched the interactive job). 
 
 5. Now navigate to ``localhost:8888`` in your browser. You can find the token by looking in the ``jupyter.log`` file into which we redirected the jupyter session output in step 3. 
 
@@ -83,7 +91,7 @@ Rhea is a dedicated visualization machine, so it's probably a better idea to use
 
     salloc -A ast106 -N 1 -t 0:30:00
 
-will create a 1 node job for 30 minutes. 
+   will create a 1 node job for 30 minutes. 
 
 2. Before loading jupyter, set ``LD_PRELOAD=/ccs/home/USERNAME/.conda/envs/yt_conda/lib/libstdc++.so.6`` where ``USERNAME`` is your username on the OLCF systems.
 
@@ -93,6 +101,6 @@ will create a 1 node job for 30 minutes.
 
     ssh username@rhea.ccs.ornl.gov -L localhost:8888:localhost:8888 ssh rhea-login3g -L 8888:rhea184:8888
 
-where ``rhea-login3g`` is the name of the login node you used, and ``rhea184`` is the name of the compute node where you launched the jupyter session.
+   where ``rhea-login3g`` is the name of the login node you used, and ``rhea184`` is the name of the compute node where you launched the jupyter session.
 
 5. Navigate to ``localhost:8888`` in your browser.
