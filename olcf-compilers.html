@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,12 +11,19 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -29,11 +35,6 @@
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Managing Jobs at OLCF" href="olcf-workflow.html" />
@@ -51,7 +52,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> AMReX-Astro
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> AMReX-Astro
           
 
           
@@ -78,6 +79,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -103,6 +105,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -141,7 +144,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="olcf.html">Working at OLCF</a> &raquo;</li>
         
@@ -177,13 +180,13 @@
 </pre></div>
 </div>
 <p>You also need to make sure you have the python module loaded:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load python/3.5.2
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load python/3.7.0
 </pre></div>
 </div>
 <p>Compile with <code class="docutils literal notranslate"><span class="pre">COMP</span> <span class="pre">=</span> <span class="pre">pgi</span></code> and <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code>.  Ensure your
 GNUMakefile uses <code class="docutils literal notranslate"><span class="pre">USE_OMP=FALSE</span></code> since AMReX’s standard OpenMP
 strategy conflicts with GPUs.  An example compilation line is:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make <span class="nv">COMP</span><span class="o">=</span>pgi <span class="nv">INTEGRATOR_DIR</span><span class="o">=</span>VODE90 <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE -j <span class="m">4</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make <span class="nv">COMP</span><span class="o">=</span>pgi <span class="nv">INTEGRATOR_DIR</span><span class="o">=</span>VODE <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE -j <span class="m">4</span>
 </pre></div>
 </div>
 <p>The version pairs that work for sure currently are:</p>
@@ -201,15 +204,23 @@ prevents compilation. Using CUDA 9.1 is a workaround.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">INTEGRATOR_DIR=VODE90</span></code> if specifying an integrator at
-compile time, since <code class="docutils literal notranslate"><span class="pre">VODE</span></code> will not work with GPUs.</p></li>
+<ul>
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">USE_GPU_PRAGMA=TRUE</span></code> for any code which uses <code class="docutils literal notranslate"><span class="pre">#pragma</span>
 <span class="pre">gpu</span></code>, this flag is set by default in MAESTROeX and CASTRO’s
 build system when <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code>.</p></li>
 <li><p>OpenMP offloading to the GPU is controlled by
 <code class="docutils literal notranslate"><span class="pre">USE_OMP_OFFLOAD</span></code>, which will default to <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>, AMReX-Astro
 doesn’t use this feature.</p></li>
+<li><p>MAESTROeX requires C++14, so it is necessary to use a
+later version of gcc than the version loaded on Summit
+when the pgi module is loaded. To do this, add the
+following to the <code class="docutils literal notranslate"><span class="pre">GNUMakefile</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">NVCC_CCBIN</span><span class="o">=</span>/sw/summit/gcc/7.4.0/bin/g++
+<span class="nv">LIBRARY_LOCATIONS</span> <span class="o">+=</span> /sw/summit/gcc/7.4.0/lib64/
+<span class="nv">LIBRARIES</span> <span class="o">+=</span> -Wl,-rpath,/sw/summit/gcc/7.4.0/lib64/
+</pre></div>
+</div>
+</li>
 </ul>
 </div>
 </div>
@@ -235,11 +246,19 @@ doesn’t use this feature.</p></li>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2018, AMReX-Astro development tem
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -250,7 +269,6 @@ doesn’t use this feature.</p></li>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
