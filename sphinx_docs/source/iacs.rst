@@ -47,4 +47,5 @@ AMReX needs to have the options changed slightly.  Edit
 make COMP=cray -j 24 DEPFLAGS=-M
 ```
 
+Note: compiling takes a long time.
 
