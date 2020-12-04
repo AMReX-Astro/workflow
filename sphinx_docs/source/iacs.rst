@@ -14,7 +14,7 @@ ideal config would be running 4 MPI each with 12 threads.
 
 
 Cray compilers
-==============
+--------------
 
 You can only access the Cray environment on a compute note:
 
@@ -37,7 +37,7 @@ Setup the environment
 ::
 
   module load CPE
-  module load cray-mvapich2_nogpu/2.3.4
+  #module load cray-mvapich2_nogpu/2.3.4
 
 This should load the older ``cce-sve`` compilers (``10.0.1``).
 
@@ -49,8 +49,30 @@ You can then build via:
 
 ::
 
-  make COMP=cray -j 24 DEPFLAGS=-M
+  make COMP=cray -j 24 DEPFLAGS=-M USE_MPI=FALSE
 
 
-Note: compiling takes a long time.
+.. note::
+
+   Compiling takes a long time.  At the moment, we do not link with
+   MPI, with a ``cannot find nopattern`` error (which is why that
+   module is commented out above).
+
+
+
+GCC
+---
+
+Load modules as:
+
+::
+
+  module load gcc
+  module load openmpi/mlnx/gcc/64/4.0.3rc4
+
+Build as
+
+::
+
+  make -j 24
 
