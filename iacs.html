@@ -92,8 +92,11 @@
 <li class="toctree-l1"><a class="reference internal" href="nersc.html">Working at NERSC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="olcf.html">Working at OLCF</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Working at IACS</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#ookami">Ookami</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cray-compilers">Cray compilers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ookami">Ookami</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cray-compilers">Cray compilers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gcc">GCC</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="workstations.html">Linux Workstations</a></li>
@@ -169,9 +172,8 @@
 <p>Ookami seems to have 48 compute cores grouped into 4 pools of 12
 threads (there is actually a 13th core on each for OS stuff).  So an
 ideal config would be running 4 MPI each with 12 threads.</p>
-</div>
 <div class="section" id="cray-compilers">
-<h2>Cray compilers<a class="headerlink" href="#cray-compilers" title="Permalink to this headline">¶</a></h2>
+<h3>Cray compilers<a class="headerlink" href="#cray-compilers" title="Permalink to this headline">¶</a></h3>
 <p>You can only access the Cray environment on a compute note:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>srun -p short -N <span class="m">1</span> -n <span class="m">48</span> --pty bash
 </pre></div>
@@ -184,7 +186,7 @@ older compilers.  Even though both have version numbers of the form
 <p>(see <a class="reference external" href="https://www.stonybrook.edu/commcms/ookami/faq/getting-started-guide.php">https://www.stonybrook.edu/commcms/ookami/faq/getting-started-guide.php</a>)</p>
 <p>Setup the environment</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load CPE
-module load cray-mvapich2_nogpu/2.3.4
+<span class="c1">#module load cray-mvapich2_nogpu/2.3.4</span>
 </pre></div>
 </div>
 <p>This should load the older <code class="docutils literal notranslate"><span class="pre">cce-sve</span></code> compilers (<code class="docutils literal notranslate"><span class="pre">10.0.1</span></code>).</p>
@@ -192,10 +194,28 @@ module load cray-mvapich2_nogpu/2.3.4
 <code class="docutils literal notranslate"><span class="pre">amrex/Tools/GNUmake/comps/cray.mak</span></code> and comment out the
 <code class="docutils literal notranslate"><span class="pre">-std=$(CXXSTD)</span></code> flag and the <code class="docutils literal notranslate"><span class="pre">-ffast-math</span></code> flag – it is not recognized.</p>
 <p>You can then build via:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make <span class="nv">COMP</span><span class="o">=</span>cray -j <span class="m">24</span> <span class="nv">DEPFLAGS</span><span class="o">=</span>-M
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make <span class="nv">COMP</span><span class="o">=</span>cray -j <span class="m">24</span> <span class="nv">DEPFLAGS</span><span class="o">=</span>-M <span class="nv">USE_MPI</span><span class="o">=</span>FALSE
 </pre></div>
 </div>
-<p>Note: compiling takes a long time.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Compiling takes a long time.  At the moment, we do not link with
+MPI, with a <code class="docutils literal notranslate"><span class="pre">cannot</span> <span class="pre">find</span> <span class="pre">nopattern</span></code> error (which is why that
+module is commented out above).</p>
+</div>
+</div>
+<div class="section" id="gcc">
+<h3>GCC<a class="headerlink" href="#gcc" title="Permalink to this headline">¶</a></h3>
+<p>Load modules as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load gcc
+module load openmpi/mlnx/gcc/64/4.0.3rc4
+</pre></div>
+</div>
+<p>Build as</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make -j <span class="m">24</span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
