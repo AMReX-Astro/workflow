@@ -13,5 +13,5 @@ cd sphinx_docs
 make html
 cd ../
 
-mkdir -p out/docs/
-mv sphinx_docs/build/html/* out/docs
+mkdir -p out
+mv sphinx_docs/build/html/* out
