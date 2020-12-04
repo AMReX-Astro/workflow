@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Working at IACS &mdash; AMReX-Astro 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Linux Workstations" href="workstations.html" />
+    <link rel="prev" title="Running Jupyter Remotely from OLCF" href="olcf-jupyter.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> AMReX-Astro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">AMReX Astro basics</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="nersc.html">Working at NERSC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="olcf.html">Working at OLCF</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Working at IACS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ookami">Ookami</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cray-compilers">Cray compilers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="workstations.html">Linux Workstations</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AMReX-Astro</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Working at IACS</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/iacs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="working-at-iacs">
+<h1>Working at IACS<a class="headerlink" href="#working-at-iacs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="ookami">
+<h2>Ookami<a class="headerlink" href="#ookami" title="Permalink to this headline">¶</a></h2>
+<p>Ookami seems to have 48 compute cores grouped into 4 pools of 12
+threads (there is actually a 13th core on each for OS stuff).  So an
+ideal config would be running 4 MPI each with 12 threads.</p>
+</div>
+<div class="section" id="cray-compilers">
+<h2>Cray compilers<a class="headerlink" href="#cray-compilers" title="Permalink to this headline">¶</a></h2>
+<p>You can only access the Cray environment on a compute note:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>srun -p short -N <span class="m">1</span> -n <span class="m">48</span> --pty bash
+</pre></div>
+</div>
+<p>There are 2 sets of Cray compilers, <code class="docutils literal notranslate"><span class="pre">cce</span></code> and <code class="docutils literal notranslate"><span class="pre">cce-sve</span></code>.  The
+former are the newer LLVM-based ocompilers, but the Fortran compiler
+does not seem to support the ARM architecture.  The latter are the
+older compilers.  Even though both have version numbers of the form
+<code class="docutils literal notranslate"><span class="pre">10.0.X</span></code>, they have different options.</p>
+<p>(see <a class="reference external" href="https://www.stonybrook.edu/commcms/ookami/faq/getting-started-guide.php">https://www.stonybrook.edu/commcms/ookami/faq/getting-started-guide.php</a>)</p>
+<p>Setup the environment</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load CPE
+module load cray-mvapich2_nogpu/2.3.4
+</pre></div>
+</div>
+<p>This should load the older <code class="docutils literal notranslate"><span class="pre">cce-sve</span></code> compilers (<code class="docutils literal notranslate"><span class="pre">10.0.1</span></code>).</p>
+<p>AMReX needs to have the options changed slightly.  Edit
+<code class="docutils literal notranslate"><span class="pre">amrex/Tools/GNUmake/comps/cray.mak</span></code> and comment out the
+<code class="docutils literal notranslate"><span class="pre">-std=$(CXXSTD)</span></code> flag and the <code class="docutils literal notranslate"><span class="pre">-ffast-math</span></code> flag – it is not recognized.</p>
+<p>You can then build via:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make <span class="nv">COMP</span><span class="o">=</span>cray -j <span class="m">24</span> <span class="nv">DEPFLAGS</span><span class="o">=</span>-M
+</pre></div>
+</div>
+<p>Note: compiling takes a long time.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="workstations.html" class="btn btn-neutral float-right" title="Linux Workstations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="olcf-jupyter.html" class="btn btn-neutral float-left" title="Running Jupyter Remotely from OLCF" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2018, AMReX-Astro development tem
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
