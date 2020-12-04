@@ -172,33 +172,29 @@ ideal config would be running 4 MPI each with 12 threads.</p>
 </div>
 <div class="section" id="cray-compilers">
 <h2>Cray compilers<a class="headerlink" href="#cray-compilers" title="Permalink to this headline">¶</a></h2>
-<p>You can only access the Cray environment on a compute note:
-<a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a></p>
-<blockquote>
-<div><p>srun -p short -N 1 -n 48 –pty bash</p>
-</div></blockquote>
-<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<p>You can only access the Cray environment on a compute note:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>srun -p short -N <span class="m">1</span> -n <span class="m">48</span> --pty bash
+</pre></div>
+</div>
 <p>There are 2 sets of Cray compilers, <code class="docutils literal notranslate"><span class="pre">cce</span></code> and <code class="docutils literal notranslate"><span class="pre">cce-sve</span></code>.  The
 former are the newer LLVM-based ocompilers, but the Fortran compiler
 does not seem to support the ARM architecture.  The latter are the
 older compilers.  Even though both have version numbers of the form
 <code class="docutils literal notranslate"><span class="pre">10.0.X</span></code>, they have different options.</p>
 <p>(see <a class="reference external" href="https://www.stonybrook.edu/commcms/ookami/faq/getting-started-guide.php">https://www.stonybrook.edu/commcms/ookami/faq/getting-started-guide.php</a>)</p>
-<p>Setup the environment
-<code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">module</span> <span class="pre">load</span> <span class="pre">CPE</span>
-<span class="pre">module</span> <span class="pre">load</span> <span class="pre">cray-mvapich2_nogpu/2.3.4</span>
-<span class="pre">`</span></code></p>
+<p>Setup the environment</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load CPE
+module load cray-mvapich2_nogpu/2.3.4
+</pre></div>
+</div>
 <p>This should load the older <code class="docutils literal notranslate"><span class="pre">cce-sve</span></code> compilers (<code class="docutils literal notranslate"><span class="pre">10.0.1</span></code>).</p>
 <p>AMReX needs to have the options changed slightly.  Edit
 <code class="docutils literal notranslate"><span class="pre">amrex/Tools/GNUmake/comps/cray.mak</span></code> and comment out the
 <code class="docutils literal notranslate"><span class="pre">-std=$(CXXSTD)</span></code> flag and the <code class="docutils literal notranslate"><span class="pre">-ffast-math</span></code> flag – it is not recognized.</p>
-<blockquote>
-<div><p>You can then build via:</p>
-</div></blockquote>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">make</span> <span class="pre">COMP=cray</span> <span class="pre">-j</span> <span class="pre">24</span> <span class="pre">DEPFLAGS=-M</span>
-<span class="pre">`</span></code></p>
+<p>You can then build via:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make <span class="nv">COMP</span><span class="o">=</span>cray -j <span class="m">24</span> <span class="nv">DEPFLAGS</span><span class="o">=</span>-M
+</pre></div>
+</div>
 <p>Note: compiling takes a long time.</p>
 </div>
 </div>
