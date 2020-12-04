@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Running Jupyter Remotely from OLCF &mdash; AMReX-Astro 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Working at IACS" href="iacs.html" />
+    <link rel="prev" title="Managing Jobs at OLCF" href="olcf-workflow.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> AMReX-Astro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">AMReX Astro basics</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="nersc.html">Working at NERSC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="olcf.html">Working at OLCF</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="olcf-compilers.html">Compiling at OLCF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="olcf-workflow.html">Managing Jobs at OLCF</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Running Jupyter Remotely from OLCF</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#launching-on-the-compute-node">Launching on the compute node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#launching-from-an-interactive-job-on-summit">Launching from an interactive job on Summit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#launching-from-an-interactive-job-on-rhea">Launching from an interactive job on Rhea</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="iacs.html">Working at IACS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workstations.html">Linux Workstations</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AMReX-Astro</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="olcf.html">Working at OLCF</a> &raquo;</li>
+        
+      <li>Running Jupyter Remotely from OLCF</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/olcf-jupyter.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="running-jupyter-remotely-from-olcf">
+<h1>Running Jupyter Remotely from OLCF<a class="headerlink" href="#running-jupyter-remotely-from-olcf" title="Permalink to this headline">¶</a></h1>
+<p>Here we shall outline how to run jupyter notebooks remotely on Summit. These instructions are for jupyter lab, but should work for jupyter notebooks as well by exchanging <code class="docutils literal notranslate"><span class="pre">lab</span></code> for <code class="docutils literal notranslate"><span class="pre">notebook</span></code>.</p>
+<div class="section" id="launching-on-the-compute-node">
+<h2>Launching on the compute node<a class="headerlink" href="#launching-on-the-compute-node" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>If you wish to install extra python libraries (e.g. <code class="docutils literal notranslate"><span class="pre">yt</span></code>), then they can be installed using a conda environment. To do this, make sure you have the correct python module loaded on Summit (e.g. <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">python/3.7.0-anaconda3-5.3.0</span></code>), and create a new conda environment with the modules you require installed. At this point, it’s also a good idea to make sure this environment has the libraries <code class="docutils literal notranslate"><span class="pre">ipykernel</span></code> and <code class="docutils literal notranslate"><span class="pre">nb_conda_kernels</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n my_env -y ipykernel nb_conda_kernels
+conda install -n my_env -c conda-forge yt
+</pre></div>
+</div>
+</li>
+<li><p>Next, we need to make sure that the environment will be available when we launch our jupyter session. Before we do this, make sure that the conda profile <code class="docutils literal notranslate"><span class="pre">conda.sh</span></code> is included in your shell environment. To do this for just this session, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span> /sw/summit/python/3.7/anaconda3/5.3.0/etc/profile.d/conda.sh
+</pre></div>
+</div>
+<p>This command will need to be re-run for every new session, so it’s more useful to instead add this line to your <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>. /sw/summit/python/3.7/anaconda3/5.3.0/etc/profile.d/conda.sh
+</pre></div>
+</div>
+<p>(note you’ll need to run <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">.bashrc</span></code> to see this change in your current session). Now we can activate the conda environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda activate my_env
+ipython kernel install --user --name<span class="o">=</span>my_env
+conda deactivate my_env
+</pre></div>
+</div>
+</li>
+<li><p>Now we should be ready to launch our jupyter session. From Summit, launch a <code class="docutils literal notranslate"><span class="pre">no-browser</span></code> session:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>username@login1.summit ~<span class="o">]</span>$ jupyter lab --no-browser --ip<span class="o">=</span><span class="s2">&quot;login1&quot;</span>
+</pre></div>
+</div>
+<p>(note if you’re on a different node, be sure to change the <code class="docutils literal notranslate"><span class="pre">--ip=</span></code> bit to reflect that).</p>
+</li>
+<li><p>We can now connect to this from our local workstation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh -N -L localhost:8888:login1:8888 username@summit.olcf.ornl.gov
+</pre></div>
+</div>
+<p>This will prompt you for your Summit password. If all goes well, it should not print any messages once you hit enter.</p>
+</li>
+<li><p>Finally, open up <code class="docutils literal notranslate"><span class="pre">localhost:8888</span></code> in your browser. This will prompt you for the token of the jupyter session. You can find this by looking back to when you first launched the jupyter session on Summit. Amongst the output, you should see something like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Copy/paste this URL into your browser when you connect <span class="k">for</span> the first time,
+to login with a token:
+http://login1:8888/?token<span class="o">=</span>kjadhsf8yw9oayfhdfya98wyfhs98hafshuihyf8ohauiuah
+</pre></div>
+</div>
+<p>Copy and paste the bit after <code class="docutils literal notranslate"><span class="pre">token=</span></code>. When in your jupyter session, make sure to create a notebook with your <code class="docutils literal notranslate"><span class="pre">my_env</span></code> kernel (rather than the default Python 3 kernel).</p>
+</li>
+</ol>
+</div>
+<div class="section" id="launching-from-an-interactive-job-on-summit">
+<h2>Launching from an interactive job on Summit<a class="headerlink" href="#launching-from-an-interactive-job-on-summit" title="Permalink to this headline">¶</a></h2>
+<p>It’s probably not a good idea to do any heavy visualization on the login nodes, so instead we’re going to run the notebook in an interactive job. This assumes that you’ve already followed the first 2 steps of the previous section to create the conda environment.</p>
+<ol class="arabic">
+<li><p>First submit your interactive job, e.g. this will launch a job on 1 node for 30 minutes:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bsub -W <span class="m">0</span>:30 -nnodes <span class="m">1</span> -P ast106 -Is /bin/bash
+</pre></div>
+</div>
+</li>
+<li><p>For some reason, if you just try to launch a jupyter session on the compute node, it will give you an error like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>PermissionError: <span class="o">[</span>Errno <span class="m">13</span><span class="o">]</span> Permission denied: <span class="s1">&#39;/run/user/12746&#39;</span>
+</pre></div>
+</div>
+<p>We can get around this by setting <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">XDG_RUNTIME_DIR=&quot;&quot;</span></code>.</p>
+</li>
+<li><p>Now we’re going to launch the jupyter session as before:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jupyter-lab --no-browser --ip<span class="o">=</span><span class="s2">&quot;batch1&quot;</span> &gt; jupyter.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
+</pre></div>
+</div>
+<p>(make sure the <code class="docutils literal notranslate"><span class="pre">--ip=</span></code> refers to the compute node you’re on).</p>
+</li>
+<li><p>Create an ssh tunnel that first connects to the login node, then from there connects to the compute node:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh -t -t username@summit.olcf.ornl.gov -L localhost:8888:localhost:8888 ssh login1 -L <span class="m">8888</span>:batch1:8888
+</pre></div>
+</div>
+<p>(for the second <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">login1</span></code>, make sure that this corresponds to the login node from which you launched the interactive job).</p>
+</li>
+<li><p>Now navigate to <code class="docutils literal notranslate"><span class="pre">localhost:8888</span></code> in your browser. You can find the token by looking in the <code class="docutils literal notranslate"><span class="pre">jupyter.log</span></code> file into which we redirected the jupyter session output in step 3.</p></li>
+</ol>
+<p>Note: it may be that you run into some issues launching a notebook with your <code class="docutils literal notranslate"><span class="pre">my_env</span></code> kernel. If this happens, activate your environment and try uninstalling and reinstalling <code class="docutils literal notranslate"><span class="pre">pyzmq</span></code>: <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">uninstall</span> <span class="pre">pyzmq</span></code>, <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">pyzmq</span></code>. If it uninstalls any other modules when you do this, make sure to reinstall them as well.</p>
+</div>
+<div class="section" id="launching-from-an-interactive-job-on-rhea">
+<h2>Launching from an interactive job on Rhea<a class="headerlink" href="#launching-from-an-interactive-job-on-rhea" title="Permalink to this headline">¶</a></h2>
+<p>Rhea is a dedicated visualization machine, so it’s probably a better idea to use it for doing visualization calculations rather than Summit. Unfortunately, the version of anaconda installed on Rhea is slightly different from the one on Summit, so the libraries installed in our conda environment on Summit will not work on Rhea. It’s therefore necessary to repeat steps 1 and 2 on Rhea and create a new Rhea-specific conda environment. As before, you’ll probably run into issues with package conflicts in your conda environment, so again you’ll need to uninstall/reinstall <code class="docutils literal notranslate"><span class="pre">pyzmq</span></code> for this environment.</p>
+<ol class="arabic">
+<li><p>First, take note of the login node you’re on. You can find this by running <code class="docutils literal notranslate"><span class="pre">hostname</span></code>.</p></li>
+<li><p>Submit your interactive job:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>salloc -A ast106 -N <span class="m">1</span> -t <span class="m">0</span>:30:00
+</pre></div>
+</div>
+<p>will create a 1 node job for 30 minutes.</p>
+</li>
+</ol>
+<ol class="arabic simple" start="2">
+<li><p>Before loading jupyter, set <code class="docutils literal notranslate"><span class="pre">LD_PRELOAD=/ccs/home/USERNAME/.conda/envs/yt_conda/lib/libstdc++.so.6</span></code> where <code class="docutils literal notranslate"><span class="pre">USERNAME</span></code> is your username on the OLCF systems.</p></li>
+</ol>
+<ol class="arabic" start="4">
+<li><p>Repeat steps 2 and 3 from the Summit instructions above.</p></li>
+<li><p>Create your ssh tunnel:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh username@rhea.ccs.ornl.gov -L localhost:8888:localhost:8888 ssh rhea-login3g -L <span class="m">8888</span>:rhea184:8888
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">rhea-login3g</span></code> is the name of the login node you used, and <code class="docutils literal notranslate"><span class="pre">rhea184</span></code> is the name of the compute node where you launched the jupyter session.</p>
+</li>
+</ol>
+<ol class="arabic simple" start="5">
+<li><p>Navigate to <code class="docutils literal notranslate"><span class="pre">localhost:8888</span></code> in your browser.</p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="iacs.html" class="btn btn-neutral float-right" title="Working at IACS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="olcf-workflow.html" class="btn btn-neutral float-left" title="Managing Jobs at OLCF" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2018, AMReX-Astro development tem
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
