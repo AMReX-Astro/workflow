@@ -63,12 +63,15 @@ You can then build via:
 GCC
 ---
 
+GCC 9.2
+^^^^^^^
+
 Load modules as:
 
 ::
 
-  module load gcc
-  module load openmpi/mlnx/gcc/64/4.0.3rc4
+  module load gcc/9.2.0
+  module load /lustre/projects/global/software/a64fx/modulefiles/mvapich2/2.3.4
 
 Build as
 
@@ -76,3 +79,26 @@ Build as
 
   make -j 24
 
+
+
+GCC 10.2
+^^^^^^^^
+
+Load modules as:
+
+::
+
+  module load /lustre/projects/global/software/a64fx/modulefiles/gcc/10.2.1-git
+  module load /lustre/projects/global/software/a64fx/modulefiles/mvapich2/2.3.4
+
+Build as
+
+::
+
+  make -j 24
+
+Note, this version of GCC knows about the A64FX chip, and it is suggested that you add:
+
+::
+
+  -mtune=a64fx -mcpu=a64fx  -march=armv8.2-a+sve -msve-vector-bits=512
