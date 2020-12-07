@@ -63,26 +63,15 @@ You can then build via:
 GCC
 ---
 
-GCC 9.2
-^^^^^^^
-
-Load modules as:
-
-::
-
-  module load gcc/9.2.0
-  module load /lustre/projects/global/software/a64fx/modulefiles/mvapich2/2.3.4
-
-Build as
-
-::
-
-  make -j 24
-
-
-
 GCC 10.2
 ^^^^^^^^
+
+This needs to be done on the compute notes.
+
+We need to tell AMReX about the machine.  Put the following ``Make.local`` file
+in ``amrex/Tools/GNUmake``:
+
+https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local
 
 Load modules as:
 
@@ -95,7 +84,7 @@ Build as
 
 ::
 
-  make -j 24
+  make -j 24 USE_MPI=TRUE USE_OMP=TRUE
 
 Note, this version of GCC knows about the A64FX chip, and it is suggested that you add:
 
