@@ -95,7 +95,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#ookami">Ookami</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#cray-compilers">Cray compilers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#gcc">GCC</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#gcc-9-2">GCC 9.2</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gcc-10-2">GCC 10.2</a></li>
 </ul>
 </li>
@@ -210,27 +209,19 @@ module is commented out above).</p>
 </div>
 <div class="section" id="gcc">
 <h3>GCC<a class="headerlink" href="#gcc" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="gcc-9-2">
-<h4>GCC 9.2<a class="headerlink" href="#gcc-9-2" title="Permalink to this headline">¶</a></h4>
-<p>Load modules as:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load gcc/9.2.0
-module load /lustre/projects/global/software/a64fx/modulefiles/mvapich2/2.3.4
-</pre></div>
-</div>
-<p>Build as</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make -j <span class="m">24</span>
-</pre></div>
-</div>
-</div>
 <div class="section" id="gcc-10-2">
 <h4>GCC 10.2<a class="headerlink" href="#gcc-10-2" title="Permalink to this headline">¶</a></h4>
+<p>This needs to be done on the compute notes.</p>
+<p>We need to tell AMReX about the machine.  Put the following <code class="docutils literal notranslate"><span class="pre">Make.local</span></code> file
+in <code class="docutils literal notranslate"><span class="pre">amrex/Tools/GNUmake</span></code>:</p>
+<p><a class="reference external" href="https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local">https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local</a></p>
 <p>Load modules as:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load /lustre/projects/global/software/a64fx/modulefiles/gcc/10.2.1-git
 module load /lustre/projects/global/software/a64fx/modulefiles/mvapich2/2.3.4
 </pre></div>
 </div>
 <p>Build as</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make -j <span class="m">24</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make -j <span class="m">24</span> <span class="nv">USE_MPI</span><span class="o">=</span>TRUE <span class="nv">USE_OMP</span><span class="o">=</span>TRUE
 </pre></div>
 </div>
 <p>Note, this version of GCC knows about the A64FX chip, and it is suggested that you add:</p>
