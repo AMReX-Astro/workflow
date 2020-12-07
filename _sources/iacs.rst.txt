@@ -86,8 +86,5 @@ Build as
 
   make -j 24 USE_MPI=TRUE USE_OMP=TRUE
 
-Note, this version of GCC knows about the A64FX chip, and it is suggested that you add:
-
-::
-
-  -mtune=a64fx -mcpu=a64fx  -march=armv8.2-a+sve -msve-vector-bits=512
+Note, this version of GCC knows about the A64FX chip, and that ``Make.local`` adds
+the architecture-specific compilations flags.
