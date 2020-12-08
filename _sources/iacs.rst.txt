@@ -11,6 +11,7 @@ Ookami seems to have 48 compute cores grouped into 4 pools of 12
 threads (there is actually a 13th core on each for OS stuff).  So an
 ideal config would be running 4 MPI each with 12 threads.
 
+Log-in to ``login.ookami.stonybrook.edu``
 
 
 Cray compilers
