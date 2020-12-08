@@ -217,7 +217,8 @@ module is commented out above).</p>
 in <code class="docutils literal notranslate"><span class="pre">amrex/Tools/GNUmake</span></code>:</p>
 <p><a class="reference external" href="https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local">https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local</a></p>
 <p>Load modules as:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load /lustre/projects/global/software/a64fx/modulefiles/gcc/10.2.1-git
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load slurm
+module load /lustre/projects/global/software/a64fx/modulefiles/gcc/10.2.1-git
 module load /lustre/projects/global/software/a64fx/modulefiles/mvapich2/2.3.4
 </pre></div>
 </div>
@@ -227,6 +228,12 @@ module load /lustre/projects/global/software/a64fx/modulefiles/mvapich2/2.3.4
 </div>
 <p>Note, this version of GCC knows about the A64FX chip, and that <code class="docutils literal notranslate"><span class="pre">Make.local</span></code> adds
 the architecture-specific compilations flags.</p>
+<p>To run on an interactive node, on 1 MPI * 12 OpenMP, do:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">MV2_ENABLE_AFFINITY</span><span class="o">=</span><span class="m">0</span>
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">12</span>
+mpiexec -n <span class="m">1</span> ./Castro3d.gnu.MPI.OMP.ex inputs.3d.sph amr.max_level<span class="o">=</span><span class="m">2</span> <span class="nv">max_step</span><span class="o">=</span><span class="m">5</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
