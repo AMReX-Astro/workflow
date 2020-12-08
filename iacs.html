@@ -189,6 +189,12 @@ in <code class="docutils literal notranslate"><span class="pre">amrex/Tools/GNUm
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>srun -p short -N <span class="m">1</span> -n <span class="m">48</span> --pty bash
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The interactive slurm job times out after 1 hour.  You can run for
+infinite time on the <code class="docutils literal notranslate"><span class="pre">fj-debug1</span></code> and <code class="docutils literal notranslate"><span class="pre">fj-debug2</span></code> nodes (you can
+ssh to them).</p>
+</div>
 <p>There are 2 sets of Cray compilers, <code class="docutils literal notranslate"><span class="pre">cce</span></code> and <code class="docutils literal notranslate"><span class="pre">cce-sve</span></code>.  The
 former are the newer LLVM-based ocompilers, but the Fortran compiler
 does not seem to support the ARM architecture.  The latter are the
