@@ -193,35 +193,15 @@ strategy conflicts with GPUs.  An example compilation line is:</p>
 <p>The version pairs that work for sure currently are:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">pgi/19.5</span></code> + <code class="docutils literal notranslate"><span class="pre">cuda/10.1.105</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">pgi/19.5</span></code> + <code class="docutils literal notranslate"><span class="pre">cuda/10.1.168</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">pgi/19.10</span></code> + <code class="docutils literal notranslate"><span class="pre">cuda/10.1.168</span></code></p></li>
 </ul>
 </div></blockquote>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>At present, there is a known compiler bug in CUDA 9.2.148 that
-prevents compilation. Using CUDA 9.1 is a workaround.</p>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<ul>
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">USE_GPU_PRAGMA=TRUE</span></code> for any code which uses <code class="docutils literal notranslate"><span class="pre">#pragma</span>
-<span class="pre">gpu</span></code>, this flag is set by default in MAESTROeX and CASTRO’s
-build system when <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code>.</p></li>
+<ul class="simple">
 <li><p>OpenMP offloading to the GPU is controlled by
 <code class="docutils literal notranslate"><span class="pre">USE_OMP_OFFLOAD</span></code>, which will default to <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>, AMReX-Astro
 doesn’t use this feature.</p></li>
-<li><p>MAESTROeX requires C++14, so it is necessary to use a
-later version of gcc than the version loaded on Summit
-when the pgi module is loaded. To do this, add the
-following to the <code class="docutils literal notranslate"><span class="pre">GNUMakefile</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">NVCC_CCBIN</span><span class="o">=</span>/sw/summit/gcc/7.4.0/bin/g++
-<span class="nv">LIBRARY_LOCATIONS</span> <span class="o">+=</span> /sw/summit/gcc/7.4.0/lib64/
-<span class="nv">LIBRARIES</span> <span class="o">+=</span> -Wl,-rpath,/sw/summit/gcc/7.4.0/lib64/
-</pre></div>
-</div>
-</li>
 </ul>
 </div>
 </div>
