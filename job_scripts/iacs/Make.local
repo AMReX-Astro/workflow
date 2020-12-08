@@ -1,0 +1,12 @@
+# Ookami
+
+# this is specific for the GCC 10.x on Ookami, since that knows about
+# the A64fx architecture
+
+ifeq ($(lowercase_comp),gnu)
+  override XTRALIBS := -lgfortran
+  CXXFLAGS += -mtune=a64fx -mcpu=a64fx  -march=armv8.2-a+sve -msve-vector-bits=512
+  CFLAGS += -mtune=a64fx -mcpu=a64fx  -march=armv8.2-a+sve -msve-vector-bits=512
+  F90FLAGS += -mtune=a64fx -mcpu=a64fx  -march=armv8.2-a+sve -msve-vector-bits=512
+endif
+
