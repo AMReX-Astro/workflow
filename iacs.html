@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="olcf.html">Working at OLCF</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Working at IACS</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ookami">Ookami</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#amrex-setup">AMReX setup</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#cray-compilers">Cray compilers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#gcc">GCC</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#gcc-10-2">GCC 10.2</a></li>
@@ -176,6 +177,12 @@
 threads (there is actually a 13th core on each for OS stuff).  So an
 ideal config would be running 4 MPI each with 12 threads.</p>
 <p>Log-in to <code class="docutils literal notranslate"><span class="pre">login.ookami.stonybrook.edu</span></code></p>
+<div class="section" id="amrex-setup">
+<h3>AMReX setup<a class="headerlink" href="#amrex-setup" title="Permalink to this headline">¶</a></h3>
+<p>We need to tell AMReX about the machine.  Put the following <code class="docutils literal notranslate"><span class="pre">Make.local</span></code> file
+in <code class="docutils literal notranslate"><span class="pre">amrex/Tools/GNUmake</span></code>:</p>
+<p><a class="reference external" href="https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local">https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local</a></p>
+</div>
 <div class="section" id="cray-compilers">
 <h3>Cray compilers<a class="headerlink" href="#cray-compilers" title="Permalink to this headline">¶</a></h3>
 <p>You can only access the Cray environment on a compute note:</p>
@@ -194,9 +201,9 @@ older compilers.  Even though both have version numbers of the form
 </pre></div>
 </div>
 <p>This should load the older <code class="docutils literal notranslate"><span class="pre">cce-sve</span></code> compilers (<code class="docutils literal notranslate"><span class="pre">10.0.1</span></code>).</p>
-<p>AMReX needs to have the options changed slightly.  Edit
-<code class="docutils literal notranslate"><span class="pre">amrex/Tools/GNUmake/comps/cray.mak</span></code> and comment out the
-<code class="docutils literal notranslate"><span class="pre">-std=$(CXXSTD)</span></code> flag and the <code class="docutils literal notranslate"><span class="pre">-ffast-math</span></code> flag – it is not recognized.</p>
+<p>The latest AMReX has an if test in the <code class="docutils literal notranslate"><span class="pre">cray.mak</span></code> file that recognizes
+the older Cray compiler on this ARM architecture and switches to using
+the old set of compiler flags, so it should work.</p>
 <p>You can then build via:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make <span class="nv">COMP</span><span class="o">=</span>cray -j <span class="m">24</span> <span class="nv">DEPFLAGS</span><span class="o">=</span>-M <span class="nv">USE_MPI</span><span class="o">=</span>FALSE
 </pre></div>
@@ -213,9 +220,6 @@ module is commented out above).</p>
 <div class="section" id="gcc-10-2">
 <h4>GCC 10.2<a class="headerlink" href="#gcc-10-2" title="Permalink to this headline">¶</a></h4>
 <p>This needs to be done on the compute notes.</p>
-<p>We need to tell AMReX about the machine.  Put the following <code class="docutils literal notranslate"><span class="pre">Make.local</span></code> file
-in <code class="docutils literal notranslate"><span class="pre">amrex/Tools/GNUmake</span></code>:</p>
-<p><a class="reference external" href="https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local">https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local</a></p>
 <p>Load modules as:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load slurm
 module load /lustre/projects/global/software/a64fx/modulefiles/gcc/10.2.1-git

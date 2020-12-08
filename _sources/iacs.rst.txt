@@ -13,6 +13,14 @@ ideal config would be running 4 MPI each with 12 threads.
 
 Log-in to ``login.ookami.stonybrook.edu``
 
+AMReX setup
+-----------
+
+We need to tell AMReX about the machine.  Put the following ``Make.local`` file
+in ``amrex/Tools/GNUmake``:
+
+https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local
+
 
 Cray compilers
 --------------
@@ -42,9 +50,10 @@ Setup the environment
 
 This should load the older ``cce-sve`` compilers (``10.0.1``).
 
-AMReX needs to have the options changed slightly.  Edit
-``amrex/Tools/GNUmake/comps/cray.mak`` and comment out the
-``-std=$(CXXSTD)`` flag and the ``-ffast-math`` flag -- it is not recognized.
+The latest AMReX has an if test in the ``cray.mak`` file that recognizes
+the older Cray compiler on this ARM architecture and switches to using
+the old set of compiler flags, so it should work.
+
 
 You can then build via:
 
@@ -68,11 +77,6 @@ GCC 10.2
 ^^^^^^^^
 
 This needs to be done on the compute notes.
-
-We need to tell AMReX about the machine.  Put the following ``Make.local`` file
-in ``amrex/Tools/GNUmake``:
-
-https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local
 
 Load modules as:
 
