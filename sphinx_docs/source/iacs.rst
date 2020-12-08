@@ -78,6 +78,7 @@ Load modules as:
 
 ::
 
+  module load slurm
   module load /lustre/projects/global/software/a64fx/modulefiles/gcc/10.2.1-git
   module load /lustre/projects/global/software/a64fx/modulefiles/mvapich2/2.3.4
 
@@ -89,3 +90,11 @@ Build as
 
 Note, this version of GCC knows about the A64FX chip, and that ``Make.local`` adds
 the architecture-specific compilations flags.
+
+To run on an interactive node, on 1 MPI * 12 OpenMP, do::
+
+   export MV2_ENABLE_AFFINITY=0
+   export OMP_NUM_THREADS=12
+   mpiexec -n 1 ./Castro3d.gnu.MPI.OMP.ex inputs.3d.sph amr.max_level=2 max_step=5
+
+
