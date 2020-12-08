@@ -32,6 +32,12 @@ You can only access the Cray environment on a compute note:
   srun -p short -N 1 -n 48 --pty bash
 
 
+.. note::
+
+   The interactive slurm job times out after 1 hour.  You can run for
+   infinite time on the ``fj-debug1`` and ``fj-debug2`` nodes (you can
+   ssh to them).
+
 
 There are 2 sets of Cray compilers, ``cce`` and ``cce-sve``.  The
 former are the newer LLVM-based ocompilers, but the Fortran compiler
