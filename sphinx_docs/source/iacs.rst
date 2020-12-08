@@ -65,7 +65,7 @@ You can then build via:
 
 ::
 
-  make COMP=cray -j 24 DEPFLAGS=-M USE_MPI=FALSE
+  make COMP=cray -j 24 USE_MPI=FALSE
 
 
 .. note::
