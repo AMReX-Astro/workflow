@@ -6,9 +6,9 @@ Compiling at OLCF
 Summit
 ------
 
-In order to compile you will need to swap the xl module with pgi::
+In order to compile you will need to swap the xl module with gcc (the default gcc/6.4.0 is fine, or anything newer)::
 
-  module swap xl pgi
+  module load gcc
 
 Then load CUDA::
 
@@ -18,16 +18,16 @@ You also need to make sure you have the python module loaded::
 
   module load python/3.7.0
 
-Compile with ``COMP = pgi`` and ``USE_CUDA=TRUE``.  Ensure your
-GNUMakefile uses ``USE_OMP=FALSE`` since AMReX's standard OpenMP
-strategy conflicts with GPUs.  An example compilation line is::
+Compile with ``USE_CUDA=TRUE`` (and ``COMP=gnu`` which is usually the default).
+Do not compile with ``USE_OMP=TRUE`` since this is currently disallowed by Castro.
+An example compilation line is::
 
-  make COMP=pgi INTEGRATOR_DIR=VODE USE_CUDA=TRUE -j 4
+  make COMP=gnu USE_MPI=TRUE USE_CUDA=TRUE -j 4
 
+The recommended/tested version pairs are:
 
-The version pairs that work for sure currently are:
-
-  * ``pgi/19.10`` + ``cuda/10.1.168``
+  * ``gcc/6.4.0`` + ``cuda/10.1.243``
+  * ``gcc/7.4.0`` + ``cuda/10.1.243``
 
 .. note::
 
