@@ -172,8 +172,8 @@
 <h1>Compiling at OLCF<a class="headerlink" href="#compiling-at-olcf" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summit">
 <h2>Summit<a class="headerlink" href="#summit" title="Permalink to this headline">¶</a></h2>
-<p>In order to compile you will need to swap the xl module with pgi:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module swap xl pgi
+<p>In order to compile you will need to swap the xl module with gcc (the default gcc/6.4.0 is fine, or anything newer):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load gcc
 </pre></div>
 </div>
 <p>Then load CUDA:</p>
@@ -184,16 +184,17 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load python/3.7.0
 </pre></div>
 </div>
-<p>Compile with <code class="docutils literal notranslate"><span class="pre">COMP</span> <span class="pre">=</span> <span class="pre">pgi</span></code> and <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code>.  Ensure your
-GNUMakefile uses <code class="docutils literal notranslate"><span class="pre">USE_OMP=FALSE</span></code> since AMReX’s standard OpenMP
-strategy conflicts with GPUs.  An example compilation line is:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make <span class="nv">COMP</span><span class="o">=</span>pgi <span class="nv">INTEGRATOR_DIR</span><span class="o">=</span>VODE <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE -j <span class="m">4</span>
+<p>Compile with <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code> (and <code class="docutils literal notranslate"><span class="pre">COMP=gnu</span></code> which is usually the default).
+Do not compile with <code class="docutils literal notranslate"><span class="pre">USE_OMP=TRUE</span></code> since this is currently disallowed by Castro.
+An example compilation line is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">USE_MPI</span><span class="o">=</span>TRUE <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE -j <span class="m">4</span>
 </pre></div>
 </div>
-<p>The version pairs that work for sure currently are:</p>
+<p>The recommended/tested version pairs are:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">pgi/19.10</span></code> + <code class="docutils literal notranslate"><span class="pre">cuda/10.1.168</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gcc/6.4.0</span></code> + <code class="docutils literal notranslate"><span class="pre">cuda/10.1.243</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gcc/7.4.0</span></code> + <code class="docutils literal notranslate"><span class="pre">cuda/10.1.243</span></code></p></li>
 </ul>
 </div></blockquote>
 <div class="admonition note">
