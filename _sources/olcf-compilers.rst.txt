@@ -10,6 +10,12 @@ In order to compile you will need to swap the xl module with gcc (the default gc
 
   module load gcc
 
+.. note::
+
+   You will need to load the same module you use for compiling in your
+   submissions script, otherwise the code won't find the shared
+   libraries at runtime.
+
 Then load CUDA::
 
   module load cuda
