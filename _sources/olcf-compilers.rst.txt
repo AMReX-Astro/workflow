@@ -6,9 +6,9 @@ Compiling at OLCF
 Summit
 ------
 
-In order to compile you will need to swap the xl module with gcc (the default gcc/6.4.0 is fine, or anything newer)::
+In order to compile you will need to swap the xl module with gcc (you need to use atleast gcc/7.4.0 due to C++17 support)::
 
-  module load gcc
+  module load gcc/7.4.0
 
 .. note::
 
@@ -18,7 +18,12 @@ In order to compile you will need to swap the xl module with gcc (the default gc
 
 Then load CUDA::
 
-  module load cuda
+  module load cuda/11.2.0
+
+.. note::
+
+   Presently you will see a warning when you load a CUDA 11 module, but the packages
+   should work fine.
 
 You also need to make sure you have the python module loaded::
 
@@ -32,8 +37,7 @@ An example compilation line is::
 
 The recommended/tested version pairs are:
 
-  * ``gcc/6.4.0`` + ``cuda/10.1.243``
-  * ``gcc/7.4.0`` + ``cuda/10.1.243``
+  * ``gcc/7.4.0`` + ``cuda/11.2.0``
 
 .. note::
 
