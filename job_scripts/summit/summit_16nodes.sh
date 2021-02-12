@@ -9,6 +9,9 @@
 
 cd $LS_SUBCWD
 
+module load gcc/10.2.0
+module load cuda/11.2.0
+
 inputs_file=inputs.3d.sph
 
 n_mpi=96 # 16 nodes * 6 gpu per node
