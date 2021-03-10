@@ -147,7 +147,9 @@ Running on Cori GPU
 
 Use a SLURM script to set 1 MPI rank per GPU. In this example, we're using 2 nodes, each with 8 GPUs.
 
-Sample SLURM script ``cori.MPI.CUDA.gpu.2nodes.slurm``: 
+Sample SLURM script ``cori.MPI.CUDA.gpu.2nodes.slurm``, for this and other Cori
+GPU SLURM scripts, see
+`our Cori GPU SLURM scripts on GitHub <https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/cori-gpu>`_
 
 .. literalinclude:: ../../job_scripts/cori-gpu/cori.MPI.CUDA.gpu.2nodes.slurm
                     :language: sh
