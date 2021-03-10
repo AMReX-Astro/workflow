@@ -183,9 +183,16 @@
 <li><p>If you wish to install extra python libraries (e.g. <code class="docutils literal notranslate"><span class="pre">yt</span></code>), then they can be installed using a conda environment. To do this, make sure you have the correct python module loaded on Summit (e.g. <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">python/3.7.0-anaconda3-5.3.0</span></code>), and create a new conda environment with the modules you require installed. At this point, it’s also a good idea to make sure this environment has the libraries <code class="docutils literal notranslate"><span class="pre">ipykernel</span></code> and <code class="docutils literal notranslate"><span class="pre">nb_conda_kernels</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n my_env -y ipykernel nb_conda_kernels
 conda install -n my_env -c conda-forge yt
+conda install -n my_env jupyterlab
 </pre></div>
 </div>
 </li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To use the conda environment for python subsequently, you do not need to do <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">python/3.7.0-anaconda3-5.3.0</span></code></p>
+</div>
+<ol class="arabic" start="2">
 <li><p>Next, we need to make sure that the environment will be available when we launch our jupyter session. Before we do this, make sure that the conda profile <code class="docutils literal notranslate"><span class="pre">conda.sh</span></code> is included in your shell environment. To do this for just this session, run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span> /sw/summit/python/3.7/anaconda3/5.3.0/etc/profile.d/conda.sh
 </pre></div>
@@ -197,7 +204,6 @@ conda install -n my_env -c conda-forge yt
 <p>(note you’ll need to run <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">.bashrc</span></code> to see this change in your current session). Now we can activate the conda environment:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda activate my_env
 ipython kernel install --user --name<span class="o">=</span>my_env
-conda deactivate my_env
 </pre></div>
 </div>
 </li>
@@ -205,13 +211,19 @@ conda deactivate my_env
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>username@login1.summit ~<span class="o">]</span>$ jupyter lab --no-browser --ip<span class="o">=</span><span class="s2">&quot;login1&quot;</span>
 </pre></div>
 </div>
-<p>(note if you’re on a different node, be sure to change the <code class="docutils literal notranslate"><span class="pre">--ip=</span></code> bit to reflect that).</p>
+<p>Note if you’re on a different node, be sure to change the <code class="docutils literal notranslate"><span class="pre">--ip=</span></code> bit to reflect that.</p>
 </li>
 <li><p>We can now connect to this from our local workstation:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh -N -L localhost:8888:login1:8888 username@summit.olcf.ornl.gov
 </pre></div>
 </div>
 <p>This will prompt you for your Summit password. If all goes well, it should not print any messages once you hit enter.</p>
+<p>If you get a message saying <code class="docutils literal notranslate"><span class="pre">bind</span> <span class="pre">[127.0.0.1]:8888:</span> <span class="pre">Address</span> <span class="pre">already</span> <span class="pre">in</span> <span class="pre">use`</span></code>, then you either need to use a different
+port on your local machine or kill the process that is using that port.  You can find out what process is using the
+port currently via:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lsof -ti:8888
+</pre></div>
+</div>
 </li>
 <li><p>Finally, open up <code class="docutils literal notranslate"><span class="pre">localhost:8888</span></code> in your browser. This will prompt you for the token of the jupyter session. You can find this by looking back to when you first launched the jupyter session on Summit. Amongst the output, you should see something like:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Copy/paste this URL into your browser when you connect <span class="k">for</span> the first time,
