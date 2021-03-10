@@ -107,6 +107,7 @@ Cori GPU
 
 To use the Cori GPU system, you first need to load the ``cgpu`` module::
 
+  module purge
   module load cgpu
 
 This will ensure the correct OpenMPI module is loaded in the next section.
@@ -119,7 +120,7 @@ Compiling with GCC + CUDA
 We use the gcc, CUDA, and OpenMPI modules for Cori GPU, so load them in this
 order::
 
-  module swap PrgEnv-intel PrgEnv-gnu
+  module load PrgEnv-gnu
   module load gcc
   module load cuda
   module load openmpi
