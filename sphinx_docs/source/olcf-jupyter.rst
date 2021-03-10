@@ -12,6 +12,12 @@ Launching on the compute node
 
     conda create -n my_env -y ipykernel nb_conda_kernels
     conda install -n my_env -c conda-forge yt 
+    conda install -n my_env jupyterlab
+
+.. note::
+
+   To use the conda environment for python subsequently, you do not need to do ``module load python/3.7.0-anaconda3-5.3.0``
+
 
 2. Next, we need to make sure that the environment will be available when we launch our jupyter session. Before we do this, make sure that the conda profile ``conda.sh`` is included in your shell environment. To do this for just this session, run::
 
@@ -25,19 +31,25 @@ Launching on the compute node
 
     conda activate my_env
     ipython kernel install --user --name=my_env
-    conda deactivate my_env 
 
 3. Now we should be ready to launch our jupyter session. From Summit, launch a ``no-browser`` session::
 
     [username@login1.summit ~]$ jupyter lab --no-browser --ip="login1"
 
-   (note if you're on a different node, be sure to change the ``--ip=`` bit to reflect that).
+   Note if you're on a different node, be sure to change the ``--ip=`` bit to reflect that.
 
 4. We can now connect to this from our local workstation::
 
     ssh -N -L localhost:8888:login1:8888 username@summit.olcf.ornl.gov
 
    This will prompt you for your Summit password. If all goes well, it should not print any messages once you hit enter. 
+
+   If you get a message saying ``bind [127.0.0.1]:8888: Address already in use```, then you either need to use a different
+   port on your local machine or kill the process that is using that port.  You can find out what process is using the 
+   port currently via::
+
+      lsof -ti:8888
+
 
 5. Finally, open up ``localhost:8888`` in your browser. This will prompt you for the token of the jupyter session. You can find this by looking back to when you first launched the jupyter session on Summit. Amongst the output, you should see something like::
 
