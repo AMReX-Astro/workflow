@@ -100,3 +100,77 @@ When running MAESTROeX, we seem to need::
 
 otherwise we get an ``Erroneous arithmetic error``.
 
+
+
+Cori GPU
+--------
+
+To use the Cori GPU system, you first need to load the ``cgpu`` module::
+
+  module load cgpu
+
+This will ensure the correct OpenMPI module is loaded in the next section.
+
+Loading ``cgpu`` will also let you check on your running jobs using ``squeue``.
+
+Compiling with GCC + CUDA
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We use the gcc, CUDA, and OpenMPI modules for Cori GPU, so load them in this
+order::
+
+  module swap PrgEnv-intel PrgEnv-gnu
+  module load gcc
+  module load cuda
+  module load openmpi
+  module load python3
+
+Then to compile, we'll need to get an interactive session on a Cori GPU node.
+This example gets 1 Cori GPU node with 1 GPU/node and 10 CPU cores/node for 60
+minutes, reserving 30GB of RAM per node::
+
+  salloc -C gpu --gres=gpu:1 -N 1 -t 60 -c 10 --mem=30GB -A [your allocation, e.g. mABCD] [--exclusive]
+
+.. note::
+
+  If the optional ``--exclusive`` argument is present, then your job will have
+  exclusive use of the nodes you requested for the duration of the job.  The
+  default behavior on Cori GPU is for jobs to share the GPU nodes, since there
+  are a limited number.
+
+Build, e.g. the Castro Sedov hydro test problem::
+
+  make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE
+
+Running on Cori GPU
+^^^^^^^^^^^^^^^^^^^
+
+Use a SLURM script to set 1 MPI rank per GPU. In this example, we're using 2 nodes, each with 8 GPUs.
+
+Sample SLURM script ``cori.MPI.CUDA.gpu.2nodes.slurm``: 
+
+.. literalinclude:: ../../job_scripts/cori-gpu/cori.MPI.CUDA.gpu.2nodes.slurm
+                    :language: sh
+                    :linenos:
+
+.. note::
+
+  Replace ``[your email address]`` and ``[your allocation]`` with your info
+  (omitting the brackets).
+
+.. note::
+
+  It is important to submit the Cori GPU SLURM script from a Cori login node.
+  If you submit the script from your Cori GPU interactive session, the memory
+  constraints you passed to ``salloc`` will conflict with the GPU options
+  specified in the SLURM script.
+
+So we'll next submit the SLURM script from a Cori login node, with the above
+modules loaded::
+
+  sbatch [--exclusive] cori.MPI.CUDA.gpu.2nodes.slurm
+
+(The optional ``--exclusive`` argument has the same meaning as for ``salloc`` above.)
+
+We can monitor the job by checking ``squeue -u [user]`` as usual with the
+``cgpu`` module loaded.
