@@ -104,6 +104,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#id1">Intel</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#cori-gpu">Cori GPU</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#compiling-with-gcc-cuda">Compiling with GCC + CUDA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#running-on-cori-gpu">Running on Cori GPU</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nersc-workflow.html">Managing Jobs at NERSC</a></li>
@@ -265,6 +270,205 @@ the following to the <code class="docutils literal notranslate"><span class="pre
 </pre></div>
 </div>
 <p>otherwise we get an <code class="docutils literal notranslate"><span class="pre">Erroneous</span> <span class="pre">arithmetic</span> <span class="pre">error</span></code>.</p>
+</div>
+</div>
+<div class="section" id="cori-gpu">
+<h2>Cori GPU<a class="headerlink" href="#cori-gpu" title="Permalink to this headline">¶</a></h2>
+<p>To use the Cori GPU system, you first need to load the <code class="docutils literal notranslate"><span class="pre">cgpu</span></code> module:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module purge
+module load cgpu
+</pre></div>
+</div>
+<p>This will ensure the correct OpenMPI module is loaded in the next section.</p>
+<p>Loading <code class="docutils literal notranslate"><span class="pre">cgpu</span></code> will also let you check on your running jobs using <code class="docutils literal notranslate"><span class="pre">squeue</span></code>.</p>
+<div class="section" id="compiling-with-gcc-cuda">
+<h3>Compiling with GCC + CUDA<a class="headerlink" href="#compiling-with-gcc-cuda" title="Permalink to this headline">¶</a></h3>
+<p>We use the gcc, CUDA, and OpenMPI modules for Cori GPU, so load them in this
+order:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load PrgEnv-gnu
+module load gcc
+module load cuda
+module load openmpi
+module load python3
+</pre></div>
+</div>
+<p>Then to compile, we’ll need to get an interactive session on a Cori GPU node.
+This example gets 1 Cori GPU node with 1 GPU/node and 10 CPU cores/node for 60
+minutes, reserving 30GB of RAM per node:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>salloc -C gpu --gres<span class="o">=</span>gpu:1 -N <span class="m">1</span> -t <span class="m">60</span> -c <span class="m">10</span> --mem<span class="o">=</span>30GB -A <span class="o">[</span>your allocation, e.g. mABCD<span class="o">]</span> <span class="o">[</span>--exclusive<span class="o">]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the optional <code class="docutils literal notranslate"><span class="pre">--exclusive</span></code> argument is present, then your job will have
+exclusive use of the nodes you requested for the duration of the job.  The
+default behavior on Cori GPU is for jobs to share the GPU nodes, since there
+are a limited number.</p>
+</div>
+<p>Build, e.g. the Castro Sedov hydro test problem:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make -j <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">TINY_PROFILE</span><span class="o">=</span>TRUE <span class="nv">USE_MPI</span><span class="o">=</span>TRUE <span class="nv">USE_OMP</span><span class="o">=</span>FALSE <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-on-cori-gpu">
+<h3>Running on Cori GPU<a class="headerlink" href="#running-on-cori-gpu" title="Permalink to this headline">¶</a></h3>
+<p>Use a SLURM script to set 1 MPI rank per GPU. In this example, we’re using 2 nodes, each with 8 GPUs.</p>
+<p>Sample SLURM script <code class="docutils literal notranslate"><span class="pre">cori.MPI.CUDA.gpu.2nodes.slurm</span></code>, for this and other Cori
+GPU SLURM scripts, see
+<a class="reference external" href="https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/cori-gpu">our Cori GPU SLURM scripts on GitHub</a></p>
+<div class="highlight-sh notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#</span>
+<span class="c1"># Number of nodes:</span>
+<span class="c1">#SBATCH --nodes=2</span>
+<span class="c1">#</span>
+<span class="c1">############################################</span>
+<span class="c1"># Cori GPU node configuration</span>
+<span class="c1">#</span>
+<span class="c1"># This lets SLURM pick the right number of</span>
+<span class="c1"># MPI tasks given the number of nodes</span>
+<span class="c1"># requested above. These settings will</span>
+<span class="c1"># assign 1 MPI task per GPU.</span>
+<span class="c1">#</span>
+<span class="c1"># (generally you won&#39;t need to change this)</span>
+<span class="c1">############################################</span>
+<span class="c1">#</span>
+<span class="c1"># Requests Cori GPU nodes:</span>
+<span class="c1">#SBATCH --constraint=gpu</span>
+<span class="c1">#</span>
+<span class="c1"># Each GPU node has 40 physical CPU cores</span>
+<span class="c1"># (w/ 2 hyperthreads, so 80 virtual CPU cores)</span>
+<span class="c1"># and 8 NVIDIA Tesla V100 GPUs.</span>
+<span class="c1">#</span>
+<span class="c1"># GPU: Assign 1 MPI tasks to each GPU</span>
+<span class="c1">#SBATCH --tasks-per-node=8</span>
+<span class="c1">#</span>
+<span class="c1"># We want all 8 GPUs on the node</span>
+<span class="c1">#SBATCH --gres=gpu:8</span>
+<span class="c1">#</span>
+<span class="c1"># Since we want the entire node (all the GPUs)</span>
+<span class="c1"># with 8 MPI tasks, this is 80/8 = 10 virtual CPUs</span>
+<span class="c1"># per MPI task.</span>
+<span class="c1">#SBATCH --cpus-per-task=10</span>
+<span class="c1">#</span>
+<span class="c1">#################</span>
+<span class="c1"># Queue &amp; Job</span>
+<span class="c1">#################</span>
+<span class="c1">#</span>
+<span class="c1"># Which queue to run in: debug, regular, premium, etc. ...</span>
+<span class="c1"># For now, don&#39;t use --qos</span>
+<span class="c1">## SBATCH --qos=debug</span>
+<span class="c1">#</span>
+<span class="c1"># Run for this much walltime: hh:mm:ss</span>
+<span class="c1">#SBATCH --time=00:15:00</span>
+<span class="c1">#</span>
+<span class="c1"># Use this job name:</span>
+<span class="c1">#SBATCH -J castro_gpu_job</span>
+<span class="c1">#</span>
+<span class="c1"># Send notification emails here:</span>
+<span class="c1">#SBATCH --mail-user=[your email address]</span>
+<span class="c1">#SBATCH --mail-type=ALL</span>
+<span class="c1">#</span>
+<span class="c1"># Which allocation to use:</span>
+<span class="c1">#SBATCH -A [your allocation ID, e.g. mABCD]</span>
+
+<span class="c1"># On the compute node, change to the directory we submitted from</span>
+<span class="nb">cd</span> <span class="nv">$SLURM_SUBMIT_DIR</span>
+
+<span class="c1"># OpenMP Configuration</span>
+<span class="c1"># This configuration ignores the hyperthreads</span>
+<span class="c1"># and assigns 1 OpenMP thread/physical core</span>
+<span class="nb">export</span> <span class="nv">OMP_PLACES</span><span class="o">=</span>cores
+<span class="nb">export</span> <span class="nv">OMP_PROC_BIND</span><span class="o">=</span><span class="nb">true</span>
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">5</span>
+
+srun --cpu_bind<span class="o">=</span>cores ./Castro3d.gnu.TPROF.MPI.CUDA.ex inputs.3d.sph.testsuite
+</pre></div>
+</td></tr></table></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">[your</span> <span class="pre">email</span> <span class="pre">address]</span></code> and <code class="docutils literal notranslate"><span class="pre">[your</span> <span class="pre">allocation]</span></code> with your info
+(omitting the brackets).</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is important to submit the Cori GPU SLURM script from a Cori login node.
+If you submit the script from your Cori GPU interactive session, the memory
+constraints you passed to <code class="docutils literal notranslate"><span class="pre">salloc</span></code> will conflict with the GPU options
+specified in the SLURM script.</p>
+</div>
+<p>So we’ll next submit the SLURM script from a Cori login node, with the above
+modules loaded:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch <span class="o">[</span>--exclusive<span class="o">]</span> cori.MPI.CUDA.gpu.2nodes.slurm
+</pre></div>
+</div>
+<p>(The optional <code class="docutils literal notranslate"><span class="pre">--exclusive</span></code> argument has the same meaning as for <code class="docutils literal notranslate"><span class="pre">salloc</span></code> above.)</p>
+<p>We can monitor the job by checking <code class="docutils literal notranslate"><span class="pre">squeue</span> <span class="pre">-u</span> <span class="pre">[user]</span></code> as usual with the
+<code class="docutils literal notranslate"><span class="pre">cgpu</span></code> module loaded.</p>
 </div>
 </div>
 </div>
