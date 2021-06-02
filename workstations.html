@@ -30,6 +30,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -99,6 +100,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#groot">groot</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#remote-vis-with-jupyter">Remote vis with Jupyter</a></li>
 </ul>
 </li>
 </ul>
@@ -170,20 +172,17 @@
             
   <div class="section" id="linux-workstations">
 <h1>Linux Workstations<a class="headerlink" href="#linux-workstations" title="Permalink to this headline">¶</a></h1>
-<p>In general GCC 7.x work well on Linux workstations.  CUDA 10.0 does
-not support the GCC 8.x compilers, so you may need to install an older
-GCC 7.3 compiler to get the code to compile.</p>
-<p>The PGI community edition 18.4 and 18.10 compilers also are known to
-work well.</p>
+<p>In general GCC 10.x works well on Linux workstations.</p>
 <div class="section" id="gpu-offloading">
 <h2>GPU offloading<a class="headerlink" href="#gpu-offloading" title="Permalink to this headline">¶</a></h2>
+<p>We use the GNU compilers to build with nvcc and CUDA.</p>
 <div class="section" id="bender">
 <h3>bender<a class="headerlink" href="#bender" title="Permalink to this headline">¶</a></h3>
 <p>Compile as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">7.3</span>
 
-<span class="n">make</span> <span class="n">CUDA_VERSION</span><span class="o">=</span><span class="n">cc60</span> <span class="n">COMPILE_CUDA_PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">cuda</span><span class="o">-</span><span class="mf">10.0</span> \
-  <span class="n">USE_CUDA</span><span class="o">=</span><span class="n">TRUE</span> <span class="n">COMP</span><span class="o">=</span><span class="n">pgi</span> <span class="o">-</span><span class="n">j</span> <span class="mi">4</span>
+<span class="n">make</span> <span class="n">CUDA_VERSION</span><span class="o">=</span><span class="n">cc60</span> <span class="n">COMPILE_CUDA_PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">cuda</span><span class="o">-</span><span class="mf">11.3</span> \
+  <span class="n">USE_CUDA</span><span class="o">=</span><span class="n">TRUE</span> <span class="n">COMP</span><span class="o">=</span><span class="n">gnu</span> <span class="o">-</span><span class="n">j</span> <span class="mi">4</span>
 </pre></div>
 </div>
 <p>To run the CUDA code path without GPU launching, add:</p>
@@ -193,12 +192,32 @@ work well.</p>
 </div>
 <div class="section" id="groot">
 <h3>groot<a class="headerlink" href="#groot" title="Permalink to this headline">¶</a></h3>
+<p>We need to work around a bug in the headers in the default GCC 10.2 on groot,
+so we load an older version for the GPU build.</p>
 <p>Compile as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">CUDA_VERSION</span><span class="o">=</span><span class="n">cc70</span> <span class="n">COMPILE_CUDA_PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">cuda</span><span class="o">-</span><span class="mf">10.1</span> \
-  <span class="n">USE_CUDA</span><span class="o">=</span><span class="n">TRUE</span> <span class="n">COMP</span><span class="o">=</span><span class="n">pgi</span> <span class="n">USE_MPI</span><span class="o">=</span><span class="n">FALSE</span> <span class="o">-</span><span class="n">j</span> <span class="mi">4</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">7.3</span>
+
+<span class="n">make</span> <span class="n">CUDA_VERSION</span><span class="o">=</span><span class="n">cc70</span> <span class="n">COMPILE_CUDA_PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">cuda</span><span class="o">-</span><span class="mf">11.3</span> \
+  <span class="n">USE_CUDA</span><span class="o">=</span><span class="n">TRUE</span> <span class="n">COMP</span><span class="o">=</span><span class="n">gnu</span> <span class="n">USE_MPI</span><span class="o">=</span><span class="n">FALSE</span> <span class="o">-</span><span class="n">j</span> <span class="mi">4</span>
 </pre></div>
 </div>
 </div>
+</div>
+<div class="section" id="remote-vis-with-jupyter">
+<h2>Remote vis with Jupyter<a class="headerlink" href="#remote-vis-with-jupyter" title="Permalink to this headline">¶</a></h2>
+<p>You can connect to Jupyter on groot to do remote visualization.</p>
+<p>On groot, do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">lab</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">browser</span> <span class="o">--</span><span class="n">ip</span><span class="o">=</span><span class="s2">&quot;groot&quot;</span>
+</pre></div>
+</div>
+<p>on your workstation do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">-</span><span class="n">N</span> <span class="o">-</span><span class="n">L</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">8888</span><span class="p">:</span><span class="n">groot</span><span class="p">:</span><span class="mi">8888</span> <span class="n">groot</span><span class="o">.</span><span class="n">astro</span><span class="o">.</span><span class="n">sunysb</span><span class="o">.</span><span class="n">edu</span>
+</pre></div>
+</div>
+<p>and enter your password.  There will be no output—that command will just continue
+to run in the terminal window.</p>
+<p>Point your web browser to <a class="reference external" href="http://localhost:8888">http://localhost:8888</a> .
+You will be prompted to add the token that appears in the groot window.</p>
 </div>
 </div>
 

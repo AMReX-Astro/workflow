@@ -30,6 +30,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -191,61 +192,35 @@ scripts. <code class="docutils literal notranslate"><span class="pre">run_amrex_
 and is more verbose about what different flags and options will do.</p>
 <p>The Castro GPU batch script example is <code class="docutils literal notranslate"><span class="pre">summit_16nodes.sh</span></code>, more job
 script examples for Castro can be found <a class="reference external" href="https://github.com/AMReX-Astro/Castro/tree/master/Util/scaling/sedov/summit_201905">here</a>.</p>
-<div class="highlight-sh notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
-<span class="c1">#BSUB -P projectid</span>
-<span class="c1">#BSUB -W 50</span>
-<span class="c1">#BSUB -nnodes 16</span>
-<span class="c1">#BSUB -alloc_flags smt1</span>
-<span class="c1">#BSUB -J Sedov_gpu</span>
-<span class="c1">#BSUB -o Sedov_gpu.%J</span>
-<span class="c1">#BSUB -e Sedov_gpu.%J</span>
-
-<span class="nb">cd</span> <span class="nv">$LS_SUBCWD</span>
-
-module load gcc/10.2.0
-module load cuda/11.2.0
-
-<span class="nv">inputs_file</span><span class="o">=</span>inputs.3d.sph
-
-<span class="nv">n_mpi</span><span class="o">=</span><span class="m">96</span> <span class="c1"># 16 nodes * 6 gpu per node</span>
-<span class="nv">n_omp</span><span class="o">=</span><span class="m">1</span>
-<span class="nv">n_gpu</span><span class="o">=</span><span class="m">1</span>
-<span class="nv">n_cores</span><span class="o">=</span><span class="m">1</span>
-<span class="nv">n_rs_per_node</span><span class="o">=</span><span class="m">6</span>
-
-<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="nv">$n_omp</span>
-
-<span class="nv">Castro_ex</span><span class="o">=</span>./Castro3d.pgi.MPI.CUDA.ex
-
-jsrun -n <span class="nv">$n_mpi</span> -r <span class="nv">$n_rs_per_node</span> -c <span class="nv">$n_cores</span> -a <span class="m">1</span> -g <span class="nv">$n_gpu</span> <span class="nv">$Castro_ex</span> <span class="nv">$inputs_file</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="ch">#!/bin/bash</span>
+<span class="linenos"> 2</span><span class="c1">#BSUB -P projectid</span>
+<span class="linenos"> 3</span><span class="c1">#BSUB -W 50</span>
+<span class="linenos"> 4</span><span class="c1">#BSUB -nnodes 16</span>
+<span class="linenos"> 5</span><span class="c1">#BSUB -alloc_flags smt1</span>
+<span class="linenos"> 6</span><span class="c1">#BSUB -J Sedov_gpu</span>
+<span class="linenos"> 7</span><span class="c1">#BSUB -o Sedov_gpu.%J</span>
+<span class="linenos"> 8</span><span class="c1">#BSUB -e Sedov_gpu.%J</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="nb">cd</span> <span class="nv">$LS_SUBCWD</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>module load gcc/10.2.0
+<span class="linenos">13</span>module load cuda/11.2.0
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="nv">inputs_file</span><span class="o">=</span>inputs.3d.sph
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="nv">n_mpi</span><span class="o">=</span><span class="m">96</span> <span class="c1"># 16 nodes * 6 gpu per node</span>
+<span class="linenos">18</span><span class="nv">n_omp</span><span class="o">=</span><span class="m">1</span>
+<span class="linenos">19</span><span class="nv">n_gpu</span><span class="o">=</span><span class="m">1</span>
+<span class="linenos">20</span><span class="nv">n_cores</span><span class="o">=</span><span class="m">1</span>
+<span class="linenos">21</span><span class="nv">n_rs_per_node</span><span class="o">=</span><span class="m">6</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="nv">$n_omp</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="nv">Castro_ex</span><span class="o">=</span>./Castro3d.pgi.MPI.CUDA.ex
+<span class="linenos">26</span>
+<span class="linenos">27</span>jsrun -n <span class="nv">$n_mpi</span> -r <span class="nv">$n_rs_per_node</span> -c <span class="nv">$n_cores</span> -a <span class="m">1</span> -g <span class="nv">$n_gpu</span> <span class="nv">$Castro_ex</span> <span class="nv">$inputs_file</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You should explicitly include the “module loads” for the GCC and CUDA version you are
@@ -256,91 +231,50 @@ we load <code class="docutils literal notranslate"><span class="pre">gcc/10.2.0<
 nvvp output, and MPI+OMP
 <code class="docutils literal notranslate"><span class="pre">run_3_tests_same_node.summit</span></code>. <code class="docutils literal notranslate"><span class="pre">run_template.summit</span></code> gives
 example syntax for jsrun:</p>
-<div class="highlight-sh notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
-<span class="c1">### Begin BSUB Options</span>
-<span class="c1">#BSUB -P &lt;OLCF_PROJECT_ID&gt;</span>
-<span class="c1">#BSUB -J &lt;JOB_NAME&gt;</span>
-<span class="c1">#BSUB -W &lt;HH:MM&gt;</span>
-<span class="c1">#BSUB -nnodes &lt;NUMBER_OF_NODES&gt;</span>
-<span class="c1">#BSUB -alloc_flags &quot;smt4&quot;</span>
-<span class="c1">### End BSUB Options and begin shell commands</span>
-
-<span class="c1"># =====================</span>
-<span class="c1"># BSUB parameters</span>
-<span class="c1"># -nnodes = number of nodes</span>
-
-<span class="hll"><span class="c1"># JSRUN parameters</span>
-</span><span class="hll"><span class="c1"># -n:--nrs          number of resource sets</span>
-</span><span class="hll"><span class="c1">#   (alternatively,</span>
-</span><span class="hll"><span class="c1"># -r:rs_per_host     number of resource sets per node)</span>
-</span><span class="hll"><span class="c1"># -a:tasks_per_rs    number of MPI tasks/ranks per resource set</span>
-</span><span class="hll"><span class="c1"># -c:cpu_per_rs      number of CPU cores per resource set</span>
-</span><span class="hll"><span class="c1"># -g:gpu_per_rs      number of GPUs per resource set</span>
-</span>
-<span class="c1"># Summit: Each node has:</span>
-<span class="c1">#         2  Sockets</span>
-<span class="c1">#         3  GPUs per socket (6 total)</span>
-<span class="c1">#         21 CPUs per socket (42 total)</span>
-<span class="c1">#         4  Hardware Threads per CPU (168 total)</span>
-<span class="c1">#</span>
-<span class="c1"># On Summit: AMReX recommended initial configuration:</span>
-<span class="c1">#             one GPU per MPI rank,</span>
-<span class="c1">#             one resource set per socket.</span>
-<span class="c1">#             (-r2 -c21 -g3 -a3)</span>
-<span class="c1"># =====================</span>
-
-<span class="hll"><span class="c1">#MPI + GPU version</span>
-</span><span class="hll"><span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
-</span><span class="hll">jsrun --nrs <span class="m">6</span> --tasks_per_rs <span class="m">1</span> --cpu_per_rs <span class="m">7</span> --gpu_per_rs <span class="m">1</span> --rs_per_host <span class="m">6</span> --latency_priority CPU-CPU --launch_distribution packed --bind packed:7 js_task_info <span class="p">|</span> sort
-</span><span class="hll"><span class="c1">#jsrun -n 6 -a 1 -g 1 -c 7 --bind=packed:1</span>
-</span><span class="hll">
-</span><span class="hll"><span class="c1">#MPI + OpenMP version</span>
-</span><span class="hll"><span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">7</span>
-</span><span class="hll">jsrun --nrs <span class="m">6</span> --tasks_per_rs <span class="m">1</span> --cpu_per_rs <span class="m">7</span> --rs_per_host <span class="m">6</span> --latency_priority CPU-CPU --launch_distribution packed --bind packed:7 js_task_info <span class="p">|</span> sort
-</span><span class="hll"><span class="c1">#jsrun -n 6 -a 1 -g 1 -c 7 --bind=packed:7</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="ch">#!/bin/bash</span>
+<span class="linenos"> 2</span><span class="c1">### Begin BSUB Options</span>
+<span class="linenos"> 3</span><span class="c1">#BSUB -P &lt;OLCF_PROJECT_ID&gt;</span>
+<span class="linenos"> 4</span><span class="c1">#BSUB -J &lt;JOB_NAME&gt;</span>
+<span class="linenos"> 5</span><span class="c1">#BSUB -W &lt;HH:MM&gt;</span>
+<span class="linenos"> 6</span><span class="c1">#BSUB -nnodes &lt;NUMBER_OF_NODES&gt;</span>
+<span class="linenos"> 7</span><span class="c1">#BSUB -alloc_flags &quot;smt4&quot;</span>
+<span class="linenos"> 8</span><span class="c1">### End BSUB Options and begin shell commands</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="c1"># =====================</span>
+<span class="linenos">11</span><span class="c1"># BSUB parameters</span>
+<span class="linenos">12</span><span class="c1"># -nnodes = number of nodes</span>
+<span class="linenos">13</span>
+<span class="hll"><span class="linenos">14</span><span class="c1"># JSRUN parameters</span>
+</span><span class="hll"><span class="linenos">15</span><span class="c1"># -n:--nrs          number of resource sets</span>
+</span><span class="hll"><span class="linenos">16</span><span class="c1">#   (alternatively,</span>
+</span><span class="hll"><span class="linenos">17</span><span class="c1"># -r:rs_per_host     number of resource sets per node)</span>
+</span><span class="hll"><span class="linenos">18</span><span class="c1"># -a:tasks_per_rs    number of MPI tasks/ranks per resource set</span>
+</span><span class="hll"><span class="linenos">19</span><span class="c1"># -c:cpu_per_rs      number of CPU cores per resource set</span>
+</span><span class="hll"><span class="linenos">20</span><span class="c1"># -g:gpu_per_rs      number of GPUs per resource set</span>
+</span><span class="linenos">21</span>
+<span class="linenos">22</span><span class="c1"># Summit: Each node has:</span>
+<span class="linenos">23</span><span class="c1">#         2  Sockets</span>
+<span class="linenos">24</span><span class="c1">#         3  GPUs per socket (6 total)</span>
+<span class="linenos">25</span><span class="c1">#         21 CPUs per socket (42 total)</span>
+<span class="linenos">26</span><span class="c1">#         4  Hardware Threads per CPU (168 total)</span>
+<span class="linenos">27</span><span class="c1">#</span>
+<span class="linenos">28</span><span class="c1"># On Summit: AMReX recommended initial configuration:</span>
+<span class="linenos">29</span><span class="c1">#             one GPU per MPI rank,</span>
+<span class="linenos">30</span><span class="c1">#             one resource set per socket.</span>
+<span class="linenos">31</span><span class="c1">#             (-r2 -c21 -g3 -a3)</span>
+<span class="linenos">32</span><span class="c1"># =====================</span>
+<span class="linenos">33</span>
+<span class="hll"><span class="linenos">34</span><span class="c1">#MPI + GPU version</span>
+</span><span class="hll"><span class="linenos">35</span><span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
+</span><span class="hll"><span class="linenos">36</span>jsrun --nrs <span class="m">6</span> --tasks_per_rs <span class="m">1</span> --cpu_per_rs <span class="m">7</span> --gpu_per_rs <span class="m">1</span> --rs_per_host <span class="m">6</span> --latency_priority CPU-CPU --launch_distribution packed --bind packed:7 js_task_info <span class="p">|</span> sort
+</span><span class="hll"><span class="linenos">37</span><span class="c1">#jsrun -n 6 -a 1 -g 1 -c 7 --bind=packed:1</span>
+</span><span class="hll"><span class="linenos">38</span>
+</span><span class="hll"><span class="linenos">39</span><span class="c1">#MPI + OpenMP version</span>
+</span><span class="hll"><span class="linenos">40</span><span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">7</span>
+</span><span class="hll"><span class="linenos">41</span>jsrun --nrs <span class="m">6</span> --tasks_per_rs <span class="m">1</span> --cpu_per_rs <span class="m">7</span> --rs_per_host <span class="m">6</span> --latency_priority CPU-CPU --launch_distribution packed --bind packed:7 js_task_info <span class="p">|</span> sort
+</span><span class="hll"><span class="linenos">42</span><span class="c1">#jsrun -n 6 -a 1 -g 1 -c 7 --bind=packed:7</span>
 </span></pre></div>
-</td></tr></table></div>
+</div>
 <p>This can be visualized using <a class="reference external" href="https://jsrunvisualizer.olcf.ornl.gov/index.html">https://jsrunvisualizer.olcf.ornl.gov/index.html</a></p>
 <span id="fig-gpu-threads"></span><table class="docutils align-default" id="id1">
 <caption><span class="caption-text">Comparison of jsrun process assignment for MPI + OpenMP and MPI + GPU work distribution.</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
