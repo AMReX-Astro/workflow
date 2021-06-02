@@ -3,16 +3,13 @@
 Linux Workstations
 ******************
 
-In general GCC 7.x work well on Linux workstations.  CUDA 10.0 does
-not support the GCC 8.x compilers, so you may need to install an older
-GCC 7.3 compiler to get the code to compile.
-
-The PGI community edition 18.4 and 18.10 compilers also are known to
-work well.
+In general GCC 10.x works well on Linux workstations.
 
 
 GPU offloading
 ==============
+
+We use the GNU compilers to build with nvcc and CUDA.
 
 bender
 ------
@@ -21,8 +18,8 @@ Compile as::
 
   module load gcc/7.3
 
-  make CUDA_VERSION=cc60 COMPILE_CUDA_PATH=/usr/local/cuda-10.0 \
-    USE_CUDA=TRUE COMP=pgi -j 4
+  make CUDA_VERSION=cc60 COMPILE_CUDA_PATH=/usr/local/cuda-11.3 \
+    USE_CUDA=TRUE COMP=gnu -j 4
 
 To run the CUDA code path without GPU launching, add::
 
@@ -32,9 +29,33 @@ To run the CUDA code path without GPU launching, add::
 groot
 -----
 
+We need to work around a bug in the headers in the default GCC 10.2 on groot,
+so we load an older version for the GPU build.
+
 Compile as::
 
-  make CUDA_VERSION=cc70 COMPILE_CUDA_PATH=/usr/local/cuda-10.1 \
-    USE_CUDA=TRUE COMP=pgi USE_MPI=FALSE -j 4
+  module load gcc/7.3
+
+  make CUDA_VERSION=cc70 COMPILE_CUDA_PATH=/usr/local/cuda-11.3 \
+    USE_CUDA=TRUE COMP=gnu USE_MPI=FALSE -j 4
 
 
+
+Remote vis with Jupyter
+=======================
+
+You can connect to Jupyter on groot to do remote visualization.
+
+On groot, do::
+
+   jupyter lab --no-browser --ip="groot"
+
+on your workstation do::
+
+   ssh -N -L localhost:8888:groot:8888 groot.astro.sunysb.edu
+
+and enter your password.  There will be no output---that command will just continue
+to run in the terminal window.
+
+Point your web browser to http://localhost:8888 .
+You will be prompted to add the token that appears in the groot window.
