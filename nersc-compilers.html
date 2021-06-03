@@ -192,6 +192,13 @@
 <h1>Compiling at NERSC<a class="headerlink" href="#compiling-at-nersc" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="cori-haswell">
 <h2>Cori Haswell<a class="headerlink" href="#cori-haswell" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You need to set:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">MPICH_MAX_THREAD_SAFETY</span><span class="o">=</span>multiple
+</pre></div>
+</div>
+</div>
 <div class="section" id="intel">
 <h3>Intel<a class="headerlink" href="#intel" title="Permalink to this headline">¶</a></h3>
 <p>Intel is the default programming environment on Cori and appear to
