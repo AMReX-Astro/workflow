@@ -7,6 +7,13 @@ Compiling at NERSC
 Cori Haswell
 ------------
 
+.. note::
+
+   You need to set::
+
+      export MPICH_MAX_THREAD_SAFETY=multiple
+
+
 Intel
 ^^^^^
 
