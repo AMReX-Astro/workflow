@@ -2,16 +2,19 @@
 
 if [ ! "$1" ]; then
   echo "usage: chainslurm.sh jobid number script"
+  echo "       set jobid -1 for no initial dependency"
   exit -1
 fi
 
 if [ ! "$2" ]; then
   echo "usage: chainslurm.sh jobid number script"
+  echo "       set jobid -1 for no initial dependency"
   exit -1
 fi
 
 if [ ! "$3" ]; then
   echo "usage: chainslurm.sh jobid number script"
+  echo "       set jobid -1 for no initial dependency"
   exit -1
 fi
 
@@ -25,10 +28,25 @@ if [ $numjobs -gt "20" ]; then
     exit -1
 fi
 
-echo chaining $numjobs jobs starting with $oldjob
+firstcount=1
 
+if [ $oldjob -eq "-1" ]
+then 
+    echo chaining $numjobs jobs
+    
+    echo starting job 1 with no dependency
+    aout=`sbatch ${script}`
+    id=$(echo $aout | cut -c21-28)
+    echo "   " jobid: $id
+    echo " "
+    oldjob=$id
+    firstcount=2
+    sleep 3
+else
+    echo chaining $numjobs jobs starting with $oldjob
+fi
 
-for count in `seq 1 1 $numjobs`
+for count in `seq $firstcount 1 $numjobs`
 do
   echo starting job $count to depend on $oldjob
   aout=`sbatch --parsable -d afterany:${oldjob} ${script}`
