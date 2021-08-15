@@ -35,11 +35,10 @@ then
     echo chaining $numjobs jobs
     
     echo starting job 1 with no dependency
-    aout=`sbatch ${script}`
-    id=$(echo $aout | cut -c21-28)
-    echo "   " jobid: $id
+    aout=`sbatch --parsable ${script}`
+    echo "   " jobid: $aout
     echo " "
-    oldjob=$id
+    oldjob=$aout
     firstcount=2
     sleep 3
 else
