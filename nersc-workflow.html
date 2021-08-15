@@ -199,7 +199,15 @@ finished, use the <code class="docutils literal notranslate"><span class="pre">c
 <p>where <code class="docutils literal notranslate"><span class="pre">jobid</span></code> is the existing job you want to start you chain from,
 <code class="docutils literal notranslate"><span class="pre">number</span></code> is the number of new jobs to chain from this starting job,
 and <code class="docutils literal notranslate"><span class="pre">script</span></code> is the job submission script to use (the same one you
-used originally most likely). You can view the job dependency using:</p>
+used originally most likely).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The script can also create the initial job to start the chain.
+If <code class="docutils literal notranslate"><span class="pre">jobid</span></code> is set to <code class="docutils literal notranslate"><span class="pre">-1</span></code>, then the script will first submit a
+job with no dependencies and then chain the remaining <code class="docutils literal notranslate"><span class="pre">number</span></code>-1
+jobs to depend on the previous.</p>
+</div>
+<p>You can view the job dependency using:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>squeue -l -j job-id
 </pre></div>
 </div>
