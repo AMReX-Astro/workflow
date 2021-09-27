@@ -52,12 +52,12 @@ source_suffix = '.rst'
 # see https://github.com/phn/pytpm/issues/3#issuecomment-12133978
 numpydoc_show_class_members = False
 
-# The master toctree document.
-master_doc = 'index'
+# The main toctree document.
+main_doc = 'index'
 
 # General information about the project.
 project = 'AMReX-Astro'
-copyright = '2018, AMReX-Astro development tem'
+copyright = '2018-2021, AMReX-Astro development tem'
 author = 'AMReX-Astro development team'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -110,6 +110,8 @@ html_static_path = ['_static']
 html_context = {
     'css_files': [
         '_static/theme_overrides.css',  # override wide tables in RTD theme
+        '_static/css/theme.css',
+        '_static/pygments.css'
         ],
     }
 
@@ -156,7 +158,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'amrex-astro.tex', 'AMReX-Astro Documentation',
+    (main_doc, 'amrex-astro.tex', 'AMReX-Astro Documentation',
      'AMReX-Astro development team', 'manual'),
 ]
 
@@ -166,7 +168,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'amrex-astro', 'AMReX-Astro Documentation',
+    (main_doc, 'amrex-astro', 'AMReX-Astro Documentation',
      [author], 1)
 ]
 
@@ -177,7 +179,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'AMReX-Astro', 'AMReX-Astro Documentation',
+    (main_doc, 'AMReX-Astro', 'AMReX-Astro Documentation',
      author, 'AMReX-Astro', 'One line description of project.',
      'Miscellaneous'),
 ]
