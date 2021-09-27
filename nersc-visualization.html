@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Working at NERSC &mdash; AMReX-Astro 1.0 documentation</title>
+  <title>Visualization at NERSC &mdash; AMReX-Astro 1.0 documentation</title>
       <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -17,8 +17,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Compiling at NERSC" href="nersc-compilers.html" />
-    <link rel="prev" title="AMReX Astrophysics Suite" href="index.html" /> 
+    <link rel="next" title="Working at OLCF" href="olcf.html" />
+    <link rel="prev" title="Managing Jobs at NERSC" href="nersc-workflow.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,11 +41,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">AMReX Astro basics</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Working at NERSC</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="nersc.html">Working at NERSC</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="nersc-compilers.html">Compiling at NERSC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nersc-workflow.html">Managing Jobs at NERSC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nersc-workflow.html#archiving-data-to-hpss">Archiving Data to HPSS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nersc-visualization.html">Visualization at NERSC</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Visualization at NERSC</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="olcf.html">Working at OLCF</a></li>
@@ -67,9 +67,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Working at NERSC</li>
+          <li><a href="nersc.html">Working at NERSC</a> &raquo;</li>
+      <li>Visualization at NERSC</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/nersc.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/nersc-visualization.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -77,36 +78,25 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="working-at-nersc">
-<h1>Working at NERSC<a class="headerlink" href="#working-at-nersc" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="nersc-compilers.html">Compiling at NERSC</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="nersc-compilers.html#cori-haswell">Cori Haswell</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="nersc-compilers.html#intel">Intel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nersc-compilers.html#gnu">GNU</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nersc-compilers.html#hypre">Hypre</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nersc-compilers.html#preferred-configuration">Preferred configuration</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="nersc-compilers.html#cori-knl">Cori KNL</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="nersc-compilers.html#id1">Intel</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="nersc-compilers.html#cori-gpu">Cori GPU</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="nersc-compilers.html#compiling-with-gcc-cuda">Compiling with GCC + CUDA</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nersc-compilers.html#running-on-cori-gpu">Running on Cori GPU</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="nersc-workflow.html">Managing Jobs at NERSC</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="nersc-workflow.html#cori-haswell">Cori Haswell</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="nersc-workflow.html#archiving-data-to-hpss">Archiving Data to HPSS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nersc-visualization.html">Visualization at NERSC</a></li>
-</ul>
+  <section id="visualization-at-nersc">
+<h1>Visualization at NERSC<a class="headerlink" href="#visualization-at-nersc" title="Permalink to this headline">¶</a></h1>
+<p>You need to install <cite>yt</cite>.  The best way to do this is to setup your own conda environment,
+following the steps here:</p>
+<p><a class="reference external" href="https://docs.nersc.gov/development/languages/python/nersc-python/">https://docs.nersc.gov/development/languages/python/nersc-python/</a></p>
+<p>in particular, something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">python</span>
+<span class="n">conda</span> <span class="n">init</span>
+<span class="n">conda</span> <span class="n">create</span> <span class="o">--</span><span class="n">name</span> <span class="n">myenv</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.8</span>
+<span class="n">conda</span> <span class="n">activate</span> <span class="n">myenv</span>
+</pre></div>
+</div>
+<p>then you can install yt as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">yt</span>
+</pre></div>
+</div>
+<p>to deactivate conda, do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">deactivate</span>
+</pre></div>
 </div>
 </section>
 
@@ -114,8 +104,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="AMReX Astrophysics Suite" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="nersc-compilers.html" class="btn btn-neutral float-right" title="Compiling at NERSC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="nersc-workflow.html" class="btn btn-neutral float-left" title="Managing Jobs at NERSC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="olcf.html" class="btn btn-neutral float-right" title="Working at OLCF" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

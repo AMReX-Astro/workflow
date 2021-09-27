@@ -1,75 +1,35 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Linux Workstations &mdash; AMReX-Astro 1.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Working at IACS" href="iacs.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> AMReX-Astro
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 1.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -77,18 +37,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">AMReX Astro basics</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="nersc.html">Working at NERSC</a></li>
@@ -105,78 +54,37 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">AMReX-Astro</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Linux Workstations</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/workstations.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="linux-workstations">
+             
+  <section id="linux-workstations">
 <h1>Linux Workstations<a class="headerlink" href="#linux-workstations" title="Permalink to this headline">¶</a></h1>
 <p>In general GCC 10.x works well on Linux workstations.</p>
-<div class="section" id="gpu-offloading">
+<section id="gpu-offloading">
 <h2>GPU offloading<a class="headerlink" href="#gpu-offloading" title="Permalink to this headline">¶</a></h2>
 <p>We use the GNU compilers to build with nvcc and CUDA.</p>
-<div class="section" id="bender">
+<section id="bender">
 <h3>bender<a class="headerlink" href="#bender" title="Permalink to this headline">¶</a></h3>
 <p>Compile as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">7.3</span>
@@ -189,8 +97,8 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NO_DEVICE_LAUNCH</span><span class="o">=</span><span class="n">TRUE</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="groot">
+</section>
+<section id="groot">
 <h3>groot<a class="headerlink" href="#groot" title="Permalink to this headline">¶</a></h3>
 <p>We need to work around a bug in the headers in the default GCC 10.2 on groot,
 so we load an older version for the GPU build.</p>
@@ -201,9 +109,9 @@ so we load an older version for the GPU build.</p>
   <span class="n">USE_CUDA</span><span class="o">=</span><span class="n">TRUE</span> <span class="n">COMP</span><span class="o">=</span><span class="n">gnu</span> <span class="n">USE_MPI</span><span class="o">=</span><span class="n">FALSE</span> <span class="o">-</span><span class="n">j</span> <span class="mi">4</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="remote-vis-with-jupyter">
+</section>
+</section>
+<section id="remote-vis-with-jupyter">
 <h2>Remote vis with Jupyter<a class="headerlink" href="#remote-vis-with-jupyter" title="Permalink to this headline">¶</a></h2>
 <p>You can connect to Jupyter on groot to do remote visualization.</p>
 <p>On groot, do:</p>
@@ -218,54 +126,37 @@ so we load an older version for the GPU build.</p>
 to run in the terminal window.</p>
 <p>Point your web browser to <a class="reference external" href="http://localhost:8888">http://localhost:8888</a> .
 You will be prompted to add the token that appears in the groot window.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="iacs.html" class="btn btn-neutral float-left" title="Working at IACS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2018, AMReX-Astro development tem.
-
-    </p>
+    <p>&#169; Copyright 2018, AMReX-Astro development tem.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

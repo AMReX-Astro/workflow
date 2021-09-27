@@ -1,76 +1,36 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Managing Jobs at OLCF &mdash; AMReX-Astro 1.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Running Jupyter Remotely from OLCF" href="olcf-jupyter.html" />
     <link rel="prev" title="Compiling at OLCF" href="olcf-compilers.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> AMReX-Astro
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 1.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -78,18 +38,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">AMReX Astro basics</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="nersc.html">Working at NERSC</a></li>
@@ -113,78 +62,36 @@
 <li class="toctree-l1"><a class="reference internal" href="workstations.html">Linux Workstations</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">AMReX-Astro</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="olcf.html">Working at OLCF</a> &raquo;</li>
-        
       <li>Managing Jobs at OLCF</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/olcf-workflow.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="managing-jobs-at-olcf">
+             
+  <section id="managing-jobs-at-olcf">
 <h1>Managing Jobs at OLCF<a class="headerlink" href="#managing-jobs-at-olcf" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="summit">
+<section id="summit">
 <h2>Summit<a class="headerlink" href="#summit" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="submission-scripts">
+<section id="submission-scripts">
 <h3>Submission scripts<a class="headerlink" href="#submission-scripts" title="Permalink to this headline">¶</a></h3>
 <p>On Summit, we have a few different examples of PBS batch
 scripts. <code class="docutils literal notranslate"><span class="pre">run_amrex_gpu_tutorials.summit</span></code> is a shallow copy of the
@@ -302,8 +209,8 @@ example syntax for jsrun:</p>
 <p class="admonition-title">Note</p>
 <p>We are defaulting to one hardware thread per CPU, since this is the configuration suggested by OLCF</p>
 </div>
-</div>
-<div class="section" id="submitting-and-monitoring">
+</section>
+<section id="submitting-and-monitoring">
 <h3>Submitting and monitoring<a class="headerlink" href="#submitting-and-monitoring" title="Permalink to this headline">¶</a></h3>
 <p>Jobs are submitted using the <code class="docutils literal notranslate"><span class="pre">bsub</span></code> command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bsub script.sh
@@ -314,8 +221,8 @@ example syntax for jsrun:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jobstat -u username
 </pre></div>
 </div>
-</div>
-<div class="section" id="automatic-restarting">
+</section>
+<section id="automatic-restarting">
 <h3>Automatic restarting<a class="headerlink" href="#automatic-restarting" title="Permalink to this headline">¶</a></h3>
 <p>Often we run a single simulation over many queue submissions with each
 starting from the latest checkpoint file.  The script
@@ -327,8 +234,8 @@ checkpoint files.  Because AMReX appends digits as the number of steps
 increase (with a minimum of 5 digits), we search for files with
 7-digits, 6-digits, and then finally 5-digits, to ensure we pick up
 the latest file.</p>
-</div>
-<div class="section" id="chaining-jobs">
+</section>
+<section id="chaining-jobs">
 <h3>Chaining jobs<a class="headerlink" href="#chaining-jobs" title="Permalink to this headline">¶</a></h3>
 <p>The script <code class="docutils literal notranslate"><span class="pre">job_scripts/summit/chain_submit.sh</span></code> can be used to setup job dependencies,
 i.e., a job chain.</p>
@@ -345,8 +252,8 @@ replace <code class="docutils literal notranslate"><span class="pre">submit_scri
 submit the job.  This will queue up N additional jobs, each depending
 on the previous.  Your submission script should use the automatic
 restarting features discussed above.</p>
-</div>
-<div class="section" id="archiving-to-hpss">
+</section>
+<section id="archiving-to-hpss">
 <h3>Archiving to HPSS<a class="headerlink" href="#archiving-to-hpss" title="Permalink to this headline">¶</a></h3>
 <p>You can access HPSS from submit using the data transfer nodes by submitting a job
 via SLURM:</p>
@@ -393,56 +300,39 @@ unpack it in <code class="docutils literal notranslate"><span class="pre">plotfi
 launch directory, the script will attempt to recover all plotfiles
 archived by <code class="docutils literal notranslate"><span class="pre">process.titan</span></code>. Try running <code class="code docutils literal notranslate"><span class="pre">./hpss_xfer.py</span> <span class="pre">--help</span></code>
 for a description of usage and arguments.</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="olcf-jupyter.html" class="btn btn-neutral float-right" title="Running Jupyter Remotely from OLCF" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="olcf-compilers.html" class="btn btn-neutral float-left" title="Compiling at OLCF" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="olcf-jupyter.html" class="btn btn-neutral float-right" title="Running Jupyter Remotely from OLCF" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2018, AMReX-Astro development tem.
-
-    </p>
+    <p>&#169; Copyright 2018, AMReX-Astro development tem.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

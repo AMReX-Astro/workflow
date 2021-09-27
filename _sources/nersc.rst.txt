@@ -9,3 +9,4 @@ Working at NERSC
 
    nersc-compilers
    nersc-workflow
+   nersc-visualization
