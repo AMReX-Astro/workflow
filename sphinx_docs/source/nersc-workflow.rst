@@ -32,7 +32,16 @@ finished, use the ``chainslurm.sh`` script in that same directory::
 where ``jobid`` is the existing job you want to start you chain from,
 ``number`` is the number of new jobs to chain from this starting job,
 and ``script`` is the job submission script to use (the same one you
-used originally most likely). You can view the job dependency using::
+used originally most likely).
+
+.. note::
+
+   The script can also create the initial job to start the chain.
+   If ``jobid`` is set to ``-1``, then the script will first submit a
+   job with no dependencies and then chain the remaining ``number``-1
+   jobs to depend on the previous.
+
+You can view the job dependency using::
 
   squeue -l -j job-id
 

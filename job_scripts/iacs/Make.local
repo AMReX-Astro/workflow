@@ -10,3 +10,7 @@ ifeq ($(lowercase_comp),gnu)
   F90FLAGS += -mtune=a64fx -mcpu=a64fx  -march=armv8.2-a+sve -msve-vector-bits=512
 endif
 
+ifeq ($(lowercase_comp),cray)
+  override CCE_GE_V9 := FALSE
+  override DEPFLAGS := -M
+endif

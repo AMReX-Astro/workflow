@@ -6,54 +6,42 @@ Compiling at OLCF
 Summit
 ------
 
-In order to compile you will need to swap the xl module with pgi::
+In order to compile you will need to swap the xl module with gcc (you need to use atleast gcc/7.4.0 due to C++17 support)::
 
-  module swap xl pgi
+  module load gcc/7.4.0
+
+.. note::
+
+   You will need to load the same module you use for compiling in your
+   submissions script, otherwise the code won't find the shared
+   libraries at runtime.
 
 Then load CUDA::
 
-  module load cuda
+  module load cuda/11.2.0
+
+.. note::
+
+   Presently you will see a warning when you load a CUDA 11 module, but the packages
+   should work fine.
 
 You also need to make sure you have the python module loaded::
 
   module load python/3.7.0
 
-Compile with ``COMP = pgi`` and ``USE_CUDA=TRUE``.  Ensure your
-GNUMakefile uses ``USE_OMP=FALSE`` since AMReX's standard OpenMP
-strategy conflicts with GPUs.  An example compilation line is::
+Compile with ``USE_CUDA=TRUE`` (and ``COMP=gnu`` which is usually the default).
+Do not compile with ``USE_OMP=TRUE`` since this is currently disallowed by Castro.
+An example compilation line is::
 
-  make COMP=pgi INTEGRATOR_DIR=VODE USE_CUDA=TRUE -j 4
+  make COMP=gnu USE_MPI=TRUE USE_CUDA=TRUE -j 4
 
+The recommended/tested version pairs are:
 
-The version pairs that work for sure currently are:
-
-  * ``pgi/19.5`` + ``cuda/10.1.105``.
-
-  * ``pgi/19.5`` + ``cuda/10.1.168``
-
-  * ``pgi/19.10`` + ``cuda/10.1.168``
-
-.. warning::
-
-   At present, there is a known compiler bug in CUDA 9.2.148 that
-   prevents compilation. Using CUDA 9.1 is a workaround.
+  * ``gcc/7.4.0`` + ``cuda/11.2.0``
 
 .. note::
-
-   - Use ``USE_GPU_PRAGMA=TRUE`` for any code which uses ``#pragma
-     gpu``, this flag is set by default in MAESTROeX and CASTRO's
-     build system when ``USE_CUDA=TRUE``.
 
    - OpenMP offloading to the GPU is controlled by
      ``USE_OMP_OFFLOAD``, which will default to ``FALSE``, AMReX-Astro
      doesn't use this feature.
-   
-   - MAESTROeX requires C++14, so it is necessary to use a   
-     later version of gcc than the version loaded on Summit 
-     when the pgi module is loaded. To do this, add the 
-     following to the ``GNUMakefile``::
-
-       NVCC_CCBIN=/sw/summit/gcc/7.4.0/bin/g++
-       LIBRARY_LOCATIONS += /sw/summit/gcc/7.4.0/lib64/
-       LIBRARIES += -Wl,-rpath,/sw/summit/gcc/7.4.0/lib64/
 

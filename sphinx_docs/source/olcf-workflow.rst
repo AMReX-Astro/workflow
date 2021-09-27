@@ -3,77 +3,34 @@
 Managing Jobs at OLCF
 =====================
 
-Titan
------
-
-.. note::
-
-   Titan is gone, so we need to update these instructions for Summit
-
-
-On Titan, we have a PBS script ``titan.run`` and a script
-``process.titan`` executed by ``titan.run`` to tar up plot,
-checkpoint, and diagnostic files and store them in HPSS.
-
-These are here: `<https://github.com/AMReX-Astro/workflow/tree/master/job_scripts/titan>`_
-
-The ``process.titan`` script relies on ``ftime``, an AMReX plotfile
-tool that prints the simulation time for a given plotfile.
-
-You can build ``ftime`` (tested with GNU) in ``amrex/Tools/Plotfile``,
-copy it into the run directory, and set ``FTIME_EXE`` appropriately in
-``process.titan``. If compiled with GNU, then the ``PrgEnv-gnu``
-module should be loaded when you submit the ``titan.run`` PBS script.
-
-These scripts will automatically create a directory with the same name
-as your run directory on HPSS where files will be archived.
-
-To have a look, use the ``hsi`` command to browse HPSS.
-
-Files may be unarchived in bulk from HPSS on OLCF systems using the
-``hpss_xfer.py`` script, which is available in the job_scripts
-directory. It requires Python 3 to be loaded to run. The command::
-
-    ./hpss_xfer.py plt00000 -s hpss_dir -o plotfile_dir
-
-will fetch ``hpss_dir/plt00000.tar`` from the HPSS filesystem and
-unpack it in ``plotfile_dir``. If run with no arguments in the problem
-launch directory, the script will attempt to recover all plotfiles
-archived by ``process.titan``. Try running :code:`./hpss_xfer.py --help`
-for a description of usage and arguments.
-
-For more information about using HPSS on Titan see `<https://www.olcf.ornl.gov/for-users/system-user-guides/titan/titan-user-guide/#workflow>`_
-
-.. note::
-
-   *Error: aprun not found*
-
-   It is possible (on Titan) that some aspect of the environment on job
-   submission can lead to the job failing with the following error::
-
-     XALT Error: unable to find aprun
-
-   Bill Renaud at OLCF advised adding the `-l` shell argument in the
-   script shebang line. This did not work for the `ksh` shell but does
-   work for `bash` as::
-
-       #!/bin/bash -l
-
-   This allows the job to run for the PBS script submitted from either
-   `bash` or `zsh`.
 
 
 Summit
 ------
+
+Submission scripts
+^^^^^^^^^^^^^^^^^^
 
 On Summit, we have a few different examples of PBS batch
 scripts. ``run_amrex_gpu_tutorials.summit`` is a shallow copy of the
 `AMReX tutorial script
 <https://github.com/AMReX-Codes/amrex/blob/development/Tutorials/GPU/run.summit>`_,
 and is more verbose about what different flags and options will do.
+
 The Castro GPU batch script example is ``summit_16nodes.sh``, more job
 script examples for Castro can be found `here
 <https://github.com/AMReX-Astro/Castro/tree/master/Util/scaling/sedov/summit_201905>`_.
+
+.. literalinclude:: ../../job_scripts/summit/summit_16nodes.sh
+		    :language: sh
+		    :linenos:
+
+.. note::
+
+   You should explicitly include the "module loads" for the GCC and CUDA version you are
+   using in the submission script, otherwise your job may not run.  In the example above,
+   we load ``gcc/10.2.0`` and ``cuda/11.2.0``.
+
 The Nyx example shows running MPI+CUDA, MPI+CUDA with one mpi process
 nvvp output, and MPI+OMP
 ``run_3_tests_same_node.summit``. ``run_template.summit`` gives
@@ -121,31 +78,102 @@ A slightly nicer view of your jobs can be viewed using ``jobstat`` as::
 
   jobstat -u username
 
-Archiving to HPSS
------------------
 
-You can submit jobs to the data transfer nodes (dtn) directly from
-Summit using::
+Automatic restarting
+^^^^^^^^^^^^^^^^^^^^
+
+Often we run a single simulation over many queue submissions with each
+starting from the latest checkpoint file.  The script
+``job_scripts/summit/submit_restart.sh`` shows how to automatically
+detect the last checkpoint file and restart from it.  This allows you
+to submit your jobs without any manual intervention.
+
+.. literalinclude:: ../../job_scripts/summit/submit.restart.sh
+		    :language: sh
+
+The function ``find_chk_file`` searches the submission directory for
+checkpoint files.  Because AMReX appends digits as the number of steps
+increase (with a minimum of 5 digits), we search for files with
+7-digits, 6-digits, and then finally 5-digits, to ensure we pick up
+the latest file.
+
+
+
+Chaining jobs
+^^^^^^^^^^^^^
+
+The script ``job_scripts/summit/chain_submit.sh`` can be used to setup job dependencies,
+i.e., a job chain.
+
+First you submit a job as usual using ``bsub``, and make note of the
+job-id that it prints upon submission (the same id you would see with
+``bjobs`` or ``jobstat``).  Then you setup N jobs to depend on the one
+you just submitted as::
+
+   chain_submit.sh job-id N submit_script.sh
+
+where you replace ``job-id`` with the id return from your first
+submission, replace ``N`` with the number of additional jobs, and
+replace ``submit_script`` with the name of the script you use to
+submit the job.  This will queue up N additional jobs, each depending
+on the previous.  Your submission script should use the automatic
+restarting features discussed above.
+
+
+
+Archiving to HPSS
+^^^^^^^^^^^^^^^^^
+
+You can access HPSS from submit using the data transfer nodes by submitting a job
+via SLURM::
 
   sbatch -N 1 -t 15:00 -A ast106 --cluster dtn test_hpss.sh
 
-This uses ``slurm`` as the job manager.  An example script
-that uses the ``process.xrb`` looks like::
+where ``test_hpss.sh`` is a SLURM script that contains the ``htar``
+commands needed to archive your data.  This uses ``slurm`` as the job
+manager.
 
-  #!/bin/bash
-  #SBATCH -A ast106
-  #SBATCH -t 02:00:00
-  #SBATCH --cluster dtn
-  #SBATCH -N 1
+An example is provided by the ``process.xrb`` archiving script and
+associated ``summit_hpss.submit`` submission script in
+``jobs_scripts/summit/``.  Together these will detect new plotfiles as
+they are generated, tar them up (using ``htar``) and archive them onto
+HPSS.  They will also store the inputs, probin, and other runtime
+generated files.  If ``ftime`` is found in your path, it will also
+create a file called ``ftime.out`` that lists the simulation time
+corresponding to each plotfile.
 
-  # do our archiving
-  pidfile=process.pid
+Once the plotfiles are archived they are moved to a subdirectory under
+your run directory called ``plotfiles/``.
 
-  cd $SLURM_SUBMIT_DIR
 
-  ./process.xrb
+To use this, we do the following:
 
-  PID=$!
-  trap 'kill -s TERM $PID' EXIT TERM HUP XCPU KILL
+#. Enter the HPSS system via ``hsi``
 
-  rm -f process.pid
+#. Create the output directory -- this should have the same name as the directory
+   you are running in on summit
+
+#. Exit HPSS
+
+#. Launch the script via::
+
+     sbatch summit_hpss.submit
+
+   It will for the full time you asked, searching for plotfiles as
+   they are created and moving them to HPSS as they are produced (it
+   will always leave the very last plotfile alone, since it can't tell
+   if it is still being written).
+
+
+Files may be unarchived in bulk from HPSS on OLCF systems using the
+``hpss_xfer.py`` script, which is available in the job_scripts
+directory. It requires Python 3 to be loaded to run. The command::
+
+    ./hpss_xfer.py plt00000 -s hpss_dir -o plotfile_dir
+
+will fetch ``hpss_dir/plt00000.tar`` from the HPSS filesystem and
+unpack it in ``plotfile_dir``. If run with no arguments in the problem
+launch directory, the script will attempt to recover all plotfiles
+archived by ``process.titan``. Try running :code:`./hpss_xfer.py --help`
+for a description of usage and arguments.
+

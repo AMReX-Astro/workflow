@@ -11,7 +11,7 @@
 # number of nodes = # of MPI * number of threads / 32 (cores / node)
 
 export OMP_NUM_THREADS=1
-
+export MPICH_MAX_THREAD_SAFETY=multiple
 export CASTRO_EXEC=./Castro2d.intel.haswell.MPI.ex
 
 
