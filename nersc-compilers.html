@@ -61,6 +61,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#running-on-cori-gpu">Running on Cori GPU</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#perlmutter">Perlmutter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Compiling with GCC + CUDA</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nersc-workflow.html">Managing Jobs at NERSC</a></li>
@@ -316,6 +320,23 @@ modules loaded:</p>
 <p>(The optional <code class="docutils literal notranslate"><span class="pre">--exclusive</span></code> argument has the same meaning as for <code class="docutils literal notranslate"><span class="pre">salloc</span></code> above.)</p>
 <p>We can monitor the job by checking <code class="docutils literal notranslate"><span class="pre">squeue</span> <span class="pre">-u</span> <span class="pre">[user]</span></code> as usual with the
 <code class="docutils literal notranslate"><span class="pre">cgpu</span></code> module loaded.</p>
+</section>
+</section>
+<section id="perlmutter">
+<h2>Perlmutter<a class="headerlink" href="#perlmutter" title="Permalink to this headline">¶</a></h2>
+<section id="id2">
+<h3>Compiling with GCC + CUDA<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Load PrgEnv-gnu to use gcc with CUDA (CUDA is already part of the default environment):
+order:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load PrgEnv-gnu
+module load gcc/9.3.0
+</pre></div>
+</div>
+<p>Build, e.g. the Castro Sedov hydro test problem (note the importance of explicitly setting
+NVCC_CCBIN to the Cray compiler wrapper, <cite>CC</cite>, which gives us MPI):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make -j <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">TINY_PROFILE</span><span class="o">=</span>TRUE <span class="nv">USE_MPI</span><span class="o">=</span>TRUE <span class="nv">USE_OMP</span><span class="o">=</span>FALSE <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE <span class="nv">NVCC_CCBIN</span><span class="o">=</span>CC
+</pre></div>
+</div>
 </section>
 </section>
 </section>
