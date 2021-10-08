@@ -197,3 +197,12 @@ Build, e.g. the Castro Sedov hydro test problem (note the importance of explicit
 NVCC_CCBIN to the Cray compiler wrapper, `CC`, which gives us MPI)::
 
   make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE NVCC_CCBIN=CC
+
+Running
+^^^^^^^
+
+Below is an example that launches the Sedov test compiled above with 4 GPUs per node on 4 nodes.
+
+.. literalinclude:: ../../job_scripts/perlmutter/sedov_4_nodes_example.sh
+                    :language: sh
+                    :linenos:
