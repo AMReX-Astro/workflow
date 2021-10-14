@@ -190,7 +190,7 @@ Compiling with GCC + CUDA
 Load PrgEnv-gnu to use gcc with CUDA (CUDA is already part of the default environment)::
 
   module load PrgEnv-gnu
-  module load gcc/9.3.0
+  module load cpe-cuda
 
 Build, e.g. the Castro Sedov hydro test problem::
 
