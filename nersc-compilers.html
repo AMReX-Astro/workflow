@@ -327,15 +327,13 @@ modules loaded:</p>
 <h2>Perlmutter<a class="headerlink" href="#perlmutter" title="Permalink to this headline">¶</a></h2>
 <section id="id2">
 <h3>Compiling with GCC + CUDA<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>Load PrgEnv-gnu to use gcc with CUDA (CUDA is already part of the default environment):
-order:</p>
+<p>Load PrgEnv-gnu to use gcc with CUDA (CUDA is already part of the default environment):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load PrgEnv-gnu
-module load gcc/9.3.0
+module load cpe-cuda
 </pre></div>
 </div>
-<p>Build, e.g. the Castro Sedov hydro test problem (note the importance of explicitly setting
-NVCC_CCBIN to the Cray compiler wrapper, <cite>CC</cite>, which gives us MPI):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make -j <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">TINY_PROFILE</span><span class="o">=</span>TRUE <span class="nv">USE_MPI</span><span class="o">=</span>TRUE <span class="nv">USE_OMP</span><span class="o">=</span>FALSE <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE <span class="nv">NVCC_CCBIN</span><span class="o">=</span>CC
+<p>Build, e.g. the Castro Sedov hydro test problem:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make -j <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">TINY_PROFILE</span><span class="o">=</span>TRUE <span class="nv">USE_MPI</span><span class="o">=</span>TRUE <span class="nv">USE_OMP</span><span class="o">=</span>FALSE <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE
 </pre></div>
 </div>
 </section>
