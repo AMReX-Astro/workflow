@@ -187,16 +187,14 @@ Perlmutter
 Compiling with GCC + CUDA
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Load PrgEnv-gnu to use gcc with CUDA (CUDA is already part of the default environment):
-order::
+Load PrgEnv-gnu to use gcc with CUDA (CUDA is already part of the default environment)::
 
   module load PrgEnv-gnu
   module load gcc/9.3.0
 
-Build, e.g. the Castro Sedov hydro test problem (note the importance of explicitly setting
-NVCC_CCBIN to the Cray compiler wrapper, `CC`, which gives us MPI)::
+Build, e.g. the Castro Sedov hydro test problem::
 
-  make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE NVCC_CCBIN=CC
+  make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE
 
 Running
 ^^^^^^^
