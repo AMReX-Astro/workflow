@@ -17,6 +17,10 @@ then you can install yt as::
 
     conda install yt
 
+or for a more recent yt::
+
+    conda install -c conda-forge yt
+
 to deactivate conda, do::
 
     conda deactivate
