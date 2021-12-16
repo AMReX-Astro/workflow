@@ -51,6 +51,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#creating-a-conda-environment">Creating a conda environment</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#batch-visualization-on-andes">Batch Visualization on Andes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="iacs.html">Working at IACS</a></li>
@@ -97,7 +98,56 @@ conda install -n my_env jupyterlab
 <p class="admonition-title">Note</p>
 <p>To use the conda environment for python subsequently, you do not need to do <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">python/3.7.0-anaconda3-5.3.0</span></code></p>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>yt is distributed via <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code>, you can add this channel to your conda search via:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda config --add channels conda-forge
+</pre></div>
+</div>
+</div>
 </section>
+</section>
+<section id="batch-visualization-on-andes">
+<h1>Batch Visualization on Andes<a class="headerlink" href="#batch-visualization-on-andes" title="Permalink to this headline">¶</a></h1>
+<p>It is best to work on <code class="docutils literal notranslate"><span class="pre">andes.olcf.ornl.gov</span></code>.  You will want to setup
+a new env for andes.  We’ll call it <code class="docutils literal notranslate"><span class="pre">andes_env</span></code>.</p>
+<p>You need to load python with anaconda support there:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load python/3.7-anaconda3
+</pre></div>
+</div>
+<p>then setup <code class="docutils literal notranslate"><span class="pre">conda</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda init bash
+</pre></div>
+</div>
+<p>this will modify your <cite>.bashrc</cite>, adding code that is specific to andes.</p>
+<p>Then you do:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n andes_env -y ipykernel nb_conda_kernels
+conda install -n andes_env -c conda-forge yt
+</pre></div>
+</div>
+<p>Note: this will install its own version of python, so you don’t need
+to load the python module any more after this.</p>
+<p>Finally, you can activate the environment as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span> activate andes_env
+</pre></div>
+</div>
+<p>Then you can run a python script that does visualization as with the
+following submission script:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -A ast106</span>
+<span class="c1">#SBATCH -J plots</span>
+<span class="c1">#SBATCH -N 1</span>
+<span class="c1">#SBATCH -t 2:00:00</span>
+
+<span class="nb">cd</span> <span class="nv">$SLURM_SUBMIT_DIR</span>
+
+<span class="nb">source</span> activate andes_env
+
+srun python vol-xrb-enuc.py flame_wave_1000Hz_25cm_smallplt203204
+</pre></div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">vol-xrb-enuc.py</span></code> is the script with the <code class="docutils literal notranslate"><span class="pre">yt</span></code> code to make the visualization.
+This is then submitted to SLURM via <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>.</p>
 </section>
 
 
