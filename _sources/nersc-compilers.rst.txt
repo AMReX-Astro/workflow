@@ -187,10 +187,10 @@ Perlmutter
 Compiling with GCC + CUDA
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Load PrgEnv-gnu to use gcc with CUDA (CUDA is already part of the default environment)::
+Load gcc and CUDA::
 
   module load PrgEnv-gnu
-  module load cpe-cuda
+  module load cudatoolkit
 
 Build, e.g. the Castro Sedov hydro test problem::
 
