@@ -88,7 +88,7 @@ starting from the latest checkpoint file.  The script
 detect the last checkpoint file and restart from it.  This allows you
 to submit your jobs without any manual intervention.
 
-.. literalinclude:: ../../job_scripts/summit/submit.restart.sh
+.. literalinclude:: ../../job_scripts/summit/submit_restart.sh
 		    :language: sh
 
 The function ``find_chk_file`` searches the submission directory for
@@ -120,9 +120,8 @@ on the previous.  Your submission script should use the automatic
 restarting features discussed above.
 
 
-
 Archiving to HPSS
-^^^^^^^^^^^^^^^^^
+-----------------
 
 You can access HPSS from submit using the data transfer nodes by submitting a job
 via SLURM::

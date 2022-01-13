@@ -52,9 +52,9 @@
 <li class="toctree-l4"><a class="reference internal" href="#submitting-and-monitoring">Submitting and monitoring</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#automatic-restarting">Automatic restarting</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#chaining-jobs">Chaining jobs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#archiving-to-hpss">Archiving to HPSS</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#archiving-to-hpss">Archiving to HPSS</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-jupyter.html">Running Jupyter Remotely from OLCF</a></li>
@@ -232,6 +232,90 @@ starting from the latest checkpoint file.  The script
 <code class="docutils literal notranslate"><span class="pre">job_scripts/summit/submit_restart.sh</span></code> shows how to automatically
 detect the last checkpoint file and restart from it.  This allows you
 to submit your jobs without any manual intervention.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#BSUB -P ast106</span>
+<span class="c1">#BSUB -W 2:00</span>
+<span class="c1">#BSUB -nnodes 11</span>
+<span class="c1">#BSUB -alloc_flags smt1</span>
+<span class="c1">#BSUB -J castro</span>
+<span class="c1">#BSUB -o castro.%J</span>
+<span class="c1">#BSUB -e castro.%J</span>
+
+<span class="c1"># This script searches for checkpoint files in the submission directory</span>
+<span class="c1"># and uses those to set Castro&#39;s amr.restart variable. It also outputs</span>
+<span class="c1"># plotfiles and checkpoint files to this directory.  It is designed to</span>
+<span class="c1"># be used with the chain_submit.sh script to submit a number of jobs</span>
+<span class="c1"># at once that depend on each other.</span>
+
+<span class="c1"># Assuming you&#39;re running the code on GPUs, the things you need to set are</span>
+<span class="c1"># BSUB -nnodes, $n_mpi, $inputs_file and $outdir (and possibly the executable $CASTRO).</span>
+
+<span class="nb">cd</span> <span class="nv">$LS_SUBCWD</span>
+
+<span class="c1"># update these to reflect the versions you compiled with</span>
+
+module load gcc/10.2.0
+module load cuda/11.2.0
+
+<span class="nv">CASTRO</span><span class="o">=</span>./Castro3d.pgi.MPI.CUDA.ex
+<span class="nv">INPUTS</span><span class="o">=</span>inputs_3d
+
+<span class="c1"># num nodes * 6 gpu per node</span>
+<span class="nv">n_mpi</span><span class="o">=</span><span class="m">66</span>
+<span class="nv">n_omp</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">n_gpu</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">n_cores</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">n_rs_per_node</span><span class="o">=</span><span class="m">6</span>
+
+
+<span class="k">function</span> find_chk_file <span class="o">{</span>
+    <span class="c1"># find_chk_file takes a single argument -- the wildcard pattern</span>
+    <span class="c1"># for checkpoint files to look through</span>
+    <span class="nv">chk</span><span class="o">=</span><span class="nv">$1</span>
+
+    <span class="c1"># find the latest 2 restart files.  This way if the latest didn&#39;t</span>
+    <span class="c1"># complete we fall back to the previous one.</span>
+    <span class="nv">temp_files</span><span class="o">=</span><span class="k">$(</span>find . -maxdepth <span class="m">1</span> -name <span class="s2">&quot;</span><span class="si">${</span><span class="nv">chk</span><span class="si">}</span><span class="s2">&quot;</span> -print <span class="p">|</span> sort <span class="p">|</span> tail -2<span class="k">)</span>
+    <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> f <span class="k">in</span> <span class="si">${</span><span class="nv">temp_files</span><span class="si">}</span>
+    <span class="k">do</span>
+        <span class="c1"># the Header is the last thing written -- check if it&#39;s there, otherwise,</span>
+        <span class="c1"># fall back to the second-to-last check file written</span>
+        <span class="k">if</span> <span class="o">[</span> ! -f <span class="si">${</span><span class="nv">f</span><span class="si">}</span>/Header <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+            <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+        <span class="k">else</span>
+            <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">fi</span>
+    <span class="k">done</span>
+
+<span class="o">}</span>
+
+<span class="c1"># look for 7-digit chk files</span>
+find_chk_file <span class="s2">&quot;*chk???????&quot;</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c1"># look for 6-digit chk files</span>
+    find_chk_file <span class="s2">&quot;*chk??????&quot;</span>
+<span class="k">fi</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c1"># look for 5-digit chk files</span>
+    find_chk_file <span class="s2">&quot;*chk?????&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># restartString will be empty if no chk files are found -- i.e. new run</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="k">else</span>
+    <span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;amr.restart=</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">fi</span>
+
+
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="nv">$n_omp</span>
+
+jsrun -n <span class="nv">$n_mpi</span> -r <span class="nv">$n_rs_per_node</span> -c <span class="nv">$n_cores</span> -a <span class="m">1</span> -g <span class="nv">$n_gpu</span> <span class="nv">$CASTRO</span> <span class="nv">$INPUTS</span> <span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
+</pre></div>
+</div>
 <p>The function <code class="docutils literal notranslate"><span class="pre">find_chk_file</span></code> searches the submission directory for
 checkpoint files.  Because AMReX appends digits as the number of steps
 increase (with a minimum of 5 digits), we search for files with
@@ -256,8 +340,9 @@ submit the job.  This will queue up N additional jobs, each depending
 on the previous.  Your submission script should use the automatic
 restarting features discussed above.</p>
 </section>
+</section>
 <section id="archiving-to-hpss">
-<h3>Archiving to HPSS<a class="headerlink" href="#archiving-to-hpss" title="Permalink to this headline">¶</a></h3>
+<h2>Archiving to HPSS<a class="headerlink" href="#archiving-to-hpss" title="Permalink to this headline">¶</a></h2>
 <p>You can access HPSS from submit using the data transfer nodes by submitting a job
 via SLURM:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch -N <span class="m">1</span> -t <span class="m">15</span>:00 -A ast106 --cluster dtn test_hpss.sh
@@ -303,7 +388,6 @@ unpack it in <code class="docutils literal notranslate"><span class="pre">plotfi
 launch directory, the script will attempt to recover all plotfiles
 archived by <code class="docutils literal notranslate"><span class="pre">process.titan</span></code>. Try running <code class="code docutils literal notranslate"><span class="pre">./hpss_xfer.py</span> <span class="pre">--help</span></code>
 for a description of usage and arguments.</p>
-</section>
 </section>
 </section>
 
