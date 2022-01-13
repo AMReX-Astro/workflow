@@ -47,6 +47,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="olcf.html">Working at OLCF</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Compiling at OLCF</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#summit">Summit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crusher">Crusher</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-workflow.html">Managing Jobs at OLCF</a></li>
@@ -129,6 +130,21 @@ An example compilation line is:</p>
 <code class="docutils literal notranslate"><span class="pre">USE_OMP_OFFLOAD</span></code>, which will default to <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>, AMReX-Astro
 doesn’t use this feature.</p></li>
 </ul>
+</div>
+</section>
+<section id="crusher">
+<h2>Crusher<a class="headerlink" href="#crusher" title="Permalink to this headline">¶</a></h2>
+<p>log into:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>crusher.olcf.ornl.gov
+</pre></div>
+</div>
+<p>load the modules:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load PrgEnv-gnu craype-accel-amd-gfx90a rocm
+</pre></div>
+</div>
+<p>build with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE
+</pre></div>
 </div>
 </section>
 </section>

@@ -45,3 +45,21 @@ The recommended/tested version pairs are:
      ``USE_OMP_OFFLOAD``, which will default to ``FALSE``, AMReX-Astro
      doesn't use this feature.
 
+
+Crusher
+-------
+
+log into::
+
+   crusher.olcf.ornl.gov
+
+load the modules::
+
+   module load PrgEnv-gnu craype-accel-amd-gfx90a rocm
+
+build with::
+
+   USE_HIP=TRUE
+
+
+

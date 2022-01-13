@@ -54,6 +54,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#chaining-jobs">Chaining jobs</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#crusher">Crusher</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#archiving-to-hpss">Archiving to HPSS</a></li>
 </ul>
 </li>
@@ -340,6 +341,34 @@ submit the job.  This will queue up N additional jobs, each depending
 on the previous.  Your submission script should use the automatic
 restarting features discussed above.</p>
 </section>
+</section>
+<section id="crusher">
+<h2>Crusher<a class="headerlink" href="#crusher" title="Permalink to this headline">¶</a></h2>
+<p>The following batch script will run on 1 GPU</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -A AST136_crusher</span>
+<span class="c1">#SBATCH -J testing</span>
+<span class="c1">#SBATCH -o %x-%j.out</span>
+<span class="c1">#SBATCH -t 00:05:00</span>
+<span class="c1">#SBATCH -p batch</span>
+<span class="c1">#SBATCH -N 1</span>
+
+<span class="c1"># here N is the number of compute nodes</span>
+
+<span class="nv">EXEC</span><span class="o">=</span>Castro2d.hip.x86-trento.DEBUG.MPI.HIP.ex
+<span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.testsuite
+
+srun -n <span class="m">1</span> -c <span class="m">2</span> --ntasks-per-node<span class="o">=</span><span class="m">1</span> rocprof <span class="nv">$EXEC</span> <span class="nv">$INPUTS</span>
+</pre></div>
+</div>
+<p>or for 8 GPUs on 1 node:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>-n <span class="m">8</span> --ntasks-per-node<span class="o">=</span><span class="m">8</span> --gpus-per-task<span class="o">=</span><span class="m">1</span> --gpu-bind<span class="o">=</span>closest
+</pre></div>
+</div>
+<p>for interactive:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>salloc -A csc308_crusher -J amrex -t <span class="m">00</span>:30:00 -p batch -N <span class="m">1</span>
+</pre></div>
+</div>
 </section>
 <section id="archiving-to-hpss">
 <h2>Archiving to HPSS<a class="headerlink" href="#archiving-to-hpss" title="Permalink to this headline">¶</a></h2>
