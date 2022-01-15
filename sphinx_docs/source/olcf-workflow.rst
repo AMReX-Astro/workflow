@@ -149,8 +149,15 @@ or for 8 GPUs on 1 node::
 
 for interactive::
 
-  salloc -A csc308_crusher -J amrex -t 00:30:00 -p batch -N 1
+  salloc -A ast136_crusher -J amrex -t 00:30:00 -p batch -N 1
 
+then you can run your jobs directly on the compute node.
+
+For debugging::
+
+   rocgdb --args ./Castro2d.hip.x86-trento.MPI.HIP.ex inputs_2d.testsuite
+
+then do ``run`` at the debugger prompt.
 
 
 Archiving to HPSS
