@@ -366,9 +366,15 @@ srun -n <span class="m">1</span> -c <span class="m">2</span> --ntasks-per-node<s
 </pre></div>
 </div>
 <p>for interactive:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>salloc -A csc308_crusher -J amrex -t <span class="m">00</span>:30:00 -p batch -N <span class="m">1</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>salloc -A ast136_crusher -J amrex -t <span class="m">00</span>:30:00 -p batch -N <span class="m">1</span>
 </pre></div>
 </div>
+<p>then you can run your jobs directly on the compute node.</p>
+<p>For debugging:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rocgdb --args ./Castro2d.hip.x86-trento.MPI.HIP.ex inputs_2d.testsuite
+</pre></div>
+</div>
+<p>then do <code class="docutils literal notranslate"><span class="pre">run</span></code> at the debugger prompt.</p>
 </section>
 <section id="archiving-to-hpss">
 <h2>Archiving to HPSS<a class="headerlink" href="#archiving-to-hpss" title="Permalink to this headline">¶</a></h2>
