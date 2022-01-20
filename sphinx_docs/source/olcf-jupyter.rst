@@ -71,3 +71,9 @@ following submission script::
 Here ``vol-xrb-enuc.py`` is the script with the ``yt`` code to make the visualization.
 This is then submitted to SLURM via ``sbatch``.
 
+.. note::
+
+   For very large plotfiles, it might run out of memory when doing the
+   visualization.  A solution is to use the ``gpu`` nodes on Andes,
+   which have more memory.  This is accomplished by adding
+   ``#SBATCH -p gpu`` to the script.
