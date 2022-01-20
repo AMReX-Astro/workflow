@@ -148,6 +148,13 @@ srun python vol-xrb-enuc.py flame_wave_1000Hz_25cm_smallplt203204
 </div>
 <p>Here <code class="docutils literal notranslate"><span class="pre">vol-xrb-enuc.py</span></code> is the script with the <code class="docutils literal notranslate"><span class="pre">yt</span></code> code to make the visualization.
 This is then submitted to SLURM via <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For very large plotfiles, it might run out of memory when doing the
+visualization.  A solution is to use the <code class="docutils literal notranslate"><span class="pre">gpu</span></code> nodes on Andes,
+which have more memory.  This is accomplished by adding
+<code class="docutils literal notranslate"><span class="pre">#SBATCH</span> <span class="pre">-p</span> <span class="pre">gpu</span></code> to the script.</p>
+</div>
 </section>
 
 
