@@ -355,14 +355,27 @@ restarting features discussed above.</p>
 
 <span class="c1"># here N is the number of compute nodes</span>
 
-<span class="nv">EXEC</span><span class="o">=</span>Castro2d.hip.x86-trento.DEBUG.MPI.HIP.ex
+<span class="nv">EXEC</span><span class="o">=</span>Castro2d.hip.x86-trento.MPI.HIP.ex
 <span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.testsuite
 
-srun -n <span class="m">1</span> -c <span class="m">2</span> --ntasks-per-node<span class="o">=</span><span class="m">1</span> rocprof <span class="nv">$EXEC</span> <span class="nv">$INPUTS</span>
+srun -n <span class="m">1</span> -c <span class="m">2</span> --ntasks-per-node<span class="o">=</span><span class="m">1</span> rocprof <span class="nv">$EXEC</span> <span class="nv">$INPUTS</span> amr.plot_files_output<span class="o">=</span><span class="m">0</span> amr.checkpoint_files_output<span class="o">=</span><span class="m">0</span>
 </pre></div>
 </div>
-<p>or for 8 GPUs on 1 node:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>-n <span class="m">8</span> --ntasks-per-node<span class="o">=</span><span class="m">8</span> --gpus-per-task<span class="o">=</span><span class="m">1</span> --gpu-bind<span class="o">=</span>closest
+<p>or for 8 GPUs on 1 node, the following script works:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -A AST136_crusher</span>
+<span class="c1">#SBATCH -J testing</span>
+<span class="c1">#SBATCH -o %x-%j.out</span>
+<span class="c1">#SBATCH -t 00:05:00</span>
+<span class="c1">#SBATCH -p batch</span>
+<span class="c1">#SBATCH -N 1</span>
+
+<span class="c1"># here N is the number of compute nodes</span>
+
+<span class="nv">EXEC</span><span class="o">=</span>Castro2d.hip.x86-trento.MPI.HIP.ex
+<span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.testsuite
+
+srun -n <span class="m">8</span> -c <span class="m">8</span> --ntasks-per-node<span class="o">=</span><span class="m">8</span> --gpus-per-task<span class="o">=</span><span class="m">1</span> --gpu-bind<span class="o">=</span>closest ./<span class="nv">$EXEC</span> <span class="nv">$INPUTS</span> amr.plot_files_output<span class="o">=</span><span class="m">0</span> amr.checkpoint_files_output<span class="o">=</span><span class="m">0</span>
 </pre></div>
 </div>
 <p>for interactive:</p>
