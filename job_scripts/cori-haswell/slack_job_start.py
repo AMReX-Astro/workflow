@@ -3,6 +3,7 @@ import json
 import sys
 import subprocess
 import shlex
+import os.path
 
 def slack_post(name, channel, message, webhook):
 
@@ -52,7 +53,7 @@ def run(string, stdin=False, outfile=None, store_command=False, env=None, outfil
 
 if __name__ == "__main__":
     try:
-        f = open("/global/homes/z/zingale/.slack.webhook")
+        f = open(os.path.expanduser("~/.slack.webhook"))
     except:
         sys.exit("ERROR: unable to open webhook file")
     else:
