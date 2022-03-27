@@ -13,7 +13,7 @@
 export OMP_NUM_THREADS=1
 export MPICH_MAX_THREAD_SAFETY=multiple
 export CASTRO_EXEC=./Castro2d.intel.haswell.MPI.ex
-
+export INPUTS=inputs
 
 function find_chk_file {
     # find_chk_file takes a single argument -- the wildcard pattern
@@ -57,7 +57,8 @@ else
     restartString="amr.restart=${restartFile}"
 fi
 
-slack_job_start.py "starting flame_wave problem @ NERSC; ${restartFile}" @michael
+workdir=`basename ${SLURM_SUBMIT_DIR}`
+slack_job_start.py "starting NERSC job: ${workdir} ${restartFile}" @michael
 
-srun ${CASTRO_EXEC} inputs.boost_10_10 ${restartString}
+srun ${CASTRO_EXEC} ${INPUTS} ${restartString}
 
