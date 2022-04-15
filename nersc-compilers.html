@@ -63,6 +63,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#perlmutter">Perlmutter</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#id2">Compiling with GCC + CUDA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Hypre</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#running">Running</a></li>
 </ul>
 </li>
@@ -334,6 +335,13 @@ module load cudatoolkit
 </div>
 <p>Build, e.g. the Castro Sedov hydro test problem:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make -j <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">TINY_PROFILE</span><span class="o">=</span>TRUE <span class="nv">USE_MPI</span><span class="o">=</span>TRUE <span class="nv">USE_OMP</span><span class="o">=</span>FALSE <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>Hypre<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>Hypre should be obtained from GitHub, and built using the same PrgEnv that you are using for Castro:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">HYPRE_CUDA_SM</span><span class="o">=</span><span class="m">80</span> <span class="nv">CXX</span><span class="o">=</span>CC <span class="nv">CC</span><span class="o">=</span>cc <span class="nv">FC</span><span class="o">=</span>ftn ./configure --prefix<span class="o">=</span>/path/to/hypre/install --with-MPI --with-cuda --enable-unified-memory
 </pre></div>
 </div>
 </section>

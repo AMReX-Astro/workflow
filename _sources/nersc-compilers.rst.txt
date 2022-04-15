@@ -196,6 +196,13 @@ Build, e.g. the Castro Sedov hydro test problem::
 
   make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE
 
+Hypre
+^^^^^
+
+Hypre should be obtained from GitHub, and built using the same PrgEnv that you are using for Castro::
+
+  HYPRE_CUDA_SM=80 CXX=CC CC=cc FC=ftn ./configure --prefix=/path/to/hypre/install --with-MPI --with-cuda --enable-unified-memory
+
 Running
 ^^^^^^^
 
