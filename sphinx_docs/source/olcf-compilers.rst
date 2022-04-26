@@ -55,11 +55,19 @@ log into::
 
 load the modules::
 
-   module load PrgEnv-gnu craype-accel-amd-gfx90a rocm
+   PrgEnv-amd craype-accel-amd-gfx90a rocm/5.1.0
 
 build with::
 
-   USE_HIP=TRUE
+   COMP=gnu USE_HIP=TRUE
+
+
+.. note::
+
+   Async I/O can sometimes have issues on crusher, so it is best to
+   leave it off.
+
+
 
 
 
