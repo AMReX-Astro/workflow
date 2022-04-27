@@ -138,11 +138,18 @@ doesn’t use this feature.</p></li>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>crusher.olcf.ornl.gov
 </pre></div>
 </div>
-<p>load the modules:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>PrgEnv-amd craype-accel-amd-gfx90a rocm/5.1.0
+<p>We want to build with ROCm/HIP.  Currently, we only work with ROCm 4.5.0,
+which you load as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load PrgEnv-gnu craype-accel-amd-gfx90a rocm/4.5.0
 </pre></div>
 </div>
-<p>build with:</p>
+<p>If you want to try ROCm 5.x, you need to use <code class="docutils literal notranslate"><span class="pre">PrgEnv-amd</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">PrgEnv-gnu</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load PrgEnv-amd craype-accel-amd-gfx90a rocm/5.1.0
+</pre></div>
+</div>
+<p>But this currently gives memory errors with Castro.</p>
+<p>We can then build with:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">USE_HIP</span><span class="o">=</span>TRUE
 </pre></div>
 </div>
@@ -150,6 +157,15 @@ doesn’t use this feature.</p></li>
 <p class="admonition-title">Note</p>
 <p>Async I/O can sometimes have issues on crusher, so it is best to
 leave it off.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Sometimes the job will start (according to <code class="docutils literal notranslate"><span class="pre">squeue</span></code>) but appear to
+hang.  This is because there are often bad nodes, and you need to
+exclude the bad nodes.  Currently use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#SBATCH --exclude=crusher[025-027,036,038-040,060,081,127,136,141,101-105]</span>
+</pre></div>
+</div>
 </div>
 </section>
 </section>
