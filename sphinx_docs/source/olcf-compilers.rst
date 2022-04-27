@@ -53,11 +53,19 @@ log into::
 
    crusher.olcf.ornl.gov
 
-load the modules::
+We want to build with ROCm/HIP.  Currently, we only work with ROCm 4.5.0, 
+which you load as::
 
-   PrgEnv-amd craype-accel-amd-gfx90a rocm/5.1.0
+    module load PrgEnv-gnu craype-accel-amd-gfx90a rocm/4.5.0
 
-build with::
+If you want to try ROCm 5.x, you need to use ``PrgEnv-amd`` instead of
+``PrgEnv-gnu``::
+
+   module load PrgEnv-amd craype-accel-amd-gfx90a rocm/5.1.0
+
+But this currently gives memory errors with Castro.
+
+We can then build with::
 
    COMP=gnu USE_HIP=TRUE
 
@@ -68,6 +76,12 @@ build with::
    leave it off.
 
 
+.. note::
 
+   Sometimes the job will start (according to ``squeue``) but appear to
+   hang.  This is because there are often bad nodes, and you need to
+   exclude the bad nodes.  Currently use::
+
+   #SBATCH --exclude=crusher[025-027,036,038-040,060,081,127,136,141,101-105]
 
 
