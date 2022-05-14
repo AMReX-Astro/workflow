@@ -144,41 +144,6 @@ Build, e.g. the Castro Sedov hydro test problem::
 
   make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE
 
-Running on Cori GPU
-^^^^^^^^^^^^^^^^^^^
-
-Use a SLURM script to set 1 MPI rank per GPU. In this example, we're using 2 nodes, each with 8 GPUs.
-
-Sample SLURM script ``cori.MPI.CUDA.gpu.2nodes.slurm``, for this and other Cori
-GPU SLURM scripts, see
-`our Cori GPU SLURM scripts on GitHub <https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/cori-gpu>`_
-
-.. literalinclude:: ../../job_scripts/cori-gpu/cori.MPI.CUDA.gpu.2nodes.slurm
-                    :language: sh
-                    :linenos:
-
-.. note::
-
-  Replace ``[your email address]`` and ``[your allocation]`` with your info
-  (omitting the brackets).
-
-.. note::
-
-  It is important to submit the Cori GPU SLURM script from a Cori login node.
-  If you submit the script from your Cori GPU interactive session, the memory
-  constraints you passed to ``salloc`` will conflict with the GPU options
-  specified in the SLURM script.
-
-So we'll next submit the SLURM script from a Cori login node, with the above
-modules loaded::
-
-  sbatch [--exclusive] cori.MPI.CUDA.gpu.2nodes.slurm
-
-(The optional ``--exclusive`` argument has the same meaning as for ``salloc`` above.)
-
-We can monitor the job by checking ``squeue -u [user]`` as usual with the
-``cgpu`` module loaded.
-
 
 
 Perlmutter
@@ -203,11 +168,3 @@ Hypre should be obtained from GitHub, and built using the same PrgEnv that you a
 
   HYPRE_CUDA_SM=80 CXX=CC CC=cc FC=ftn ./configure --prefix=/path/to/hypre/install --with-MPI --with-cuda --enable-unified-memory
 
-Running
-^^^^^^^
-
-Below is an example that launches the Sedov test compiled above with 4 GPUs per node on 4 nodes.
-
-.. literalinclude:: ../../job_scripts/perlmutter/sedov_4_nodes_example.sh
-                    :language: sh
-                    :linenos:
