@@ -93,6 +93,9 @@ We can monitor the job by checking ``squeue -u [user]`` as usual with the
 Perlmutter
 ----------
 
+Each Perlmutter node has 4 NVIDIA A100 GPUs -- therefore it is best to use
+4 MPI tasks per node.
+
 
 Below is an example that launches the Sedov test compiled above with 4 GPUs per node on 4 nodes.
 

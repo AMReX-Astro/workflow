@@ -24,9 +24,11 @@ be the preferred compilers.
 GNU
 ^^^
 
-You need to swap environments::
+You need to swap environments:
 
-  module swap PrgEnv-{intel,gnu}
+.. prompt:: bash
+
+   module swap PrgEnv-{intel,gnu}
 
 There are no known issues with GNU.
 
@@ -37,9 +39,11 @@ These notes are from Edison.  Need to be confirmed on Cori Haswell.
 
 On Edison, the Cray *Third Party Scientific Libraries* provide Hypre
 in a form that works directly with the compiler wrappers used on that
-machine (``CC``, ``ftn``, ...).  To use this, simply do::
+machine (``CC``, ``ftn``, ...).  To use this, simply do:
 
-  module load cray-tpsl
+.. prompt:: bash
+
+   module load cray-tpsl
 
 There is no need to set ``HYPRE_DIR``, but note however that the
 dependency checker script (``BoxLib/Tools/C_scripts/mkdep``) will
@@ -48,13 +52,17 @@ complain about::
   /path/to/Hypre--with-openmp/include does not exist
 
 This can be ignored an compilation will finish.  If you do wish to
-silence it, you can set ``HYPRE_DIR`` to the path shown by::
+silence it, you can set ``HYPRE_DIR`` to the path shown by:
 
-  module show cray-tpsl
+.. prompt:: bash
 
-as::
+   module show cray-tpsl
 
-  export HYPRE_DIR=${CRAY_TPSL_PREFIX_DIR}
+as:
+
+.. prompt:: bash
+
+   export HYPRE_DIR=${CRAY_TPSL_PREFIX_DIR}
 
 This path will change dynamically to reflect which compiler programming
 environment you have loaded.  (You can also see that this is the path
@@ -76,9 +84,11 @@ Cori KNL
 
 Regardless of the compiler, you need to swap the compiler weappers to
 use the AVX-512 instruction set supported on the Intel Phi processors
-(instead of the AVX-2 on the Haswell chips).  This is done as::
+(instead of the AVX-2 on the Haswell chips).  This is done as:
 
-  module swap craype-{haswell,mic-knl}
+.. prompt:: bash
+
+   module swap craype-{haswell,mic-knl}
 
 It could happen that even when the various verbosities are set to 0,
 when using several nodes (more than 64) in a run compiled with Intel,
@@ -106,10 +116,12 @@ otherwise we get an ``Erroneous arithmetic error``.
 Cori GPU
 --------
 
-To use the Cori GPU system, you first need to load the ``cgpu`` module::
+To use the Cori GPU system, you first need to load the ``cgpu`` module:
 
-  module purge
-  module load cgpu
+.. prompt:: bash
+
+   module purge
+   module load cgpu
 
 This will ensure the correct OpenMPI module is loaded in the next section.
 
@@ -119,19 +131,23 @@ Compiling with GCC + CUDA
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We use the gcc, CUDA, and OpenMPI modules for Cori GPU, so load them in this
-order::
+order:
 
-  module load PrgEnv-gnu
-  module load gcc
-  module load cuda
-  module load openmpi
-  module load python3
+.. prompt:: bash
+
+   module load PrgEnv-gnu
+   module load gcc
+   module load cuda
+   module load openmpi
+   module load python3
 
 Then to compile, we'll need to get an interactive session on a Cori GPU node.
 This example gets 1 Cori GPU node with 1 GPU/node and 10 CPU cores/node for 60
-minutes, reserving 30GB of RAM per node::
+minutes, reserving 30GB of RAM per node:
 
-  salloc -C gpu --gres=gpu:1 -N 1 -t 60 -c 10 --mem=30GB -A [your allocation, e.g. mABCD] [--exclusive]
+.. prompt:: bash
+
+   salloc -C gpu --gres=gpu:1 -N 1 -t 60 -c 10 --mem=30GB -A [your allocation, e.g. mABCD] [--exclusive]
 
 .. note::
 
@@ -140,26 +156,39 @@ minutes, reserving 30GB of RAM per node::
   default behavior on Cori GPU is for jobs to share the GPU nodes, since there
   are a limited number.
 
-Build, e.g. the Castro Sedov hydro test problem::
+Build, e.g. the Castro Sedov hydro test problem:
 
-  make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE
+.. prompt:: bash
+
+   make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE
 
 
 
 Perlmutter
 ----------
 
+Log into Perlmutter via
+
+.. prompt:: bash
+
+   ssh perlmutter-p1.nersc.gov
+
+
 Compiling with GCC + CUDA
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Load gcc and CUDA::
+Load gcc and CUDA
 
-  module load PrgEnv-gnu
-  module load cudatoolkit
+.. prompt:: bash
 
-Build, e.g. the Castro Sedov hydro test problem::
+   module load PrgEnv-gnu
+   module load cudatoolkit
 
-  make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE
+Build, e.g. the Castro Sedov hydro test problem
+
+.. prompt:: bash
+
+   make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE
 
 Hypre
 ^^^^^
