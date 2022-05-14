@@ -20,14 +20,18 @@ to automatically add the correct restart options to the run to
 continue a simulation from the last checkpoint file in the submission
 directory.
 
-Jobs are submitted as::
+Jobs are submitted as:
 
-  sbatch script.slurm
+.. prompt:: bash
+
+   sbatch script.slurm
 
 To chain jobs, such that one queues up after the previous job
-finished, use the ``chainslurm.sh`` script in that same directory::
+finished, use the ``chainslurm.sh`` script in that same directory:
 
-  chainslurm.sh jobid number script
+.. prompt:: bash
+
+   chainslurm.sh jobid number script
 
 where ``jobid`` is the existing job you want to start you chain from,
 ``number`` is the number of new jobs to chain from this starting job,
@@ -41,17 +45,21 @@ used originally most likely).
    job with no dependencies and then chain the remaining ``number``-1
    jobs to depend on the previous.
 
-You can view the job dependency using::
+You can view the job dependency using:
 
-  squeue -l -j job-id
+.. prompt:: bash
+
+   squeue -l -j job-id
 
 where ``job-id`` is the number of the job.  A job can be canceled
 using ``scancel``, and the status can be checked using ``squeue -u
-username``.
+username`` or ``squeue --me``.
 
-An estimate of the start time can be found via::
+An estimate of the start time can be found via:
 
-  sqs -u username
+.. prompt:: bash
+
+   sqs -u username
 
 
 Cori GPU
@@ -64,25 +72,27 @@ GPU SLURM scripts, see
 `our Cori GPU SLURM scripts on GitHub <https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/cori-gpu>`_
 
 .. literalinclude:: ../../job_scripts/cori-gpu/cori.MPI.CUDA.gpu.2nodes.slurm
-                    :language: sh
-                    :linenos:
+   :language: sh
+   :linenos:
 
 .. note::
 
-  Replace ``[your email address]`` and ``[your allocation]`` with your info
-  (omitting the brackets).
+   Replace ``[your email address]`` and ``[your allocation]`` with your info
+   (omitting the brackets).
 
 .. note::
 
-  It is important to submit the Cori GPU SLURM script from a Cori login node.
-  If you submit the script from your Cori GPU interactive session, the memory
-  constraints you passed to ``salloc`` will conflict with the GPU options
-  specified in the SLURM script.
+   It is important to submit the Cori GPU SLURM script from a Cori login node.
+   If you submit the script from your Cori GPU interactive session, the memory
+   constraints you passed to ``salloc`` will conflict with the GPU options
+   specified in the SLURM script.
 
 So we'll next submit the SLURM script from a Cori login node, with the above
-modules loaded::
+modules loaded:
 
-  sbatch [--exclusive] cori.MPI.CUDA.gpu.2nodes.slurm
+.. prompt:: bash
+
+   sbatch [--exclusive] cori.MPI.CUDA.gpu.2nodes.slurm
 
 (The optional ``--exclusive`` argument has the same meaning as for ``salloc`` above.)
 
@@ -100,8 +110,8 @@ Each Perlmutter node has 4 NVIDIA A100 GPUs -- therefore it is best to use
 Below is an example that launches the Sedov test compiled above with 4 GPUs per node on 4 nodes.
 
 .. literalinclude:: ../../job_scripts/perlmutter/sedov_4_nodes_example.sh
-                    :language: sh
-                    :linenos:
+   :language: sh
+   :linenos:
 
 
 Archiving Data to HPSS
@@ -109,9 +119,11 @@ Archiving Data to HPSS
 
 .. note::
 
-   Access to the xfer queue is done by loading the ``esslurm`` queue::
+   Access to the xfer queue is done by loading the ``esslurm`` queue:
 
-     module load esslurm
+   .. prompt:: bash
+
+      module load esslurm
 
    Then you can use ``sbatch`` and ``squeue`` to submit and monitor
    jobs in the ``xfer`` queue.  Details are provided at:
@@ -127,13 +139,18 @@ it to HPSS.
 To use the scripts, first create a directory in HPSS that has the same
 name as the directory on lustre you are running in (just the directory
 name, not the full path). E.g. if you are running in a directory call
-``wdconvect/`` run, then do::
+``wdconvect/`` run, then do:
 
-  hsi
-  mkdir wdconvect_run
+.. prompt:: bash
 
-(Note: if the ``hsi`` command prompts you for your password, you will need to talk to the NERSC
-help desk to ask for password-less access to HPSS).
+   hsi
+   mkdir wdconvect_run
+
+.. note::
+
+   If the ``hsi`` command prompts you for your password, you will need
+   to talk to the NERSC help desk to ask for password-less access to
+   HPSS.
 
 The script ``process.xrb`` is called from the xfer job and will run in
 the background and continually wait until checkpoint or plotfiles are
@@ -145,10 +162,10 @@ successful, then the plotfiles are copied into a ``plotfile/``
 subdirectory. This is actually important, since you don’t want to try
 archiving the data a second time and overwriting the stored copy,
 especially if a purge took place. The same is done with checkpoint
-files.  
+files.
 
 Additionally, if the ``ftime`` executable is in your path
-(``ftime.f90`` lives in ``AMReX/Tools/Postprocessing/F_src/``), then
+(``ftime.cpp`` lives in ``amrex/Tools/Plotfile/``), then
 the script will create a file called ``ftime.out`` that lists the name
 of the plotfile and the corresponding simulation time.
 

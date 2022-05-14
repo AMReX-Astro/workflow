@@ -193,7 +193,9 @@ Build, e.g. the Castro Sedov hydro test problem
 Hypre
 ^^^^^
 
-Hypre should be obtained from GitHub, and built using the same PrgEnv that you are using for Castro::
+Hypre should be obtained from GitHub, and built using the same PrgEnv that you are using for Castro:
 
-  HYPRE_CUDA_SM=80 CXX=CC CC=cc FC=ftn ./configure --prefix=/path/to/hypre/install --with-MPI --with-cuda --enable-unified-memory
+.. prompt:: bash
+
+   HYPRE_CUDA_SM=80 CXX=CC CC=cc FC=ftn ./configure --prefix=/path/to/hypre/install --with-MPI --with-cuda --enable-unified-memory
 
