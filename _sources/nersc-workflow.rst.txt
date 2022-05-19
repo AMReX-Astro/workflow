@@ -106,10 +106,15 @@ Perlmutter
 Perlmutter has 1536 GPU nodes, each with 4 NVIDIA A100 GPUs -- therefore it is best to use
 4 MPI tasks per node.
 
+.. note::
 
-Below is an example that launches the Sedov test compiled above with 4 GPUs per node on 4 nodes.
+   you need to load the same modules used to compile the executable in
+   your submission script, otherwise, it will fail at runtime because
+   it can't find the CUDA libraries.
 
-.. literalinclude:: ../../job_scripts/perlmutter/sedov_4_nodes_example.sh
+Below is an example that runs on 16 nodes with 4 GPUs per node, and also
+includes the restart logic to allow for job chaining.
+
+.. literalinclude:: ../../job_scripts/perlmutter/perlmutter.submit
    :language: sh
-   :linenos:
 

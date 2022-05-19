@@ -224,20 +224,79 @@ modules loaded:</p>
 <h2>Perlmutter<a class="headerlink" href="#perlmutter" title="Permalink to this headline">¶</a></h2>
 <p>Perlmutter has 1536 GPU nodes, each with 4 NVIDIA A100 GPUs – therefore it is best to use
 4 MPI tasks per node.</p>
-<p>Below is an example that launches the Sedov test compiled above with 4 GPUs per node on 4 nodes.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="ch">#!/bin/bash</span>
-<span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="c1">#SBATCH -A m3018_g</span>
-<span class="linenos"> 4</span><span class="c1">#SBATCH -C gpu</span>
-<span class="linenos"> 5</span><span class="c1">#SBATCH -J Castro</span>
-<span class="linenos"> 6</span><span class="c1">#SBATCH -o sedov_%j.out</span>
-<span class="linenos"> 7</span><span class="c1">#SBATCH -t 10</span>
-<span class="linenos"> 8</span><span class="c1">#SBATCH -N 4</span>
-<span class="linenos"> 9</span><span class="c1">#SBATCH --ntasks-per-node=4</span>
-<span class="linenos">10</span><span class="c1">#SBATCH --gpus-per-task=1</span>
-<span class="linenos">11</span><span class="c1">#SBATCH --gpu-bind=map_gpu:0,1,2,3</span>
-<span class="linenos">12</span>
-<span class="linenos">13</span>srun -n <span class="m">16</span> ./Castro3d.gnu.TPROF.MPI.CUDA.ex inputs.3d.sph.testsuite amr.n_cell<span class="o">=</span><span class="m">256</span> <span class="m">256</span> <span class="m">256</span> amr.plot_files_output<span class="o">=</span><span class="m">0</span> amr.checkpoint_files_output<span class="o">=</span><span class="m">0</span> amr.max_grid_size<span class="o">=</span><span class="m">128</span> <span class="nv">max_step</span><span class="o">=</span><span class="m">100</span>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>you need to load the same modules used to compile the executable in
+your submission script, otherwise, it will fail at runtime because
+it can’t find the CUDA libraries.</p>
+</div>
+<p>Below is an example that runs on 16 nodes with 4 GPUs per node, and also
+includes the restart logic to allow for job chaining.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1">#SBATCH -A m3018_g</span>
+<span class="c1">#SBATCH -C gpu</span>
+<span class="c1">#SBATCH -J Castro</span>
+<span class="c1">#SBATCH -o subch_%j.out</span>
+<span class="c1">#SBATCH -t 4:00:00</span>
+<span class="c1">#SBATCH -N 16</span>
+<span class="c1">#SBATCH --ntasks-per-node=4</span>
+<span class="c1">#SBATCH --gpus-per-task=1</span>
+<span class="c1">#SBATCH --gpu-bind=map_gpu:0,1,2,3</span>
+
+<span class="nb">export</span> <span class="nv">CASTRO_EXEC</span><span class="o">=</span>./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
+<span class="nb">export</span> <span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.N14
+
+module load PrgEnv-gnu
+module load cudatoolkit
+
+<span class="k">function</span> find_chk_file <span class="o">{</span>
+    <span class="c1"># find_chk_file takes a single argument -- the wildcard pattern</span>
+    <span class="c1"># for checkpoint files to look through</span>
+    <span class="nv">chk</span><span class="o">=</span><span class="nv">$1</span>
+
+    <span class="c1"># find the latest 2 restart files.  This way if the latest didn&#39;t</span>
+    <span class="c1"># complete we fall back to the previous one.</span>
+    <span class="nv">temp_files</span><span class="o">=</span><span class="k">$(</span>find . -maxdepth <span class="m">1</span> -name <span class="s2">&quot;</span><span class="si">${</span><span class="nv">chk</span><span class="si">}</span><span class="s2">&quot;</span> -print <span class="p">|</span> sort <span class="p">|</span> tail -2<span class="k">)</span>
+    <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> f <span class="k">in</span> <span class="si">${</span><span class="nv">temp_files</span><span class="si">}</span>
+    <span class="k">do</span>
+        <span class="c1"># the Header is the last thing written -- check if it&#39;s there, otherwise,</span>
+        <span class="c1"># fall back to the second-to-last check file written</span>
+        <span class="k">if</span> <span class="o">[</span> ! -f <span class="si">${</span><span class="nv">f</span><span class="si">}</span>/Header <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+            <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+        <span class="k">else</span>
+            <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">fi</span>
+    <span class="k">done</span>
+
+<span class="o">}</span>
+
+<span class="c1"># look for 7-digit chk files</span>
+find_chk_file <span class="s2">&quot;*chk???????&quot;</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c1"># look for 6-digit chk files</span>
+    find_chk_file <span class="s2">&quot;*chk??????&quot;</span>
+<span class="k">fi</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c1"># look for 5-digit chk files</span>
+    find_chk_file <span class="s2">&quot;*chk?????&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># restartString will be empty if no chk files are found -- i.e. new run</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="k">else</span>
+    <span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;amr.restart=</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">fi</span>
+
+<span class="nv">workdir</span><span class="o">=</span><span class="sb">`</span>basename <span class="si">${</span><span class="nv">SLURM_SUBMIT_DIR</span><span class="si">}</span><span class="sb">`</span>
+slack_job_start.py <span class="s2">&quot;starting NERSC job: </span><span class="si">${</span><span class="nv">workdir</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> @michael
+
+
+srun -n <span class="m">64</span> <span class="si">${</span><span class="nv">CASTRO_EXEC</span><span class="si">}</span> <span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span> <span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
 </pre></div>
 </div>
 </section>
