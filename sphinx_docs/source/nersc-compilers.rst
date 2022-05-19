@@ -113,56 +113,6 @@ otherwise we get an ``Erroneous arithmetic error``.
 
 
 
-Cori GPU
---------
-
-To use the Cori GPU system, you first need to load the ``cgpu`` module:
-
-.. prompt:: bash
-
-   module purge
-   module load cgpu
-
-This will ensure the correct OpenMPI module is loaded in the next section.
-
-Loading ``cgpu`` will also let you check on your running jobs using ``squeue``.
-
-Compiling with GCC + CUDA
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-We use the gcc, CUDA, and OpenMPI modules for Cori GPU, so load them in this
-order:
-
-.. prompt:: bash
-
-   module load PrgEnv-gnu
-   module load gcc
-   module load cuda
-   module load openmpi
-   module load python3
-
-Then to compile, we'll need to get an interactive session on a Cori GPU node.
-This example gets 1 Cori GPU node with 1 GPU/node and 10 CPU cores/node for 60
-minutes, reserving 30GB of RAM per node:
-
-.. prompt:: bash
-
-   salloc -C gpu --gres=gpu:1 -N 1 -t 60 -c 10 --mem=30GB -A [your allocation, e.g. mABCD] [--exclusive]
-
-.. note::
-
-  If the optional ``--exclusive`` argument is present, then your job will have
-  exclusive use of the nodes you requested for the duration of the job.  The
-  default behavior on Cori GPU is for jobs to share the GPU nodes, since there
-  are a limited number.
-
-Build, e.g. the Castro Sedov hydro test problem:
-
-.. prompt:: bash
-
-   make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE
-
-
 
 Perlmutter
 ----------
