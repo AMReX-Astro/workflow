@@ -56,13 +56,9 @@
 <li class="toctree-l4"><a class="reference internal" href="#id1">Intel</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#cori-gpu">Cori GPU</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#compiling-with-gcc-cuda">Compiling with GCC + CUDA</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="#perlmutter">Perlmutter</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id2">Compiling with GCC + CUDA</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id3">Hypre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compiling-with-gcc-cuda">Compiling with GCC + CUDA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Hypre</a></li>
 </ul>
 </li>
 </ul>
@@ -182,51 +178,20 @@ the following to the <code class="docutils literal notranslate"><span class="pre
 <p>otherwise we get an <code class="docutils literal notranslate"><span class="pre">Erroneous</span> <span class="pre">arithmetic</span> <span class="pre">error</span></code>.</p>
 </section>
 </section>
-<section id="cori-gpu">
-<h2>Cori GPU<a class="headerlink" href="#cori-gpu" title="Permalink to this headline">¶</a></h2>
-<p>To use the Cori GPU system, you first need to load the <code class="docutils literal notranslate"><span class="pre">cgpu</span></code> module:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module purge</span>
-<span class="prompt1">module load cgpu</span>
-</pre></div></div><p>This will ensure the correct OpenMPI module is loaded in the next section.</p>
-<p>Loading <code class="docutils literal notranslate"><span class="pre">cgpu</span></code> will also let you check on your running jobs using <code class="docutils literal notranslate"><span class="pre">squeue</span></code>.</p>
-<section id="compiling-with-gcc-cuda">
-<h3>Compiling with GCC + CUDA<a class="headerlink" href="#compiling-with-gcc-cuda" title="Permalink to this headline">¶</a></h3>
-<p>We use the gcc, CUDA, and OpenMPI modules for Cori GPU, so load them in this
-order:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module load PrgEnv-gnu</span>
-<span class="prompt1">module load gcc</span>
-<span class="prompt1">module load cuda</span>
-<span class="prompt1">module load openmpi</span>
-<span class="prompt1">module load python3</span>
-</pre></div></div><p>Then to compile, we’ll need to get an interactive session on a Cori GPU node.
-This example gets 1 Cori GPU node with 1 GPU/node and 10 CPU cores/node for 60
-minutes, reserving 30GB of RAM per node:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">salloc -C gpu --gres<span class="o">=</span>gpu:1 -N <span class="m">1</span> -t <span class="m">60</span> -c <span class="m">10</span> --mem<span class="o">=</span>30GB -A <span class="o">[</span>your allocation, e.g. mABCD<span class="o">]</span> <span class="o">[</span>--exclusive<span class="o">]</span></span>
-</pre></div></div><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If the optional <code class="docutils literal notranslate"><span class="pre">--exclusive</span></code> argument is present, then your job will have
-exclusive use of the nodes you requested for the duration of the job.  The
-default behavior on Cori GPU is for jobs to share the GPU nodes, since there
-are a limited number.</p>
-</div>
-<p>Build, e.g. the Castro Sedov hydro test problem:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make -j <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">TINY_PROFILE</span><span class="o">=</span>TRUE <span class="nv">USE_MPI</span><span class="o">=</span>TRUE <span class="nv">USE_OMP</span><span class="o">=</span>FALSE <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE</span>
-</pre></div></div></section>
-</section>
 <section id="perlmutter">
 <h2>Perlmutter<a class="headerlink" href="#perlmutter" title="Permalink to this headline">¶</a></h2>
 <p>Log into Perlmutter via</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">ssh perlmutter-p1.nersc.gov</span>
-</pre></div></div><section id="id2">
-<h3>Compiling with GCC + CUDA<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+</pre></div></div><section id="compiling-with-gcc-cuda">
+<h3>Compiling with GCC + CUDA<a class="headerlink" href="#compiling-with-gcc-cuda" title="Permalink to this headline">¶</a></h3>
 <p>Load gcc and CUDA</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module load PrgEnv-gnu</span>
 <span class="prompt1">module load cudatoolkit</span>
 </pre></div></div><p>Build, e.g. the Castro Sedov hydro test problem</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make -j <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">TINY_PROFILE</span><span class="o">=</span>TRUE <span class="nv">USE_MPI</span><span class="o">=</span>TRUE <span class="nv">USE_OMP</span><span class="o">=</span>FALSE <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE</span>
 </pre></div></div></section>
-<section id="id3">
-<h3>Hypre<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<section id="id2">
+<h3>Hypre<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>Hypre should be obtained from GitHub, and built using the same PrgEnv that you are using for Castro:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1"><span class="nv">HYPRE_CUDA_SM</span><span class="o">=</span><span class="m">80</span> <span class="nv">CXX</span><span class="o">=</span>CC <span class="nv">CC</span><span class="o">=</span>cc <span class="nv">FC</span><span class="o">=</span>ftn ./configure --prefix<span class="o">=</span>/path/to/hypre/install --with-MPI --with-cuda --enable-unified-memory</span>
 </pre></div></div></section>
