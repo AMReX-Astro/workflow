@@ -4,7 +4,7 @@
 #SBATCH -C gpu
 #SBATCH -J Castro
 #SBATCH -o subch_%j.out
-#SBATCH -t 2:00:00
+#SBATCH -t 4:00:00
 #SBATCH -N 16
 #SBATCH --ntasks-per-node=4
 #SBATCH --gpus-per-task=1
@@ -12,6 +12,9 @@
 
 export CASTRO_EXEC=./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
 export INPUTS=inputs_2d.N14
+
+module load PrgEnv-gnu
+module load cudatoolkit
 
 function find_chk_file {
     # find_chk_file takes a single argument -- the wildcard pattern
