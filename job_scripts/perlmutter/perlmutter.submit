@@ -2,9 +2,10 @@
 
 #SBATCH -A m3018_g
 #SBATCH -C gpu
+#SBATCH -q regular
 #SBATCH -J Castro
 #SBATCH -o subch_%j.out
-#SBATCH -t 4:00:00
+#SBATCH -t 2:00:00
 #SBATCH -N 16
 #SBATCH --ntasks-per-node=4
 #SBATCH --gpus-per-task=1
