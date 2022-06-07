@@ -15,6 +15,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -85,21 +86,21 @@
            <div itemprop="articleBody">
              
   <section id="working-at-iacs">
-<h1>Working at IACS<a class="headerlink" href="#working-at-iacs" title="Permalink to this headline">¶</a></h1>
+<h1>Working at IACS<a class="headerlink" href="#working-at-iacs" title="Permalink to this heading">¶</a></h1>
 <section id="ookami">
-<h2>Ookami<a class="headerlink" href="#ookami" title="Permalink to this headline">¶</a></h2>
+<h2>Ookami<a class="headerlink" href="#ookami" title="Permalink to this heading">¶</a></h2>
 <p>Ookami seems to have 48 compute cores grouped into 4 pools of 12
 threads (there is actually a 13th core on each for OS stuff).  So an
 ideal config would be running 4 MPI each with 12 threads.</p>
 <p>Log-in to <code class="docutils literal notranslate"><span class="pre">login.ookami.stonybrook.edu</span></code></p>
 <section id="amrex-setup">
-<h3>AMReX setup<a class="headerlink" href="#amrex-setup" title="Permalink to this headline">¶</a></h3>
+<h3>AMReX setup<a class="headerlink" href="#amrex-setup" title="Permalink to this heading">¶</a></h3>
 <p>We need to tell AMReX about the machine.  Put the following <code class="docutils literal notranslate"><span class="pre">Make.local</span></code> file
 in <code class="docutils literal notranslate"><span class="pre">amrex/Tools/GNUmake</span></code>:</p>
 <p><a class="reference external" href="https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local">https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local</a></p>
 </section>
 <section id="cray-compilers">
-<h3>Cray compilers<a class="headerlink" href="#cray-compilers" title="Permalink to this headline">¶</a></h3>
+<h3>Cray compilers<a class="headerlink" href="#cray-compilers" title="Permalink to this heading">¶</a></h3>
 <p>You can only access the Cray environment on a compute note:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>srun -p short -N <span class="m">1</span> -n <span class="m">48</span> --pty bash
 </pre></div>
@@ -137,9 +138,9 @@ module is commented out above).</p>
 </div>
 </section>
 <section id="gcc">
-<h3>GCC<a class="headerlink" href="#gcc" title="Permalink to this headline">¶</a></h3>
+<h3>GCC<a class="headerlink" href="#gcc" title="Permalink to this heading">¶</a></h3>
 <section id="gcc-10-2">
-<h4>GCC 10.2<a class="headerlink" href="#gcc-10-2" title="Permalink to this headline">¶</a></h4>
+<h4>GCC 10.2<a class="headerlink" href="#gcc-10-2" title="Permalink to this heading">¶</a></h4>
 <p>This needs to be done on the compute notes.</p>
 <p>Load modules as:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load slurm

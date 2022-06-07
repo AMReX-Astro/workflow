@@ -15,6 +15,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -85,9 +86,9 @@
            <div itemprop="articleBody">
              
   <section id="managing-jobs-at-nersc">
-<h1>Managing Jobs at NERSC<a class="headerlink" href="#managing-jobs-at-nersc" title="Permalink to this headline">¶</a></h1>
+<h1>Managing Jobs at NERSC<a class="headerlink" href="#managing-jobs-at-nersc" title="Permalink to this heading">¶</a></h1>
 <section id="cori-haswell">
-<h2>Cori Haswell<a class="headerlink" href="#cori-haswell" title="Permalink to this headline">¶</a></h2>
+<h2>Cori Haswell<a class="headerlink" href="#cori-haswell" title="Permalink to this heading">¶</a></h2>
 <p>Cori Haswell is configured with 32 cores per node, split between
 twi Intel Haswell 16-core processors.</p>
 <p>Jobs should be run in your <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> directory. By default,
@@ -127,7 +128,7 @@ using <code class="docutils literal notranslate"><span class="pre">scancel</span
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">sqs -u username</span>
 </pre></div></div></section>
 <section id="perlmutter">
-<h2>Perlmutter<a class="headerlink" href="#perlmutter" title="Permalink to this headline">¶</a></h2>
+<h2>Perlmutter<a class="headerlink" href="#perlmutter" title="Permalink to this heading">¶</a></h2>
 <p>Perlmutter has 1536 GPU nodes, each with 4 NVIDIA A100 GPUs – therefore it is best to use
 4 MPI tasks per node.</p>
 <div class="admonition note">
@@ -142,9 +143,10 @@ includes the restart logic to allow for job chaining.</p>
 
 <span class="c1">#SBATCH -A m3018_g</span>
 <span class="c1">#SBATCH -C gpu</span>
+<span class="c1">#SBATCH -q regular</span>
 <span class="c1">#SBATCH -J Castro</span>
 <span class="c1">#SBATCH -o subch_%j.out</span>
-<span class="c1">#SBATCH -t 4:00:00</span>
+<span class="c1">#SBATCH -t 2:00:00</span>
 <span class="c1">#SBATCH -N 16</span>
 <span class="c1">#SBATCH --ntasks-per-node=4</span>
 <span class="c1">#SBATCH --gpus-per-task=1</span>

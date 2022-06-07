@@ -15,6 +15,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -92,11 +93,11 @@
            <div itemprop="articleBody">
              
   <section id="managing-jobs-at-olcf">
-<h1>Managing Jobs at OLCF<a class="headerlink" href="#managing-jobs-at-olcf" title="Permalink to this headline">¶</a></h1>
+<h1>Managing Jobs at OLCF<a class="headerlink" href="#managing-jobs-at-olcf" title="Permalink to this heading">¶</a></h1>
 <section id="summit">
-<h2>Summit<a class="headerlink" href="#summit" title="Permalink to this headline">¶</a></h2>
+<h2>Summit<a class="headerlink" href="#summit" title="Permalink to this heading">¶</a></h2>
 <section id="submission-scripts">
-<h3>Submission scripts<a class="headerlink" href="#submission-scripts" title="Permalink to this headline">¶</a></h3>
+<h3>Submission scripts<a class="headerlink" href="#submission-scripts" title="Permalink to this heading">¶</a></h3>
 <p>On Summit, we have a few different examples of PBS batch
 scripts. <code class="docutils literal notranslate"><span class="pre">run_amrex_gpu_tutorials.summit</span></code> is a shallow copy of the
 <a class="reference external" href="https://github.com/AMReX-Codes/amrex/blob/development/Tutorials/GPU/run.summit">AMReX tutorial script</a>,
@@ -215,7 +216,7 @@ example syntax for jsrun:</p>
 </div>
 </section>
 <section id="submitting-and-monitoring">
-<h3>Submitting and monitoring<a class="headerlink" href="#submitting-and-monitoring" title="Permalink to this headline">¶</a></h3>
+<h3>Submitting and monitoring<a class="headerlink" href="#submitting-and-monitoring" title="Permalink to this heading">¶</a></h3>
 <p>Jobs are submitted using the <code class="docutils literal notranslate"><span class="pre">bsub</span></code> command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bsub script.sh
 </pre></div>
@@ -227,7 +228,7 @@ example syntax for jsrun:</p>
 </div>
 </section>
 <section id="automatic-restarting">
-<h3>Automatic restarting<a class="headerlink" href="#automatic-restarting" title="Permalink to this headline">¶</a></h3>
+<h3>Automatic restarting<a class="headerlink" href="#automatic-restarting" title="Permalink to this heading">¶</a></h3>
 <p>Often we run a single simulation over many queue submissions with each
 starting from the latest checkpoint file.  The script
 <code class="docutils literal notranslate"><span class="pre">job_scripts/summit/submit_restart.sh</span></code> shows how to automatically
@@ -324,7 +325,7 @@ increase (with a minimum of 5 digits), we search for files with
 the latest file.</p>
 </section>
 <section id="chaining-jobs">
-<h3>Chaining jobs<a class="headerlink" href="#chaining-jobs" title="Permalink to this headline">¶</a></h3>
+<h3>Chaining jobs<a class="headerlink" href="#chaining-jobs" title="Permalink to this heading">¶</a></h3>
 <p>The script <code class="docutils literal notranslate"><span class="pre">job_scripts/summit/chain_submit.sh</span></code> can be used to setup job dependencies,
 i.e., a job chain.</p>
 <p>First you submit a job as usual using <code class="docutils literal notranslate"><span class="pre">bsub</span></code>, and make note of the
@@ -343,7 +344,7 @@ restarting features discussed above.</p>
 </section>
 </section>
 <section id="crusher">
-<h2>Crusher<a class="headerlink" href="#crusher" title="Permalink to this headline">¶</a></h2>
+<h2>Crusher<a class="headerlink" href="#crusher" title="Permalink to this heading">¶</a></h2>
 <p>The following batch script will run on 1 GPU</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#SBATCH -A AST136_crusher</span>
@@ -390,7 +391,7 @@ srun -n <span class="m">8</span> -c <span class="m">8</span> --ntasks-per-node<s
 <p>then do <code class="docutils literal notranslate"><span class="pre">run</span></code> at the debugger prompt.</p>
 </section>
 <section id="archiving-to-hpss">
-<h2>Archiving to HPSS<a class="headerlink" href="#archiving-to-hpss" title="Permalink to this headline">¶</a></h2>
+<h2>Archiving to HPSS<a class="headerlink" href="#archiving-to-hpss" title="Permalink to this heading">¶</a></h2>
 <p>You can access HPSS from submit using the data transfer nodes by submitting a job
 via SLURM:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch -N <span class="m">1</span> -t <span class="m">15</span>:00 -A ast106 --cluster dtn test_hpss.sh
