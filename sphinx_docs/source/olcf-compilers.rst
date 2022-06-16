@@ -53,17 +53,15 @@ log into::
 
    crusher.olcf.ornl.gov
 
-We want to build with ROCm/HIP.  Currently, we only work with ROCm 4.5.0, 
+We want to build with ROCm/HIP.  Currently, we only work with ROCm 5.x,
 which you load as::
 
-    module load PrgEnv-gnu craype-accel-amd-gfx90a rocm/4.5.0
+   module load PrgEnv-amd craype-accel-amd-gfx90a cray-mpich/8.1.16 rocm/5.1.0
 
-If you want to try ROCm 5.x, you need to use ``PrgEnv-amd`` instead of
-``PrgEnv-gnu``::
+.. note::
 
-   module load PrgEnv-amd craype-accel-amd-gfx90a rocm/5.1.0
-
-But this currently gives memory errors with Castro.
+   There are specific MPICH versions that work with each ROCm release,
+   as described in: `Determining the Compatibility of Cray MPICH and ROCm <https://docs.olcf.ornl.gov/systems/crusher_quick_start_guide.html#determining-the-compatibility-of-cray-mpich-and-rocm>`_.
 
 We can then build with::
 
