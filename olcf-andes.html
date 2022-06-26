@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Batch Visualization on Andes &mdash; AMReX-Astro 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Working at IACS" href="iacs.html" />
+    <link rel="prev" title="Running Jupyter Remotely from OLCF" href="olcf-jupyter.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> AMReX-Astro
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">AMReX Astro basics</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="nersc.html">Working at NERSC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="olcf.html">Working at OLCF</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="olcf-compilers.html">Compiling at OLCF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="olcf-workflow.html">Managing Jobs at OLCF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="olcf-jupyter.html">Running Jupyter Remotely from OLCF</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Batch Visualization on Andes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="iacs.html">Working at IACS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workstations.html">Linux Workstations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AMReX-Astro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="olcf.html">Working at OLCF</a> &raquo;</li>
+      <li>Batch Visualization on Andes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/olcf-andes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="batch-visualization-on-andes">
+<h1>Batch Visualization on Andes<a class="headerlink" href="#batch-visualization-on-andes" title="Permalink to this heading">¶</a></h1>
+<p>It is best to work on <code class="docutils literal notranslate"><span class="pre">andes.olcf.ornl.gov</span></code>.  You will want to setup
+a new env for andes.  We’ll call it <code class="docutils literal notranslate"><span class="pre">andes_env</span></code>.</p>
+<p>You need to load python with anaconda support there:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
+span.prompt1:before {
+  content: "$ ";
+}
+</style><span class="prompt1">module load python/3.7-anaconda3</span>
+</pre></div></div><p>then setup <code class="docutils literal notranslate"><span class="pre">conda</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">conda init bash</span>
+</pre></div></div><p>this will modify your <cite>.bashrc</cite>, adding code that is specific to andes.</p>
+<p>Then you do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">conda create -n andes_env -y ipykernel nb_conda_kernels</span>
+<span class="prompt1">conda install -n andes_env -c conda-forge yt</span>
+</pre></div></div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to install yt from source, then you would first clone
+the yt repo:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">git clone git@github.com:yt-project/yt</span>
+</pre></div></div><p>Then in the top-level <code class="docutils literal notranslate"><span class="pre">yt/</span></code> directory, do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pip install -e .</span>
+</pre></div></div><p>If you have an existing yt installation, you can uninstall it first via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pip uninstall yt</span>
+</pre></div></div></div>
+<p>Finally, you can activate the environment as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1"><span class="nb">source</span> activate andes_env</span>
+</pre></div></div><p>Then you can run a python script that does visualization as with the
+following submission script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+#SBATCH -A ast106
+#SBATCH -J plots
+#SBATCH -N 1
+#SBATCH -t 2:00:00
+
+cd $SLURM_SUBMIT_DIR
+
+source activate andes_env
+
+srun python vol-xrb-enuc.py flame_wave_1000Hz_25cm_smallplt203204
+</pre></div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">vol-xrb-enuc.py</span></code> is the script with the <code class="docutils literal notranslate"><span class="pre">yt</span></code> code to make the visualization.
+This is then submitted to SLURM via <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For very large plotfiles, it might run out of memory when doing the
+visualization.  A solution is to use the <code class="docutils literal notranslate"><span class="pre">gpu</span></code> nodes on Andes,
+which have more memory.  This is accomplished by adding
+<code class="docutils literal notranslate"><span class="pre">#SBATCH</span> <span class="pre">-p</span> <span class="pre">gpu</span></code> to the script.</p>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="olcf-jupyter.html" class="btn btn-neutral float-left" title="Running Jupyter Remotely from OLCF" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="iacs.html" class="btn btn-neutral float-right" title="Working at IACS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-2021, AMReX-Astro development tem.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
