@@ -17,6 +17,8 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -90,35 +92,31 @@
 <section id="summit">
 <h2>Summit<a class="headerlink" href="#summit" title="Permalink to this heading">¶</a></h2>
 <p>In order to compile you will need to swap the xl module with gcc (you need to use atleast gcc/7.4.0 due to C++17 support):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load gcc/7.4.0
-</pre></div>
-</div>
-<div class="admonition note">
+<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
+span.prompt1:before {
+  content: "$ ";
+}
+</style><span class="prompt1">module load gcc/7.4.0</span>
+</pre></div></div><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You will need to load the same module you use for compiling in your
 submissions script, otherwise the code won’t find the shared
 libraries at runtime.</p>
 </div>
 <p>Then load CUDA:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load cuda/11.2.0
-</pre></div>
-</div>
-<div class="admonition note">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module load cuda/11.2.0</span>
+</pre></div></div><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Presently you will see a warning when you load a CUDA 11 module, but the packages
 should work fine.</p>
 </div>
 <p>You also need to make sure you have the python module loaded:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load python/3.7.0
-</pre></div>
-</div>
-<p>Compile with <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code> (and <code class="docutils literal notranslate"><span class="pre">COMP=gnu</span></code> which is usually the default).
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module load python/3.7.0</span>
+</pre></div></div><p>Compile with <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code> (and <code class="docutils literal notranslate"><span class="pre">COMP=gnu</span></code> which is usually the default).
 Do not compile with <code class="docutils literal notranslate"><span class="pre">USE_OMP=TRUE</span></code> since this is currently disallowed by Castro.
 An example compilation line is:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">USE_MPI</span><span class="o">=</span>TRUE <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE -j <span class="m">4</span>
-</pre></div>
-</div>
-<p>The recommended/tested version pairs are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">USE_MPI</span><span class="o">=</span>TRUE <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE -j <span class="m">4</span></span>
+</pre></div></div><p>The recommended/tested version pairs are:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">gcc/7.4.0</span></code> + <code class="docutils literal notranslate"><span class="pre">cuda/11.2.0</span></code></p></li>
@@ -135,25 +133,18 @@ doesn’t use this feature.</p></li>
 </section>
 <section id="crusher">
 <h2>Crusher<a class="headerlink" href="#crusher" title="Permalink to this heading">¶</a></h2>
-<p>log into:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>crusher.olcf.ornl.gov
-</pre></div>
-</div>
+<p>log into <code class="docutils literal notranslate"><span class="pre">crusher.olcf.ornl.gov</span></code></p>
 <p>We want to build with ROCm/HIP.  Currently, we only work with ROCm 5.x,
 which you load as:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load PrgEnv-amd craype-accel-amd-gfx90a cray-mpich/8.1.16 rocm/5.1.0
-</pre></div>
-</div>
-<div class="admonition note">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module load PrgEnv-amd craype-accel-amd-gfx90a cray-mpich/8.1.16 rocm/5.1.0</span>
+</pre></div></div><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>There are specific MPICH versions that work with each ROCm release,
 as described in: <a class="reference external" href="https://docs.olcf.ornl.gov/systems/crusher_quick_start_guide.html#determining-the-compatibility-of-cray-mpich-and-rocm">Determining the Compatibility of Cray MPICH and ROCm</a>.</p>
 </div>
 <p>We can then build with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">USE_HIP</span><span class="o">=</span>TRUE
-</pre></div>
-</div>
-<div class="admonition note">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">USE_HIP</span><span class="o">=</span>TRUE</span>
+</pre></div></div><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Async I/O can sometimes have issues on crusher, so it is best to
 leave it off.</p>
