@@ -4,3 +4,4 @@ sphinxcontrib_bibtex
 numpydoc
 more_itertools
 sphinx-prompt
+sphinx-copybutton

@@ -6,7 +6,9 @@ Compiling at OLCF
 Summit
 ------
 
-In order to compile you will need to swap the xl module with gcc (you need to use atleast gcc/7.4.0 due to C++17 support)::
+In order to compile you will need to swap the xl module with gcc (you need to use atleast gcc/7.4.0 due to C++17 support):
+
+.. prompt:: bash
 
   module load gcc/7.4.0
 
@@ -16,7 +18,9 @@ In order to compile you will need to swap the xl module with gcc (you need to us
    submissions script, otherwise the code won't find the shared
    libraries at runtime.
 
-Then load CUDA::
+Then load CUDA:
+
+.. prompt:: bash
 
   module load cuda/11.2.0
 
@@ -25,13 +29,17 @@ Then load CUDA::
    Presently you will see a warning when you load a CUDA 11 module, but the packages
    should work fine.
 
-You also need to make sure you have the python module loaded::
+You also need to make sure you have the python module loaded:
+
+.. prompt:: bash
 
   module load python/3.7.0
 
 Compile with ``USE_CUDA=TRUE`` (and ``COMP=gnu`` which is usually the default).
 Do not compile with ``USE_OMP=TRUE`` since this is currently disallowed by Castro.
-An example compilation line is::
+An example compilation line is:
+
+.. prompt:: bash
 
   make COMP=gnu USE_MPI=TRUE USE_CUDA=TRUE -j 4
 
@@ -49,12 +57,12 @@ The recommended/tested version pairs are:
 Crusher
 -------
 
-log into::
-
-   crusher.olcf.ornl.gov
+log into ``crusher.olcf.ornl.gov``
 
 We want to build with ROCm/HIP.  Currently, we only work with ROCm 5.x,
-which you load as::
+which you load as:
+
+.. prompt:: bash
 
    module load PrgEnv-amd craype-accel-amd-gfx90a cray-mpich/8.1.16 rocm/5.1.0
 
@@ -63,9 +71,11 @@ which you load as::
    There are specific MPICH versions that work with each ROCm release,
    as described in: `Determining the Compatibility of Cray MPICH and ROCm <https://docs.olcf.ornl.gov/systems/crusher_quick_start_guide.html#determining-the-compatibility-of-cray-mpich-and-rocm>`_.
 
-We can then build with::
+We can then build with:
 
-   COMP=gnu USE_HIP=TRUE
+.. prompt:: bash
+
+   make COMP=gnu USE_HIP=TRUE
 
 
 .. note::
