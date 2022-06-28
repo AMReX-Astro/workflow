@@ -68,15 +68,19 @@ The example script directory is: `<https://github.com/AMReX-Astro/workflow/tree/
 Submitting and monitoring
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Jobs are submitted using the ``bsub`` command::
+Jobs are submitted using the ``bsub`` command:
 
-  bsub script.sh
+.. prompt:: bash
+
+   bsub script.sh
 
 You can monitor the status of your jobs using ``bjobs``.
 
-A slightly nicer view of your jobs can be viewed using ``jobstat`` as::
+A slightly nicer view of your jobs can be viewed using ``jobstat`` as:
 
-  jobstat -u username
+.. prompt:: bash
+
+   jobstat -u username
 
 
 Automatic restarting
@@ -108,7 +112,9 @@ i.e., a job chain.
 First you submit a job as usual using ``bsub``, and make note of the
 job-id that it prints upon submission (the same id you would see with
 ``bjobs`` or ``jobstat``).  Then you setup N jobs to depend on the one
-you just submitted as::
+you just submitted as:
+
+.. prompt:: bash
 
    chain_submit.sh job-id N submit_script.sh
 
@@ -131,13 +137,17 @@ or for 8 GPUs on 1 node, the following script works:
 
 .. literalinclude:: ../../job_scripts/crusher/crusher_8gpu.slurm
 
-for interactive::
+for interactive:
 
-  salloc -A ast136_crusher -J amrex -t 00:30:00 -p batch -N 1
+.. prompt:: bash
+
+   salloc -A ast136_crusher -J amrex -t 00:30:00 -p batch -N 1
 
 then you can run your jobs directly on the compute node.
 
-For debugging::
+For debugging:
+
+.. prompt:: bash
 
    rocgdb --args ./Castro2d.hip.x86-trento.MPI.HIP.ex inputs_2d.testsuite
 
@@ -148,9 +158,11 @@ Archiving to HPSS
 -----------------
 
 You can access HPSS from submit using the data transfer nodes by submitting a job
-via SLURM::
+via SLURM:
 
-  sbatch -N 1 -t 15:00 -A ast106 --cluster dtn test_hpss.sh
+.. prompt:: bash
+
+   sbatch -N 1 -t 15:00 -A ast106 --cluster dtn test_hpss.sh
 
 where ``test_hpss.sh`` is a SLURM script that contains the ``htar``
 commands needed to archive your data.  This uses ``slurm`` as the job
@@ -178,9 +190,11 @@ To use this, we do the following:
 
 #. Exit HPSS
 
-#. Launch the script via::
+#. Launch the script via:
 
-     sbatch summit_hpss.submit
+   .. prompt:: bash
+
+      sbatch summit_hpss.submit
 
    It will for the full time you asked, searching for plotfiles as
    they are created and moving them to HPSS as they are produced (it
@@ -190,9 +204,11 @@ To use this, we do the following:
 
 Files may be unarchived in bulk from HPSS on OLCF systems using the
 ``hpss_xfer.py`` script, which is available in the job_scripts
-directory. It requires Python 3 to be loaded to run. The command::
+directory. It requires Python 3 to be loaded to run. The command:
 
-    ./hpss_xfer.py plt00000 -s hpss_dir -o plotfile_dir
+.. prompt:: bash
+
+   ./hpss_xfer.py plt00000 -s hpss_dir -o plotfile_dir
 
 will fetch ``hpss_dir/plt00000.tar`` from the HPSS filesystem and
 unpack it in ``plotfile_dir``. If run with no arguments in the problem
