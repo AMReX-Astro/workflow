@@ -220,15 +220,15 @@ example syntax for jsrun:</p>
 <section id="submitting-and-monitoring">
 <h3>Submitting and monitoring<a class="headerlink" href="#submitting-and-monitoring" title="Permalink to this heading">¶</a></h3>
 <p>Jobs are submitted using the <code class="docutils literal notranslate"><span class="pre">bsub</span></code> command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bsub script.sh
-</pre></div>
-</div>
-<p>You can monitor the status of your jobs using <code class="docutils literal notranslate"><span class="pre">bjobs</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
+span.prompt1:before {
+  content: "$ ";
+}
+</style><span class="prompt1">bsub script.sh</span>
+</pre></div></div><p>You can monitor the status of your jobs using <code class="docutils literal notranslate"><span class="pre">bjobs</span></code>.</p>
 <p>A slightly nicer view of your jobs can be viewed using <code class="docutils literal notranslate"><span class="pre">jobstat</span></code> as:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jobstat -u username
-</pre></div>
-</div>
-</section>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">jobstat -u username</span>
+</pre></div></div></section>
 <section id="automatic-restarting">
 <h3>Automatic restarting<a class="headerlink" href="#automatic-restarting" title="Permalink to this heading">¶</a></h3>
 <p>Often we run a single simulation over many queue submissions with each
@@ -334,10 +334,8 @@ i.e., a job chain.</p>
 job-id that it prints upon submission (the same id you would see with
 <code class="docutils literal notranslate"><span class="pre">bjobs</span></code> or <code class="docutils literal notranslate"><span class="pre">jobstat</span></code>).  Then you setup N jobs to depend on the one
 you just submitted as:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chain_submit.sh job-id N submit_script.sh
-</pre></div>
-</div>
-<p>where you replace <code class="docutils literal notranslate"><span class="pre">job-id</span></code> with the id return from your first
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">chain_submit.sh job-id N submit_script.sh</span>
+</pre></div></div><p>where you replace <code class="docutils literal notranslate"><span class="pre">job-id</span></code> with the id return from your first
 submission, replace <code class="docutils literal notranslate"><span class="pre">N</span></code> with the number of additional jobs, and
 replace <code class="docutils literal notranslate"><span class="pre">submit_script</span></code> with the name of the script you use to
 submit the job.  This will queue up N additional jobs, each depending
@@ -382,24 +380,18 @@ srun -n <span class="m">8</span> -c <span class="m">8</span> --ntasks-per-node<s
 </pre></div>
 </div>
 <p>for interactive:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>salloc -A ast136_crusher -J amrex -t <span class="m">00</span>:30:00 -p batch -N <span class="m">1</span>
-</pre></div>
-</div>
-<p>then you can run your jobs directly on the compute node.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">salloc -A ast136_crusher -J amrex -t <span class="m">00</span>:30:00 -p batch -N <span class="m">1</span></span>
+</pre></div></div><p>then you can run your jobs directly on the compute node.</p>
 <p>For debugging:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rocgdb --args ./Castro2d.hip.x86-trento.MPI.HIP.ex inputs_2d.testsuite
-</pre></div>
-</div>
-<p>then do <code class="docutils literal notranslate"><span class="pre">run</span></code> at the debugger prompt.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">rocgdb --args ./Castro2d.hip.x86-trento.MPI.HIP.ex inputs_2d.testsuite</span>
+</pre></div></div><p>then do <code class="docutils literal notranslate"><span class="pre">run</span></code> at the debugger prompt.</p>
 </section>
 <section id="archiving-to-hpss">
 <h2>Archiving to HPSS<a class="headerlink" href="#archiving-to-hpss" title="Permalink to this heading">¶</a></h2>
 <p>You can access HPSS from submit using the data transfer nodes by submitting a job
 via SLURM:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch -N <span class="m">1</span> -t <span class="m">15</span>:00 -A ast106 --cluster dtn test_hpss.sh
-</pre></div>
-</div>
-<p>where <code class="docutils literal notranslate"><span class="pre">test_hpss.sh</span></code> is a SLURM script that contains the <code class="docutils literal notranslate"><span class="pre">htar</span></code>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">sbatch -N <span class="m">1</span> -t <span class="m">15</span>:00 -A ast106 --cluster dtn test_hpss.sh</span>
+</pre></div></div><p>where <code class="docutils literal notranslate"><span class="pre">test_hpss.sh</span></code> is a SLURM script that contains the <code class="docutils literal notranslate"><span class="pre">htar</span></code>
 commands needed to archive your data.  This uses <code class="docutils literal notranslate"><span class="pre">slurm</span></code> as the job
 manager.</p>
 <p>An example is provided by the <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> archiving script and
@@ -419,10 +411,8 @@ your run directory called <code class="docutils literal notranslate"><span class
 you are running in on summit</p></li>
 <li><p>Exit HPSS</p></li>
 <li><p>Launch the script via:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch summit_hpss.submit
-</pre></div>
-</div>
-<p>It will for the full time you asked, searching for plotfiles as
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">sbatch summit_hpss.submit</span>
+</pre></div></div><p>It will for the full time you asked, searching for plotfiles as
 they are created and moving them to HPSS as they are produced (it
 will always leave the very last plotfile alone, since it can’t tell
 if it is still being written).</p>
@@ -431,10 +421,8 @@ if it is still being written).</p>
 <p>Files may be unarchived in bulk from HPSS on OLCF systems using the
 <code class="docutils literal notranslate"><span class="pre">hpss_xfer.py</span></code> script, which is available in the job_scripts
 directory. It requires Python 3 to be loaded to run. The command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./hpss_xfer.py plt00000 -s hpss_dir -o plotfile_dir
-</pre></div>
-</div>
-<p>will fetch <code class="docutils literal notranslate"><span class="pre">hpss_dir/plt00000.tar</span></code> from the HPSS filesystem and
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./hpss_xfer.py plt00000 -s hpss_dir -o plotfile_dir</span>
+</pre></div></div><p>will fetch <code class="docutils literal notranslate"><span class="pre">hpss_dir/plt00000.tar</span></code> from the HPSS filesystem and
 unpack it in <code class="docutils literal notranslate"><span class="pre">plotfile_dir</span></code>. If run with no arguments in the problem
 launch directory, the script will attempt to recover all plotfiles
 archived by <code class="docutils literal notranslate"><span class="pre">process.titan</span></code>. Try running <code class="code docutils literal notranslate"><span class="pre">./hpss_xfer.py</span> <span class="pre">--help</span></code>
