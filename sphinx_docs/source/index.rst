@@ -19,6 +19,7 @@ including HPC Centers and workstations.
    :maxdepth: 1
    :caption: AMReX Astro basics
 
+   alcf
    nersc
    olcf
    iacs
