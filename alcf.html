@@ -49,6 +49,8 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Working at ALCF</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#logging-in">Logging In</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compiling">Compiling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#disks">Disks</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nersc.html">Working at NERSC</a></li>
@@ -83,6 +85,7 @@
              
   <section id="working-at-alcf">
 <h1>Working at ALCF<a class="headerlink" href="#working-at-alcf" title="Permalink to this heading">¶</a></h1>
+<p>Polaris has 560 nodes each with 4 NVIDIA A100 GPUs.</p>
 <section id="logging-in">
 <h2>Logging In<a class="headerlink" href="#logging-in" title="Permalink to this heading">¶</a></h2>
 <p>ssh into:</p>
@@ -91,6 +94,22 @@
 </div>
 <p>To have a custom <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code>, create a <code class="docutils literal notranslate"><span class="pre">~/.bash.expert</span></code> file and add anything
 there.  This is read at the end of <code class="docutils literal notranslate"><span class="pre">/etc/bash.bashrc</span></code></p>
+</section>
+<section id="compiling">
+<h2>Compiling<a class="headerlink" href="#compiling" title="Permalink to this heading">¶</a></h2>
+<p>Load the modules:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
+span.prompt1:before {
+  content: "$ ";
+}
+</style><span class="prompt1">module swap PrgEnv-nvhpc PrgEnv-gnu</span>
+<span class="prompt1">module load nvhpc-mixed</span>
+</pre></div></div><p>Then you can compile via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE</span>
+</pre></div></div></section>
+<section id="disks">
+<h2>Disks<a class="headerlink" href="#disks" title="Permalink to this heading">¶</a></h2>
+<p>Project workspace is at: <code class="docutils literal notranslate"><span class="pre">/lus/grand/projects/AstroExplosions/</span></code></p>
 </section>
 </section>
 
