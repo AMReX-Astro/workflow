@@ -6,6 +6,8 @@ Working at ALCF
 
 Polaris has 560 nodes each with 4 NVIDIA A100 GPUs.
 
+The PBS scheduler is used.
+
 Logging In
 ==========
 
@@ -101,6 +103,6 @@ Job Chaining
 
 A script that can be used to chain jobs with PBS is:
 
-.. literalinclude:: ../../job_scripts/polaris/chainpbs.sh
-   :caption: ``chainpbs.sh``
+.. literalinclude:: ../../job_scripts/polaris/chainqsub.sh
+   :caption: ``chainqsub.sh``
 
