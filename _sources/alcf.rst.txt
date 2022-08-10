@@ -87,3 +87,13 @@ the last checkpoint is:
 
 .. literalinclude:: ../../job_scripts/polaris/polaris.submit
    :caption: ``polaris.submit``
+
+
+Job Chaining
+============
+
+A script that can be used to chain jobs with PBS is:
+
+.. literalinclude:: ../../job_scripts/polaris/chainpbs.sh
+   :caption: ``chainpbs.sh``
+
