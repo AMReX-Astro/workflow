@@ -46,6 +46,13 @@ Queues
 
 https://www.alcf.anl.gov/support/user-guides/polaris/queueing-and-running-jobs/job-and-queue-scheduling/index.html
 
+For production jobs, you submit to the ``prod`` queue.
+
+.. note::
+
+   The smallest node count that seems to be allowed in production is 10 nodes.
+
+
 Submitting
 ==========
 
