@@ -40,3 +40,23 @@ Disks
 
 Project workspace is at: ``/lus/grand/projects/AstroExplosions/``
 
+
+Queues
+======
+
+https://www.alcf.anl.gov/support/user-guides/polaris/queueing-and-running-jobs/job-and-queue-scheduling/index.html
+
+Submitting
+==========
+
+Clone the ``GettingStarted`` repo:
+
+.. prompt:: bash
+
+   git clone git@github.com:argonne-lcf/GettingStarted.git
+
+you'll want to use the examples in
+``GettingStarted/Examples/Polaris/affinity_gpu``.
+
+In particular, you will need the script
+``set_affinity_gpu_polaris.sh`` copied into your run directory.
