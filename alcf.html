@@ -53,6 +53,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#disks">Disks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#queues">Queues</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#submitting">Submitting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#automatic-restarting">Automatic Restarting</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nersc.html">Working at NERSC</a></li>
@@ -162,6 +163,85 @@ mpiexec -n <span class="si">${</span><span class="nv">NTOTRANKS</span><span clas
 </pre></div></div><p>To check the status:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">qstat -u username</span>
 </pre></div></div></section>
+<section id="automatic-restarting">
+<h2>Automatic Restarting<a class="headerlink" href="#automatic-restarting" title="Permalink to this heading">¶</a></h2>
+<p>A version of the submission script that automatically restarts from
+the last checkpoint is:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">polaris.submit</span></code></span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PBS -l select=2:system=polaris</span>
+<span class="c1">#PBS -l place=scatter</span>
+<span class="c1">#PBS -l walltime=0:30:00</span>
+<span class="c1">#PBS -q debug</span>
+<span class="c1">#PBS -A AstroExplosions</span>
+
+<span class="nv">EXEC</span><span class="o">=</span>./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
+<span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.N14.coarse
+
+<span class="c1"># Enable GPU-MPI (if supported by application)</span>
+<span class="c1">##export MPICH_GPU_SUPPORT_ENABLED=1</span>
+
+<span class="c1"># Change to working directory</span>
+<span class="nb">cd</span> <span class="si">${</span><span class="nv">PBS_O_WORKDIR</span><span class="si">}</span>
+
+<span class="c1"># MPI and OpenMP settings</span>
+<span class="nv">NNODES</span><span class="o">=</span><span class="sb">`</span>wc -l &lt; <span class="nv">$PBS_NODEFILE</span><span class="sb">`</span>
+<span class="nv">NRANKS_PER_NODE</span><span class="o">=</span><span class="m">4</span>
+<span class="nv">NDEPTH</span><span class="o">=</span><span class="m">8</span>
+<span class="nv">NTHREADS</span><span class="o">=</span><span class="m">1</span>
+
+<span class="nv">NTOTRANKS</span><span class="o">=</span><span class="k">$((</span> NNODES <span class="o">*</span> NRANKS_PER_NODE <span class="k">))</span>
+
+<span class="k">function</span> find_chk_file <span class="o">{</span>
+    <span class="c1"># find_chk_file takes a single argument -- the wildcard pattern</span>
+    <span class="c1"># for checkpoint files to look through</span>
+    <span class="nv">chk</span><span class="o">=</span><span class="nv">$1</span>
+
+    <span class="c1"># find the latest 2 restart files.  This way if the latest didn&#39;t</span>
+    <span class="c1"># complete we fall back to the previous one.</span>
+    <span class="nv">temp_files</span><span class="o">=</span><span class="k">$(</span>find . -maxdepth <span class="m">1</span> -name <span class="s2">&quot;</span><span class="si">${</span><span class="nv">chk</span><span class="si">}</span><span class="s2">&quot;</span> -print <span class="p">|</span> sort <span class="p">|</span> tail -2<span class="k">)</span>
+    <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> f <span class="k">in</span> <span class="si">${</span><span class="nv">temp_files</span><span class="si">}</span>
+    <span class="k">do</span>
+        <span class="c1"># the Header is the last thing written -- check if it&#39;s there, otherwise,</span>
+        <span class="c1"># fall back to the second-to-last check file written</span>
+        <span class="k">if</span> <span class="o">[</span> ! -f <span class="si">${</span><span class="nv">f</span><span class="si">}</span>/Header <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+            <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+        <span class="k">else</span>
+            <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">fi</span>
+    <span class="k">done</span>
+
+<span class="o">}</span>
+
+<span class="c1"># look for 7-digit chk files</span>
+find_chk_file <span class="s2">&quot;*chk???????&quot;</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c1"># look for 6-digit chk files</span>
+    find_chk_file <span class="s2">&quot;*chk??????&quot;</span>
+<span class="k">fi</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c1"># look for 5-digit chk files</span>
+    find_chk_file <span class="s2">&quot;*chk?????&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># restartString will be empty if no chk files are found -- i.e. new run</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="k">else</span>
+    <span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;amr.restart=</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">fi</span>
+
+
+<span class="c1"># For applications that need mpiexec to bind MPI ranks to GPUs</span>
+mpiexec -n <span class="si">${</span><span class="nv">NTOTRANKS</span><span class="si">}</span> --ppn <span class="si">${</span><span class="nv">NRANKS_PER_NODE</span><span class="si">}</span> --depth<span class="o">=</span><span class="si">${</span><span class="nv">NDEPTH</span><span class="si">}</span> --cpu-bind depth --env <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="si">${</span><span class="nv">NTHREADS</span><span class="si">}</span> -env <span class="nv">OMP_PLACES</span><span class="o">=</span>threads ./set_affinity_gpu_polaris.sh <span class="si">${</span><span class="nv">EXEC</span><span class="si">}</span> <span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span> <span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
+</pre></div>
+</div>
+</div>
+</section>
 </section>
 
 

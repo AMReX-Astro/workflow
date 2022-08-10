@@ -63,7 +63,7 @@ In particular, you will need the script
 
 Here's a submission script that will run on 2 nodes with 4 GPUs / node:
 
-.. literalinclude:: ../../job_scripts/polaris/polaris.submit
+.. literalinclude:: ../../job_scripts/polaris/polaris_simple.submit
    :caption: ``polaris.submit``
 
 To submit the job, do:
@@ -78,3 +78,12 @@ To check the status:
 
    qstat -u username
 
+
+Automatic Restarting
+====================
+
+A version of the submission script that automatically restarts from
+the last checkpoint is:
+
+.. literalinclude:: ../../job_scripts/polaris/polaris.submit
+   :caption: ``polaris.submit``
