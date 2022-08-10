@@ -60,3 +60,21 @@ you'll want to use the examples in
 
 In particular, you will need the script
 ``set_affinity_gpu_polaris.sh`` copied into your run directory.
+
+Here's a submission script that will run on 2 nodes with 4 GPUs / node:
+
+.. literalinclude:: ../../job_scripts/polaris/polaris.submit
+   :caption: ``polaris.submit``
+
+To submit the job, do:
+
+.. prompt:: bash
+
+   qsub polaris.submit
+
+To check the status:
+
+.. prompt:: bash
+
+   qstat -u username
+

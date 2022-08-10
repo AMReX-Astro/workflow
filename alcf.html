@@ -125,7 +125,43 @@ span.prompt1:before {
 <code class="docutils literal notranslate"><span class="pre">GettingStarted/Examples/Polaris/affinity_gpu</span></code>.</p>
 <p>In particular, you will need the script
 <code class="docutils literal notranslate"><span class="pre">set_affinity_gpu_polaris.sh</span></code> copied into your run directory.</p>
-</section>
+<p>Here’s a submission script that will run on 2 nodes with 4 GPUs / node:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">polaris.submit</span></code></span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PBS -l select=2:system=polaris</span>
+<span class="c1">#PBS -l place=scatter</span>
+<span class="c1">#PBS -l walltime=0:30:00</span>
+<span class="c1">#PBS -q debug</span>
+<span class="c1">#PBS -A AstroExplosions</span>
+
+<span class="nv">EXEC</span><span class="o">=</span>./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
+<span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.N14.coarse
+
+<span class="c1"># Enable GPU-MPI (if supported by application)</span>
+<span class="c1">##export MPICH_GPU_SUPPORT_ENABLED=1</span>
+
+<span class="c1"># Change to working directory</span>
+<span class="nb">cd</span> <span class="si">${</span><span class="nv">PBS_O_WORKDIR</span><span class="si">}</span>
+
+<span class="c1"># MPI and OpenMP settings</span>
+<span class="nv">NNODES</span><span class="o">=</span><span class="sb">`</span>wc -l &lt; <span class="nv">$PBS_NODEFILE</span><span class="sb">`</span>
+<span class="nv">NRANKS_PER_NODE</span><span class="o">=</span><span class="m">4</span>
+<span class="nv">NDEPTH</span><span class="o">=</span><span class="m">8</span>
+<span class="nv">NTHREADS</span><span class="o">=</span><span class="m">1</span>
+
+<span class="nv">NTOTRANKS</span><span class="o">=</span><span class="k">$((</span> NNODES <span class="o">*</span> NRANKS_PER_NODE <span class="k">))</span>
+
+<span class="c1"># For applications that need mpiexec to bind MPI ranks to GPUs</span>
+mpiexec -n <span class="si">${</span><span class="nv">NTOTRANKS</span><span class="si">}</span> --ppn <span class="si">${</span><span class="nv">NRANKS_PER_NODE</span><span class="si">}</span> --depth<span class="o">=</span><span class="si">${</span><span class="nv">NDEPTH</span><span class="si">}</span> --cpu-bind depth --env <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="si">${</span><span class="nv">NTHREADS</span><span class="si">}</span> -env <span class="nv">OMP_PLACES</span><span class="o">=</span>threads ./set_affinity_gpu_polaris.sh <span class="si">${</span><span class="nv">EXEC</span><span class="si">}</span> <span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span>
+</pre></div>
+</div>
+</div>
+<p>To submit the job, do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">qsub polaris.submit</span>
+</pre></div></div><p>To check the status:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">qstat -u username</span>
+</pre></div></div></section>
 </section>
 
 
