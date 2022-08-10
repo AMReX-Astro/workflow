@@ -1,0 +1,26 @@
+#!/bin/sh
+#PBS -l select=2:system=polaris
+#PBS -l place=scatter
+#PBS -l walltime=0:30:00
+#PBS -q debug
+#PBS -A AstroExplosions
+
+EXEC=./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
+INPUTS=inputs_2d.N14.coarse
+
+# Enable GPU-MPI (if supported by application)
+##export MPICH_GPU_SUPPORT_ENABLED=1
+
+# Change to working directory
+cd ${PBS_O_WORKDIR}
+
+# MPI and OpenMP settings
+NNODES=`wc -l < $PBS_NODEFILE`
+NRANKS_PER_NODE=4
+NDEPTH=8
+NTHREADS=1
+
+NTOTRANKS=$(( NNODES * NRANKS_PER_NODE ))
+
+# For applications that need mpiexec to bind MPI ranks to GPUs
+mpiexec -n ${NTOTRANKS} --ppn ${NRANKS_PER_NODE} --depth=${NDEPTH} --cpu-bind depth --env OMP_NUM_THREADS=${NTHREADS} -env OMP_PLACES=threads ./set_affinity_gpu_polaris.sh ${EXEC} ${INPUTS}
