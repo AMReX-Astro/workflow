@@ -90,6 +90,7 @@
   <section id="working-at-alcf">
 <h1>Working at ALCF<a class="headerlink" href="#working-at-alcf" title="Permalink to this heading">¶</a></h1>
 <p>Polaris has 560 nodes each with 4 NVIDIA A100 GPUs.</p>
+<p>The PBS scheduler is used.</p>
 <section id="logging-in">
 <h2>Logging In<a class="headerlink" href="#logging-in" title="Permalink to this heading">¶</a></h2>
 <p>ssh into:</p>
@@ -118,6 +119,11 @@ span.prompt1:before {
 <section id="queues">
 <h2>Queues<a class="headerlink" href="#queues" title="Permalink to this heading">¶</a></h2>
 <p><a class="reference external" href="https://www.alcf.anl.gov/support/user-guides/polaris/queueing-and-running-jobs/job-and-queue-scheduling/index.html">https://www.alcf.anl.gov/support/user-guides/polaris/queueing-and-running-jobs/job-and-queue-scheduling/index.html</a></p>
+<p>For production jobs, you submit to the <code class="docutils literal notranslate"><span class="pre">prod</span></code> queue.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The smallest node count that seems to be allowed in production is 10 nodes.</p>
+</div>
 </section>
 <section id="submitting">
 <h2>Submitting<a class="headerlink" href="#submitting" title="Permalink to this heading">¶</a></h2>
@@ -246,6 +252,67 @@ mpiexec -n <span class="si">${</span><span class="nv">NTOTRANKS</span><span clas
 <section id="job-chaining">
 <h2>Job Chaining<a class="headerlink" href="#job-chaining" title="Permalink to this heading">¶</a></h2>
 <p>A script that can be used to chain jobs with PBS is:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">chainqsub.sh</span></code></span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -f</span>
+
+<span class="k">if</span> <span class="o">[</span> ! <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nb">echo</span> <span class="s2">&quot;usage: chainqsub.sh jobid number script&quot;</span>
+  <span class="nb">echo</span> <span class="s2">&quot;       set jobid -1 for no initial dependency&quot;</span>
+  <span class="nb">exit</span> -1
+<span class="k">fi</span>
+
+<span class="k">if</span> <span class="o">[</span> ! <span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nb">echo</span> <span class="s2">&quot;usage: chainqsub.sh jobid number script&quot;</span>
+  <span class="nb">echo</span> <span class="s2">&quot;       set jobid -1 for no initial dependency&quot;</span>
+  <span class="nb">exit</span> -1
+<span class="k">fi</span>
+
+<span class="k">if</span> <span class="o">[</span> ! <span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nb">echo</span> <span class="s2">&quot;usage: chainqsub.sh jobid number script&quot;</span>
+  <span class="nb">echo</span> <span class="s2">&quot;       set jobid -1 for no initial dependency&quot;</span>
+  <span class="nb">exit</span> -1
+<span class="k">fi</span>
+
+
+<span class="nv">oldjob</span><span class="o">=</span><span class="nv">$1</span>
+<span class="nv">numjobs</span><span class="o">=</span><span class="nv">$2</span>
+<span class="nv">script</span><span class="o">=</span><span class="nv">$3</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$numjobs</span> -gt <span class="s2">&quot;20&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nb">echo</span> <span class="s2">&quot;too many jobs requested&quot;</span>
+    <span class="nb">exit</span> -1
+<span class="k">fi</span>
+
+<span class="nv">firstcount</span><span class="o">=</span><span class="m">1</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$oldjob</span> -eq <span class="s2">&quot;-1&quot;</span> <span class="o">]</span>
+<span class="k">then</span>
+    <span class="nb">echo</span> chaining <span class="nv">$numjobs</span> <span class="nb">jobs</span>
+
+    <span class="nb">echo</span> starting job <span class="m">1</span> with no dependency
+    <span class="nv">aout</span><span class="o">=</span><span class="k">$(</span>qsub <span class="si">${</span><span class="nv">script</span><span class="si">}</span><span class="k">)</span>
+    <span class="nb">echo</span> <span class="s2">&quot;   &quot;</span> jobid: <span class="nv">$aout</span>
+    <span class="nb">echo</span> <span class="s2">&quot; &quot;</span>
+    <span class="nv">oldjob</span><span class="o">=</span><span class="nv">$aout</span>
+    <span class="nv">firstcount</span><span class="o">=</span><span class="m">2</span>
+    sleep <span class="m">3</span>
+<span class="k">else</span>
+    <span class="nb">echo</span> chaining <span class="nv">$numjobs</span> <span class="nb">jobs</span> starting with <span class="nv">$oldjob</span>
+<span class="k">fi</span>
+
+<span class="k">for</span> count <span class="k">in</span> <span class="k">$(</span>seq <span class="nv">$firstcount</span> <span class="m">1</span> <span class="nv">$numjobs</span><span class="k">)</span>
+<span class="k">do</span>
+  <span class="nb">echo</span> starting job <span class="nv">$count</span> to depend on <span class="nv">$oldjob</span>
+  <span class="nv">aout</span><span class="o">=</span><span class="k">$(</span>qsub -W <span class="nv">depend</span><span class="o">=</span>afterany:<span class="si">${</span><span class="nv">oldjob</span><span class="si">}</span> <span class="si">${</span><span class="nv">script</span><span class="si">}</span><span class="k">)</span>
+  <span class="nb">echo</span> <span class="s2">&quot;   &quot;</span> jobid: <span class="nv">$aout</span>
+  <span class="nb">echo</span> <span class="s2">&quot; &quot;</span>
+  <span class="nv">oldjob</span><span class="o">=</span><span class="nv">$aout</span>
+  sleep <span class="m">2</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+</div>
 </section>
 </section>
 
