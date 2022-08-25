@@ -1,12 +1,16 @@
 #!/bin/sh
 #PBS -l select=2:system=polaris
 #PBS -l place=scatter
-#PBS -l walltime=0:30:00
-#PBS -q debug
+#PBS -l walltime=6:00:00
+#PBS -q prod
 #PBS -A AstroExplosions
+#PBS -j eo
 
 EXEC=./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
 INPUTS=inputs_2d.N14.coarse
+
+module swap PrgEnv-nvhpc PrgEnv-gnu
+module load nvhpc-mixed
 
 # Enable GPU-MPI (if supported by application)
 ##export MPICH_GPU_SUPPORT_ENABLED=1
@@ -21,6 +25,7 @@ NDEPTH=8
 NTHREADS=1
 
 NTOTRANKS=$(( NNODES * NRANKS_PER_NODE ))
+
 
 function find_chk_file {
     # find_chk_file takes a single argument -- the wildcard pattern
@@ -67,4 +72,3 @@ fi
 
 # For applications that need mpiexec to bind MPI ranks to GPUs
 mpiexec -n ${NTOTRANKS} --ppn ${NRANKS_PER_NODE} --depth=${NDEPTH} --cpu-bind depth --env OMP_NUM_THREADS=${NTHREADS} -env OMP_PLACES=threads ./set_affinity_gpu_polaris.sh ${EXEC} ${INPUTS} ${restartString}
-
