@@ -6,6 +6,8 @@ Working at ALCF
 
 Polaris has 560 nodes each with 4 NVIDIA A100 GPUs.
 
+The PBS scheduler is used.
+
 Logging In
 ==========
 
@@ -45,6 +47,13 @@ Queues
 ======
 
 https://www.alcf.anl.gov/support/user-guides/polaris/queueing-and-running-jobs/job-and-queue-scheduling/index.html
+
+For production jobs, you submit to the ``prod`` queue.
+
+.. note::
+
+   The smallest node count that seems to be allowed in production is 10 nodes.
+
 
 Submitting
 ==========
@@ -94,6 +103,6 @@ Job Chaining
 
 A script that can be used to chain jobs with PBS is:
 
-.. literalinclude:: ../../job_scripts/polaris/chainpbs.sh
-   :caption: ``chainpbs.sh``
+.. literalinclude:: ../../job_scripts/polaris/chainqsub.sh
+   :caption: ``chainqsub.sh``
 
