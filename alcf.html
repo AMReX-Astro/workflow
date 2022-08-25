@@ -179,12 +179,16 @@ the last checkpoint is:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
 <span class="c1">#PBS -l select=2:system=polaris</span>
 <span class="c1">#PBS -l place=scatter</span>
-<span class="c1">#PBS -l walltime=0:30:00</span>
-<span class="c1">#PBS -q debug</span>
+<span class="c1">#PBS -l walltime=6:00:00</span>
+<span class="c1">#PBS -q prod</span>
 <span class="c1">#PBS -A AstroExplosions</span>
+<span class="c1">#PBS -j eo</span>
 
 <span class="nv">EXEC</span><span class="o">=</span>./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
 <span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.N14.coarse
+
+module swap PrgEnv-nvhpc PrgEnv-gnu
+module load nvhpc-mixed
 
 <span class="c1"># Enable GPU-MPI (if supported by application)</span>
 <span class="c1">##export MPICH_GPU_SUPPORT_ENABLED=1</span>
@@ -199,6 +203,7 @@ the last checkpoint is:</p>
 <span class="nv">NTHREADS</span><span class="o">=</span><span class="m">1</span>
 
 <span class="nv">NTOTRANKS</span><span class="o">=</span><span class="k">$((</span> NNODES <span class="o">*</span> NRANKS_PER_NODE <span class="k">))</span>
+
 
 <span class="k">function</span> find_chk_file <span class="o">{</span>
     <span class="c1"># find_chk_file takes a single argument -- the wildcard pattern</span>
