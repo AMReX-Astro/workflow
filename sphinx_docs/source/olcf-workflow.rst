@@ -35,7 +35,7 @@ threads operates through the execution of the code. Therefore, for each resource
 
 - A number of MPI processes.
 
-- A number of OpenMP threads.
+- The number of OpenMP threads.
 
 where each core supports up to 4 threads; however, this option is not supported in AMReX and we will not extend our
 discussion here. For now, we fix just only one thread through the whole execution of our code. The next step is to determine the maximum
@@ -56,7 +56,7 @@ Requesting Allocation:
 
 To allocate the resource sets we need to summon the command ``bsub`` in addition to some flags:
 
-.. list-table:: Title
+.. list-table::
    :widths: 25 75
    :header-rows: 1
 
@@ -116,7 +116,7 @@ Submitting a Job:
 ^^^^^^^^^^^^^^^^^
 
 Once our allocation is granted, is important to load the same modules used in the compilation process of the executable and
-export the variable ``OMP_NUM_THREADS`` to setup the number of threads per resource set.
+export the variable ``OMP_NUM_THREADS`` to setup the number of threads per MPI process.
 
 In Castro, we have used the following modules:
 
@@ -126,7 +126,7 @@ In Castro, we have used the following modules:
    module load cuda/11.5.2
    module load python
 
-and fixed only one thread per resource set by:
+and fixed only one thread per MPI process by:
 
 .. code-block::
 
@@ -179,8 +179,9 @@ from the 480 resources available, 398 resources will remain idle until the two w
 Writting a Job Script:
 ^^^^^^^^^^^^^^^^^^^^^^
 
-In order to make our life easier, instead of submitting an allocation command line, loading the modules and threads, and writing another command line
-to submit our jobs, we can make an script to pack all these command into one executable ``.sh`` file, that can be submitted via ``bsub`` just once.
+In order to make our life easier, instead of submitting an allocation command line, loading the modules, setting the threads/MPI process, and writing
+another command line to submit our jobs, we can make an script to pack all these command into one executable ``.sh`` file, that can be submitted
+ via ``bsub`` just once.
 
 We start our job script, summoning the shell with the statement ``!/bin/bash``. Then we add the ``bsub`` allocations flags, starting with ``#BSUB``
 as follows:
@@ -196,7 +197,7 @@ as follows:
    #BSUB -o luna_output.%J
    #BSUB -e luna_sniffing_output.%J
 
-In addition we add the modules statements, fix only one thread per resource set by:
+In addition we add the modules statements, fixing only one thread per MPI process:
 
 .. code-block::
 
@@ -216,15 +217,14 @@ and define the enviroment variables:
    n_res = 480                # The max allocated number of resource sets is
    n_cpu_cores_per_res = 1    # nnodes * n_max_res_per_node. In this case we will
    n_mpi_per_res = 1          # use all the allocated resource sets to run the job
-   n_gpu_per_res = 1          # below, however we can define more enviroment
-   n_max_res_per_node = 6     # variables to allocate two jobs simultaneous jobs,
-                              # where n_res = n_res_1 + n_res2 .
+   n_gpu_per_res = 1          # below.
+   n_max_res_per_node = 6
 
-Once the allocation ends, the job is killed, leaving us as we started. As we pointed out, the maximum allocation
-time in Summit is 03:00 (three hours), however, we may need sometimes weeks, months, or maybe years to complete
-our runs. This is where the automatic restarting section of the script comes to our salvation.
+Once the allocation ends, the job is downgraded/killed, leaving us as we started. As we pointed out, the maximum allocation
+time in Summit is 03:00 (three hours), but, we may need sometimes weeks, months, or maybe years to complete
+our runs. Now is when the automatic restarting section of the script comes to our salvation.
 
-From here we can add an optional (actually, is a mandatory) setting to our script. As the code executes,
+From here we can add an optional (or mandatory) setting to our script. As the code executes,
 after a certain number of timesteps, the code creates checkpoint files of the form ``chkxxxxxxx``, ``chkxxxxxx``
 or ``chkxxxxx``. This checkpoint files can be read by our executable and run from the simulation time where
 the checkpoint was created. This is implemented as follows:
