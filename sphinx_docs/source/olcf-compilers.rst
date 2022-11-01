@@ -10,7 +10,7 @@ In order to compile you will need to swap the xl module with gcc (you need to us
 
 .. prompt:: bash
 
-  module load gcc/7.4.0
+   module load gcc/10.2.0
 
 .. note::
 
@@ -22,7 +22,7 @@ Then load CUDA:
 
 .. prompt:: bash
 
-  module load cuda/11.2.0
+  module load cuda/11.5.2
 
 .. note::
 
@@ -33,10 +33,10 @@ You also need to make sure you have the python module loaded:
 
 .. prompt:: bash
 
-  module load python/3.7.0
+  module load python
 
 Compile with ``USE_CUDA=TRUE`` (and ``COMP=gnu`` which is usually the default).
-Do not compile with ``USE_OMP=TRUE`` since this is currently disallowed by Castro.
+Is important to setup ``USE_OMP=FALSE``, since the ``TRUE`` option is currently disallowed by Castro.
 An example compilation line is:
 
 .. prompt:: bash
@@ -45,7 +45,7 @@ An example compilation line is:
 
 The recommended/tested version pairs are:
 
-  * ``gcc/7.4.0`` + ``cuda/11.2.0``
+  * ``gcc/10.2.0`` + ``cuda/11.5.2``
 
 .. note::
 
@@ -91,5 +91,3 @@ We can then build with:
    exclude the bad nodes.  Currently use::
 
    #SBATCH --exclude=crusher[025-027,036,038-040,060,081,127,136,141,101-105]
-
-
