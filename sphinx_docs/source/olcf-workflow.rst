@@ -8,7 +8,7 @@ Managing Jobs at OLCF
 Summit
 ------
 
-Summit Arquitecture:
+Summit Architecture:
 ^^^^^^^^^^^^^^^^^^^^
 
 Let us start by reviewing the node architecture of Summit. Our goal is to provide the necessary insight to make better
