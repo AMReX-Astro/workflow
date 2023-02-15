@@ -33,12 +33,9 @@ function find_chk_file {
     restartFile=""
     for f in ${temp_files}
     do
-        # the Header is the last thing written -- check if it's there, otherwise,
-        # fall back to the second-to-last check file written
-        if [ ! -f ${f}/Header ]; then
-        restartFile=""
-        else
-        restartFile="${f}"
+        # the Header is the last thing written -- if it's there, update the restart file
+        if [ -f ${f}/Header ]; then
+            restartFile="${f}"
         fi
     done
 }
