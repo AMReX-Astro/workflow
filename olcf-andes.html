@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Batch Visualization on Andes &mdash; AMReX-Astro 1.0 documentation</title>
@@ -14,9 +14,6 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
@@ -33,14 +30,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> AMReX-Astro
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AMReX-Astro
           </a>
               <div class="version">
                 1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -74,9 +75,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="olcf.html">Working at OLCF</a> &raquo;</li>
-      <li>Batch Visualization on Andes</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="olcf.html">Working at OLCF</a></li>
+      <li class="breadcrumb-item active">Batch Visualization on Andes</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/olcf-andes.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -95,25 +96,25 @@ a new env for andes.  We’ll call it <code class="docutils literal notranslate"
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">module load python/3.7-anaconda3</span>
+</style><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>python/3.7-anaconda3</span>
 </pre></div></div><p>then setup <code class="docutils literal notranslate"><span class="pre">conda</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">conda init bash</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">conda<span class="w"> </span>init<span class="w"> </span>bash</span>
 </pre></div></div><p>this will modify your <cite>.bashrc</cite>, adding code that is specific to andes.</p>
 <p>Then you do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">conda create -n andes_env -y ipykernel nb_conda_kernels</span>
-<span class="prompt1">conda install -n andes_env -c conda-forge yt</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>andes_env<span class="w"> </span>-y<span class="w"> </span>ipykernel<span class="w"> </span>nb_conda_kernels</span>
+<span class="prompt1">conda<span class="w"> </span>install<span class="w"> </span>-n<span class="w"> </span>andes_env<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>yt</span>
 </pre></div></div><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If you want to install yt from source, then you would first clone
 the yt repo:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">git clone git@github.com:yt-project/yt</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">git<span class="w"> </span>clone<span class="w"> </span>git@github.com:yt-project/yt</span>
 </pre></div></div><p>Then in the top-level <code class="docutils literal notranslate"><span class="pre">yt/</span></code> directory, do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pip install -e .</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.</span>
 </pre></div></div><p>If you have an existing yt installation, you can uninstall it first via:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pip uninstall yt</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pip<span class="w"> </span>uninstall<span class="w"> </span>yt</span>
 </pre></div></div></div>
 <p>Finally, you can activate the environment as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1"><span class="nb">source</span> activate andes_env</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1"><span class="nb">source</span><span class="w"> </span>activate<span class="w"> </span>andes_env</span>
 </pre></div></div><p>Then you can run a python script that does visualization as with the
 following submission script:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/bash

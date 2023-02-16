@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Compiling at OLCF &mdash; AMReX-Astro 1.0 documentation</title>
@@ -14,9 +14,6 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
@@ -33,14 +30,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> AMReX-Astro
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AMReX-Astro
           </a>
               <div class="version">
                 1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -78,9 +79,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="olcf.html">Working at OLCF</a> &raquo;</li>
-      <li>Compiling at OLCF</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="olcf.html">Working at OLCF</a></li>
+      <li class="breadcrumb-item active">Compiling at OLCF</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/olcf-compilers.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -99,7 +100,7 @@
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">module load gcc/10.2.0</span>
+</style><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>gcc/10.2.0</span>
 </pre></div></div><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You will need to load the same module you use for compiling in your
@@ -107,18 +108,18 @@ submissions script, otherwise the code won’t find the shared
 libraries at runtime.</p>
 </div>
 <p>Then load CUDA:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module load cuda/11.5.2</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>cuda/11.5.2</span>
 </pre></div></div><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Presently you will see a warning when you load a CUDA 11 module, but the packages
 should work fine.</p>
 </div>
 <p>You also need to make sure you have the python module loaded:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module load python</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>python</span>
 </pre></div></div><p>Compile with <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code> (and <code class="docutils literal notranslate"><span class="pre">COMP=gnu</span></code> which is usually the default).
 Is important to setup <code class="docutils literal notranslate"><span class="pre">USE_OMP=FALSE</span></code>, since the <code class="docutils literal notranslate"><span class="pre">TRUE</span></code> option is currently disallowed by Castro.
 An example compilation line is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">USE_MPI</span><span class="o">=</span>TRUE <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE -j <span class="m">4</span></span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">COMP</span><span class="o">=</span>gnu<span class="w"> </span><span class="nv">USE_MPI</span><span class="o">=</span>TRUE<span class="w"> </span><span class="nv">USE_CUDA</span><span class="o">=</span>TRUE<span class="w"> </span>-j<span class="w"> </span><span class="m">4</span></span>
 </pre></div></div><p>The recommended/tested version pairs are:</p>
 <blockquote>
 <div><ul class="simple">
@@ -139,14 +140,14 @@ doesn’t use this feature.</p></li>
 <p>log into <code class="docutils literal notranslate"><span class="pre">crusher.olcf.ornl.gov</span></code></p>
 <p>We want to build with ROCm/HIP.  Currently, we only work with ROCm 5.x,
 which you load as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module load PrgEnv-amd craype-accel-amd-gfx90a cray-mpich/8.1.16 rocm/5.1.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-amd<span class="w"> </span>craype-accel-amd-gfx90a<span class="w"> </span>cray-mpich/8.1.16<span class="w"> </span>rocm/5.1.0</span>
 </pre></div></div><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>There are specific MPICH versions that work with each ROCm release,
 as described in: <a class="reference external" href="https://docs.olcf.ornl.gov/systems/crusher_quick_start_guide.html#determining-the-compatibility-of-cray-mpich-and-rocm">Determining the Compatibility of Cray MPICH and ROCm</a>.</p>
 </div>
 <p>We can then build with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">USE_HIP</span><span class="o">=</span>TRUE</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">COMP</span><span class="o">=</span>gnu<span class="w"> </span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE</span>
 </pre></div></div><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Async I/O can sometimes have issues on crusher, so it is best to

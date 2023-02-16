@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Working at ALCF &mdash; AMReX-Astro 1.0 documentation</title>
@@ -14,9 +14,6 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
@@ -33,14 +30,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> AMReX-Astro
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AMReX-Astro
           </a>
               <div class="version">
                 1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -77,8 +78,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Working at ALCF</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Working at ALCF</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/alcf.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -108,10 +109,10 @@ there.  This is read at the end of <code class="docutils literal notranslate"><s
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">module swap PrgEnv-nvhpc PrgEnv-gnu</span>
-<span class="prompt1">module load nvhpc-mixed</span>
+</style><span class="prompt1">module<span class="w"> </span>swap<span class="w"> </span>PrgEnv-nvhpc<span class="w"> </span>PrgEnv-gnu</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>nvhpc-mixed</span>
 </pre></div></div><p>Then you can compile via:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make <span class="nv">COMP</span><span class="o">=</span>gnu <span class="nv">USE_CUDA</span><span class="o">=</span>TRUE</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">COMP</span><span class="o">=</span>gnu<span class="w"> </span><span class="nv">USE_CUDA</span><span class="o">=</span>TRUE</span>
 </pre></div></div></section>
 <section id="disks">
 <h2>Disks<a class="headerlink" href="#disks" title="Permalink to this heading">¶</a></h2>
@@ -129,7 +130,7 @@ span.prompt1:before {
 <section id="submitting">
 <h2>Submitting<a class="headerlink" href="#submitting" title="Permalink to this heading">¶</a></h2>
 <p>Clone the <code class="docutils literal notranslate"><span class="pre">GettingStarted</span></code> repo:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">git clone git@github.com:argonne-lcf/GettingStarted.git</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">git<span class="w"> </span>clone<span class="w"> </span>git@github.com:argonne-lcf/GettingStarted.git</span>
 </pre></div></div><p>you’ll want to use the examples in
 <code class="docutils literal notranslate"><span class="pre">GettingStarted/Examples/Polaris/affinity_gpu</span></code>.</p>
 <p>In particular, you will need the script
@@ -151,25 +152,25 @@ span.prompt1:before {
 <span class="c1">##export MPICH_GPU_SUPPORT_ENABLED=1</span>
 
 <span class="c1"># Change to working directory</span>
-<span class="nb">cd</span> <span class="si">${</span><span class="nv">PBS_O_WORKDIR</span><span class="si">}</span>
+<span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">PBS_O_WORKDIR</span><span class="si">}</span>
 
 <span class="c1"># MPI and OpenMP settings</span>
-<span class="nv">NNODES</span><span class="o">=</span><span class="sb">`</span>wc -l &lt; <span class="nv">$PBS_NODEFILE</span><span class="sb">`</span>
+<span class="nv">NNODES</span><span class="o">=</span><span class="sb">`</span>wc<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span><span class="nv">$PBS_NODEFILE</span><span class="sb">`</span>
 <span class="nv">NRANKS_PER_NODE</span><span class="o">=</span><span class="m">4</span>
 <span class="nv">NDEPTH</span><span class="o">=</span><span class="m">8</span>
 <span class="nv">NTHREADS</span><span class="o">=</span><span class="m">1</span>
 
-<span class="nv">NTOTRANKS</span><span class="o">=</span><span class="k">$((</span> NNODES <span class="o">*</span> NRANKS_PER_NODE <span class="k">))</span>
+<span class="nv">NTOTRANKS</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span>NNODES<span class="w"> </span><span class="o">*</span><span class="w"> </span>NRANKS_PER_NODE<span class="w"> </span><span class="k">))</span>
 
 <span class="c1"># For applications that need mpiexec to bind MPI ranks to GPUs</span>
-mpiexec -n <span class="si">${</span><span class="nv">NTOTRANKS</span><span class="si">}</span> --ppn <span class="si">${</span><span class="nv">NRANKS_PER_NODE</span><span class="si">}</span> --depth<span class="o">=</span><span class="si">${</span><span class="nv">NDEPTH</span><span class="si">}</span> --cpu-bind depth --env <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="si">${</span><span class="nv">NTHREADS</span><span class="si">}</span> -env <span class="nv">OMP_PLACES</span><span class="o">=</span>threads ./set_affinity_gpu_polaris.sh <span class="si">${</span><span class="nv">EXEC</span><span class="si">}</span> <span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span>
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="si">${</span><span class="nv">NTOTRANKS</span><span class="si">}</span><span class="w"> </span>--ppn<span class="w"> </span><span class="si">${</span><span class="nv">NRANKS_PER_NODE</span><span class="si">}</span><span class="w"> </span>--depth<span class="o">=</span><span class="si">${</span><span class="nv">NDEPTH</span><span class="si">}</span><span class="w"> </span>--cpu-bind<span class="w"> </span>depth<span class="w"> </span>--env<span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="si">${</span><span class="nv">NTHREADS</span><span class="si">}</span><span class="w"> </span>-env<span class="w"> </span><span class="nv">OMP_PLACES</span><span class="o">=</span>threads<span class="w"> </span>./set_affinity_gpu_polaris.sh<span class="w"> </span><span class="si">${</span><span class="nv">EXEC</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span>
 </pre></div>
 </div>
 </div>
 <p>To submit the job, do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">qsub polaris.submit</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">qsub<span class="w"> </span>polaris.submit</span>
 </pre></div></div><p>To check the status:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">qstat -u username</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">qstat<span class="w"> </span>-u<span class="w"> </span>username</span>
 </pre></div></div></section>
 <section id="automatic-restarting">
 <h2>Automatic Restarting<a class="headerlink" href="#automatic-restarting" title="Permalink to this heading">¶</a></h2>
@@ -188,69 +189,66 @@ the last checkpoint is:</p>
 <span class="nv">EXEC</span><span class="o">=</span>./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
 <span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.N14.coarse
 
-module swap PrgEnv-nvhpc PrgEnv-gnu
-module load nvhpc-mixed
+module<span class="w"> </span>swap<span class="w"> </span>PrgEnv-nvhpc<span class="w"> </span>PrgEnv-gnu
+module<span class="w"> </span>load<span class="w"> </span>nvhpc-mixed
 
 <span class="c1"># Enable GPU-MPI (if supported by application)</span>
 <span class="c1">##export MPICH_GPU_SUPPORT_ENABLED=1</span>
 
 <span class="c1"># Change to working directory</span>
-<span class="nb">cd</span> <span class="si">${</span><span class="nv">PBS_O_WORKDIR</span><span class="si">}</span>
+<span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">PBS_O_WORKDIR</span><span class="si">}</span>
 
 <span class="c1"># MPI and OpenMP settings</span>
-<span class="nv">NNODES</span><span class="o">=</span><span class="sb">`</span>wc -l &lt; <span class="nv">$PBS_NODEFILE</span><span class="sb">`</span>
+<span class="nv">NNODES</span><span class="o">=</span><span class="sb">`</span>wc<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span><span class="nv">$PBS_NODEFILE</span><span class="sb">`</span>
 <span class="nv">NRANKS_PER_NODE</span><span class="o">=</span><span class="m">4</span>
 <span class="nv">NDEPTH</span><span class="o">=</span><span class="m">8</span>
 <span class="nv">NTHREADS</span><span class="o">=</span><span class="m">1</span>
 
-<span class="nv">NTOTRANKS</span><span class="o">=</span><span class="k">$((</span> NNODES <span class="o">*</span> NRANKS_PER_NODE <span class="k">))</span>
+<span class="nv">NTOTRANKS</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span>NNODES<span class="w"> </span><span class="o">*</span><span class="w"> </span>NRANKS_PER_NODE<span class="w"> </span><span class="k">))</span>
 
 
-<span class="k">function</span> find_chk_file <span class="o">{</span>
-    <span class="c1"># find_chk_file takes a single argument -- the wildcard pattern</span>
-    <span class="c1"># for checkpoint files to look through</span>
-    <span class="nv">chk</span><span class="o">=</span><span class="nv">$1</span>
+<span class="k">function</span><span class="w"> </span>find_chk_file<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># find_chk_file takes a single argument -- the wildcard pattern</span>
+<span class="w">    </span><span class="c1"># for checkpoint files to look through</span>
+<span class="w">    </span><span class="nv">chk</span><span class="o">=</span><span class="nv">$1</span>
 
-    <span class="c1"># find the latest 2 restart files.  This way if the latest didn&#39;t</span>
-    <span class="c1"># complete we fall back to the previous one.</span>
-    <span class="nv">temp_files</span><span class="o">=</span><span class="k">$(</span>find . -maxdepth <span class="m">1</span> -name <span class="s2">&quot;</span><span class="si">${</span><span class="nv">chk</span><span class="si">}</span><span class="s2">&quot;</span> -print <span class="p">|</span> sort <span class="p">|</span> tail -2<span class="k">)</span>
-    <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
-    <span class="k">for</span> f <span class="k">in</span> <span class="si">${</span><span class="nv">temp_files</span><span class="si">}</span>
-    <span class="k">do</span>
-        <span class="c1"># the Header is the last thing written -- check if it&#39;s there, otherwise,</span>
-        <span class="c1"># fall back to the second-to-last check file written</span>
-        <span class="k">if</span> <span class="o">[</span> ! -f <span class="si">${</span><span class="nv">f</span><span class="si">}</span>/Header <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-            <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
-        <span class="k">else</span>
-            <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">fi</span>
-    <span class="k">done</span>
+<span class="w">    </span><span class="c1"># find the latest 2 restart files.  This way if the latest didn&#39;t</span>
+<span class="w">    </span><span class="c1"># complete we fall back to the previous one.</span>
+<span class="w">    </span><span class="nv">temp_files</span><span class="o">=</span><span class="k">$(</span>find<span class="w"> </span>.<span class="w"> </span>-maxdepth<span class="w"> </span><span class="m">1</span><span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">chk</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>-print<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-2<span class="k">)</span>
+<span class="w">    </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span>f<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">temp_files</span><span class="si">}</span>
+<span class="w">    </span><span class="k">do</span>
+<span class="w">        </span><span class="c1"># the Header is the last thing written -- if it&#39;s there, update the restart file</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">f</span><span class="si">}</span>/Header<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">            </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">fi</span>
+<span class="w">    </span><span class="k">done</span>
 
 <span class="o">}</span>
 
 <span class="c1"># look for 7-digit chk files</span>
-find_chk_file <span class="s2">&quot;*chk???????&quot;</span>
+find_chk_file<span class="w"> </span><span class="s2">&quot;*chk???????&quot;</span>
 
-<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="c1"># look for 6-digit chk files</span>
-    find_chk_file <span class="s2">&quot;*chk??????&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="c1"># look for 6-digit chk files</span>
+<span class="w">    </span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk??????&quot;</span>
 <span class="k">fi</span>
 
-<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="c1"># look for 5-digit chk files</span>
-    find_chk_file <span class="s2">&quot;*chk?????&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="c1"># look for 5-digit chk files</span>
+<span class="w">    </span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk?????&quot;</span>
 <span class="k">fi</span>
 
 <span class="c1"># restartString will be empty if no chk files are found -- i.e. new run</span>
-<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
 <span class="k">else</span>
-    <span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;amr.restart=</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;amr.restart=</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="k">fi</span>
 
 
 <span class="c1"># For applications that need mpiexec to bind MPI ranks to GPUs</span>
-mpiexec -n <span class="si">${</span><span class="nv">NTOTRANKS</span><span class="si">}</span> --ppn <span class="si">${</span><span class="nv">NRANKS_PER_NODE</span><span class="si">}</span> --depth<span class="o">=</span><span class="si">${</span><span class="nv">NDEPTH</span><span class="si">}</span> --cpu-bind depth --env <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="si">${</span><span class="nv">NTHREADS</span><span class="si">}</span> -env <span class="nv">OMP_PLACES</span><span class="o">=</span>threads ./set_affinity_gpu_polaris.sh <span class="si">${</span><span class="nv">EXEC</span><span class="si">}</span> <span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span> <span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="si">${</span><span class="nv">NTOTRANKS</span><span class="si">}</span><span class="w"> </span>--ppn<span class="w"> </span><span class="si">${</span><span class="nv">NRANKS_PER_NODE</span><span class="si">}</span><span class="w"> </span>--depth<span class="o">=</span><span class="si">${</span><span class="nv">NDEPTH</span><span class="si">}</span><span class="w"> </span>--cpu-bind<span class="w"> </span>depth<span class="w"> </span>--env<span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="si">${</span><span class="nv">NTHREADS</span><span class="si">}</span><span class="w"> </span>-env<span class="w"> </span><span class="nv">OMP_PLACES</span><span class="o">=</span>threads<span class="w"> </span>./set_affinity_gpu_polaris.sh<span class="w"> </span><span class="si">${</span><span class="nv">EXEC</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
 </pre></div>
 </div>
 </div>
@@ -262,22 +260,22 @@ mpiexec -n <span class="si">${</span><span class="nv">NTOTRANKS</span><span clas
 <div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">chainqsub.sh</span></code></span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -f</span>
 
-<span class="k">if</span> <span class="o">[</span> ! <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-  <span class="nb">echo</span> <span class="s2">&quot;usage: chainqsub.sh jobid number script&quot;</span>
-  <span class="nb">echo</span> <span class="s2">&quot;       set jobid -1 for no initial dependency&quot;</span>
-  <span class="nb">exit</span> -1
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;usage: chainqsub.sh jobid number script&quot;</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;       set jobid -1 for no initial dependency&quot;</span>
+<span class="w">  </span><span class="nb">exit</span><span class="w"> </span>-1
 <span class="k">fi</span>
 
-<span class="k">if</span> <span class="o">[</span> ! <span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-  <span class="nb">echo</span> <span class="s2">&quot;usage: chainqsub.sh jobid number script&quot;</span>
-  <span class="nb">echo</span> <span class="s2">&quot;       set jobid -1 for no initial dependency&quot;</span>
-  <span class="nb">exit</span> -1
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;usage: chainqsub.sh jobid number script&quot;</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;       set jobid -1 for no initial dependency&quot;</span>
+<span class="w">  </span><span class="nb">exit</span><span class="w"> </span>-1
 <span class="k">fi</span>
 
-<span class="k">if</span> <span class="o">[</span> ! <span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-  <span class="nb">echo</span> <span class="s2">&quot;usage: chainqsub.sh jobid number script&quot;</span>
-  <span class="nb">echo</span> <span class="s2">&quot;       set jobid -1 for no initial dependency&quot;</span>
-  <span class="nb">exit</span> -1
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;usage: chainqsub.sh jobid number script&quot;</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;       set jobid -1 for no initial dependency&quot;</span>
+<span class="w">  </span><span class="nb">exit</span><span class="w"> </span>-1
 <span class="k">fi</span>
 
 
@@ -285,36 +283,36 @@ mpiexec -n <span class="si">${</span><span class="nv">NTOTRANKS</span><span clas
 <span class="nv">numjobs</span><span class="o">=</span><span class="nv">$2</span>
 <span class="nv">script</span><span class="o">=</span><span class="nv">$3</span>
 
-<span class="k">if</span> <span class="o">[</span> <span class="nv">$numjobs</span> -gt <span class="s2">&quot;20&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">&quot;too many jobs requested&quot;</span>
-    <span class="nb">exit</span> -1
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$numjobs</span><span class="w"> </span>-gt<span class="w"> </span><span class="s2">&quot;20&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;too many jobs requested&quot;</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span>-1
 <span class="k">fi</span>
 
 <span class="nv">firstcount</span><span class="o">=</span><span class="m">1</span>
 
-<span class="k">if</span> <span class="o">[</span> <span class="nv">$oldjob</span> -eq <span class="s2">&quot;-1&quot;</span> <span class="o">]</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$oldjob</span><span class="w"> </span>-eq<span class="w"> </span><span class="s2">&quot;-1&quot;</span><span class="w"> </span><span class="o">]</span>
 <span class="k">then</span>
-    <span class="nb">echo</span> chaining <span class="nv">$numjobs</span> <span class="nb">jobs</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span>chaining<span class="w"> </span><span class="nv">$numjobs</span><span class="w"> </span><span class="nb">jobs</span>
 
-    <span class="nb">echo</span> starting job <span class="m">1</span> with no dependency
-    <span class="nv">aout</span><span class="o">=</span><span class="k">$(</span>qsub <span class="si">${</span><span class="nv">script</span><span class="si">}</span><span class="k">)</span>
-    <span class="nb">echo</span> <span class="s2">&quot;   &quot;</span> jobid: <span class="nv">$aout</span>
-    <span class="nb">echo</span> <span class="s2">&quot; &quot;</span>
-    <span class="nv">oldjob</span><span class="o">=</span><span class="nv">$aout</span>
-    <span class="nv">firstcount</span><span class="o">=</span><span class="m">2</span>
-    sleep <span class="m">3</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span>starting<span class="w"> </span>job<span class="w"> </span><span class="m">1</span><span class="w"> </span>with<span class="w"> </span>no<span class="w"> </span>dependency
+<span class="w">    </span><span class="nv">aout</span><span class="o">=</span><span class="k">$(</span>qsub<span class="w"> </span><span class="si">${</span><span class="nv">script</span><span class="si">}</span><span class="k">)</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;   &quot;</span><span class="w"> </span>jobid:<span class="w"> </span><span class="nv">$aout</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot; &quot;</span>
+<span class="w">    </span><span class="nv">oldjob</span><span class="o">=</span><span class="nv">$aout</span>
+<span class="w">    </span><span class="nv">firstcount</span><span class="o">=</span><span class="m">2</span>
+<span class="w">    </span>sleep<span class="w"> </span><span class="m">3</span>
 <span class="k">else</span>
-    <span class="nb">echo</span> chaining <span class="nv">$numjobs</span> <span class="nb">jobs</span> starting with <span class="nv">$oldjob</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span>chaining<span class="w"> </span><span class="nv">$numjobs</span><span class="w"> </span><span class="nb">jobs</span><span class="w"> </span>starting<span class="w"> </span>with<span class="w"> </span><span class="nv">$oldjob</span>
 <span class="k">fi</span>
 
-<span class="k">for</span> count <span class="k">in</span> <span class="k">$(</span>seq <span class="nv">$firstcount</span> <span class="m">1</span> <span class="nv">$numjobs</span><span class="k">)</span>
+<span class="k">for</span><span class="w"> </span>count<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="nv">$firstcount</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="nv">$numjobs</span><span class="k">)</span>
 <span class="k">do</span>
-  <span class="nb">echo</span> starting job <span class="nv">$count</span> to depend on <span class="nv">$oldjob</span>
-  <span class="nv">aout</span><span class="o">=</span><span class="k">$(</span>qsub -W <span class="nv">depend</span><span class="o">=</span>afterany:<span class="si">${</span><span class="nv">oldjob</span><span class="si">}</span> <span class="si">${</span><span class="nv">script</span><span class="si">}</span><span class="k">)</span>
-  <span class="nb">echo</span> <span class="s2">&quot;   &quot;</span> jobid: <span class="nv">$aout</span>
-  <span class="nb">echo</span> <span class="s2">&quot; &quot;</span>
-  <span class="nv">oldjob</span><span class="o">=</span><span class="nv">$aout</span>
-  sleep <span class="m">2</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span>starting<span class="w"> </span>job<span class="w"> </span><span class="nv">$count</span><span class="w"> </span>to<span class="w"> </span>depend<span class="w"> </span>on<span class="w"> </span><span class="nv">$oldjob</span>
+<span class="w">  </span><span class="nv">aout</span><span class="o">=</span><span class="k">$(</span>qsub<span class="w"> </span>-W<span class="w"> </span><span class="nv">depend</span><span class="o">=</span>afterany:<span class="si">${</span><span class="nv">oldjob</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">script</span><span class="si">}</span><span class="k">)</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;   &quot;</span><span class="w"> </span>jobid:<span class="w"> </span><span class="nv">$aout</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot; &quot;</span>
+<span class="w">  </span><span class="nv">oldjob</span><span class="o">=</span><span class="nv">$aout</span>
+<span class="w">  </span>sleep<span class="w"> </span><span class="m">2</span>
 <span class="k">done</span>
 </pre></div>
 </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Managing Jobs at NERSC &mdash; AMReX-Astro 1.0 documentation</title>
@@ -14,9 +14,6 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
@@ -33,14 +30,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> AMReX-Astro
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AMReX-Astro
           </a>
               <div class="version">
                 1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -78,9 +79,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="nersc.html">Working at NERSC</a> &raquo;</li>
-      <li>Managing Jobs at NERSC</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="nersc.html">Working at NERSC</a></li>
+      <li class="breadcrumb-item active">Managing Jobs at NERSC</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/nersc-workflow.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -109,10 +110,10 @@ directory.</p>
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">sbatch script.slurm</span>
+</style><span class="prompt1">sbatch<span class="w"> </span>script.slurm</span>
 </pre></div></div><p>To chain jobs, such that one queues up after the previous job
 finished, use the <code class="docutils literal notranslate"><span class="pre">chainslurm.sh</span></code> script in that same directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">chainslurm.sh jobid number script</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">chainslurm.sh<span class="w"> </span>jobid<span class="w"> </span>number<span class="w"> </span>script</span>
 </pre></div></div><p>where <code class="docutils literal notranslate"><span class="pre">jobid</span></code> is the existing job you want to start you chain from,
 <code class="docutils literal notranslate"><span class="pre">number</span></code> is the number of new jobs to chain from this starting job,
 and <code class="docutils literal notranslate"><span class="pre">script</span></code> is the job submission script to use (the same one you
@@ -125,12 +126,12 @@ job with no dependencies and then chain the remaining <code class="docutils lite
 jobs to depend on the previous.</p>
 </div>
 <p>You can view the job dependency using:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">squeue -l -j job-id</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">squeue<span class="w"> </span>-l<span class="w"> </span>-j<span class="w"> </span>job-id</span>
 </pre></div></div><p>where <code class="docutils literal notranslate"><span class="pre">job-id</span></code> is the number of the job.  A job can be canceled
 using <code class="docutils literal notranslate"><span class="pre">scancel</span></code>, and the status can be checked using <code class="docutils literal notranslate"><span class="pre">squeue</span> <span class="pre">-u</span>
 <span class="pre">username</span></code> or <code class="docutils literal notranslate"><span class="pre">squeue</span> <span class="pre">--me</span></code>.</p>
 <p>An estimate of the start time can be found via:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">sqs -u username</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">sqs<span class="w"> </span>-u<span class="w"> </span>username</span>
 </pre></div></div></section>
 <section id="perlmutter">
 <h2>Perlmutter<a class="headerlink" href="#perlmutter" title="Permalink to this heading">¶</a></h2>
@@ -157,59 +158,56 @@ includes the restart logic to allow for job chaining.</p>
 <span class="c1">#SBATCH --gpus-per-task=1</span>
 <span class="c1">#SBATCH --gpu-bind=map_gpu:0,1,2,3</span>
 
-<span class="nb">export</span> <span class="nv">CASTRO_EXEC</span><span class="o">=</span>./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
-<span class="nb">export</span> <span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.N14
+<span class="nb">export</span><span class="w"> </span><span class="nv">CASTRO_EXEC</span><span class="o">=</span>./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
+<span class="nb">export</span><span class="w"> </span><span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.N14
 
-module load PrgEnv-gnu
-module load cudatoolkit
+module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu
+module<span class="w"> </span>load<span class="w"> </span>cudatoolkit
 
-<span class="k">function</span> find_chk_file <span class="o">{</span>
-    <span class="c1"># find_chk_file takes a single argument -- the wildcard pattern</span>
-    <span class="c1"># for checkpoint files to look through</span>
-    <span class="nv">chk</span><span class="o">=</span><span class="nv">$1</span>
+<span class="k">function</span><span class="w"> </span>find_chk_file<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># find_chk_file takes a single argument -- the wildcard pattern</span>
+<span class="w">    </span><span class="c1"># for checkpoint files to look through</span>
+<span class="w">    </span><span class="nv">chk</span><span class="o">=</span><span class="nv">$1</span>
 
-    <span class="c1"># find the latest 2 restart files.  This way if the latest didn&#39;t</span>
-    <span class="c1"># complete we fall back to the previous one.</span>
-    <span class="nv">temp_files</span><span class="o">=</span><span class="k">$(</span>find . -maxdepth <span class="m">1</span> -name <span class="s2">&quot;</span><span class="si">${</span><span class="nv">chk</span><span class="si">}</span><span class="s2">&quot;</span> -print <span class="p">|</span> sort <span class="p">|</span> tail -2<span class="k">)</span>
-    <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
-    <span class="k">for</span> f <span class="k">in</span> <span class="si">${</span><span class="nv">temp_files</span><span class="si">}</span>
-    <span class="k">do</span>
-        <span class="c1"># the Header is the last thing written -- check if it&#39;s there, otherwise,</span>
-        <span class="c1"># fall back to the second-to-last check file written</span>
-        <span class="k">if</span> <span class="o">[</span> ! -f <span class="si">${</span><span class="nv">f</span><span class="si">}</span>/Header <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-            <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
-        <span class="k">else</span>
-            <span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">fi</span>
-    <span class="k">done</span>
+<span class="w">    </span><span class="c1"># find the latest 2 restart files.  This way if the latest didn&#39;t</span>
+<span class="w">    </span><span class="c1"># complete we fall back to the previous one.</span>
+<span class="w">    </span><span class="nv">temp_files</span><span class="o">=</span><span class="k">$(</span>find<span class="w"> </span>.<span class="w"> </span>-maxdepth<span class="w"> </span><span class="m">1</span><span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">chk</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>-print<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-2<span class="k">)</span>
+<span class="w">    </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span>f<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">temp_files</span><span class="si">}</span>
+<span class="w">    </span><span class="k">do</span>
+<span class="w">        </span><span class="c1"># the Header is the last thing written -- if it&#39;s there, update the restart file</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">f</span><span class="si">}</span>/Header<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">            </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">fi</span>
+<span class="w">    </span><span class="k">done</span>
 
 <span class="o">}</span>
 
 <span class="c1"># look for 7-digit chk files</span>
-find_chk_file <span class="s2">&quot;*chk???????&quot;</span>
+find_chk_file<span class="w"> </span><span class="s2">&quot;*chk???????&quot;</span>
 
-<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="c1"># look for 6-digit chk files</span>
-    find_chk_file <span class="s2">&quot;*chk??????&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="c1"># look for 6-digit chk files</span>
+<span class="w">    </span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk??????&quot;</span>
 <span class="k">fi</span>
 
-<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="c1"># look for 5-digit chk files</span>
-    find_chk_file <span class="s2">&quot;*chk?????&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="c1"># look for 5-digit chk files</span>
+<span class="w">    </span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk?????&quot;</span>
 <span class="k">fi</span>
 
 <span class="c1"># restartString will be empty if no chk files are found -- i.e. new run</span>
-<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
 <span class="k">else</span>
-    <span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;amr.restart=</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;amr.restart=</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="k">fi</span>
 
-<span class="nv">workdir</span><span class="o">=</span><span class="sb">`</span>basename <span class="si">${</span><span class="nv">SLURM_SUBMIT_DIR</span><span class="si">}</span><span class="sb">`</span>
-slack_job_start.py <span class="s2">&quot;starting NERSC job: </span><span class="si">${</span><span class="nv">workdir</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span> @michael
+<span class="nv">workdir</span><span class="o">=</span><span class="sb">`</span>basename<span class="w"> </span><span class="si">${</span><span class="nv">SLURM_SUBMIT_DIR</span><span class="si">}</span><span class="sb">`</span>
+slack_job_start.py<span class="w"> </span><span class="s2">&quot;starting NERSC job: </span><span class="si">${</span><span class="nv">workdir</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>@michael
 
 
-srun -n <span class="m">64</span> <span class="si">${</span><span class="nv">CASTRO_EXEC</span><span class="si">}</span> <span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span> <span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
+srun<span class="w"> </span>-n<span class="w"> </span><span class="m">64</span><span class="w"> </span><span class="si">${</span><span class="nv">CASTRO_EXEC</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
 </pre></div>
 </div>
 </section>
