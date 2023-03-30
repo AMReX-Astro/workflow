@@ -472,3 +472,6 @@ Here's a suggested script:
 
    srun -u -N2 -n16 --gpus-per-node=8 --gpu-bind=closest  main3d.hip.x86-trento.TPROF.MPI.HIP.ex inputs amr.n_cell="256 256 32" amr.do_tracers=0 amrex.use_gpu_aware_mpi=1 amrex.the_arena_is_managed=0 amr.blocking_factor_x=16 amr.blocking_factor_y=16 amr.blocking_factor_z=16 amr.max_grid_size=64
     amr.plot_int=-1 > output1.txt
+
+
+Also see the WarpX docs: https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html
