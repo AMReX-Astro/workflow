@@ -424,3 +424,22 @@ unpack it in ``plotfile_dir``. If run with no arguments in the problem
 launch directory, the script will attempt to recover all plotfiles
 archived by ``process.titan``. Try running :code:`./hpss_xfer.py --help`
 for a description of usage and arguments.
+
+
+
+Frontier
+--------
+
+Queue policies are here:
+https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#scheduling-policy
+
+
+Filesystem is called ``orion``, and is Lustre:
+https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#data-and-storage
+
+Workaround to prevent hangs for collectives:
+
+::
+
+ export FI_MR_CACHE_MONITOR=memhooks
+

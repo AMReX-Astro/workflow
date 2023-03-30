@@ -66,6 +66,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#crusher">Crusher</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#archiving-to-hpss">Archiving to HPSS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#frontier">Frontier</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-jupyter.html">Running Jupyter Remotely from OLCF</a></li>
@@ -524,6 +525,17 @@ unpack it in <code class="docutils literal notranslate"><span class="pre">plotfi
 launch directory, the script will attempt to recover all plotfiles
 archived by <code class="docutils literal notranslate"><span class="pre">process.titan</span></code>. Try running <code class="code docutils literal notranslate"><span class="pre">./hpss_xfer.py</span> <span class="pre">--help</span></code>
 for a description of usage and arguments.</p>
+</section>
+<section id="frontier">
+<h2>Frontier<a class="headerlink" href="#frontier" title="Permalink to this heading">¶</a></h2>
+<p>Queue policies are here:
+<a class="reference external" href="https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#scheduling-policy">https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#scheduling-policy</a></p>
+<p>Filesystem is called <code class="docutils literal notranslate"><span class="pre">orion</span></code>, and is Lustre:
+<a class="reference external" href="https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#data-and-storage">https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#data-and-storage</a></p>
+<p>Workaround to prevent hangs for collectives:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FI_MR_CACHE_MONITOR</span><span class="o">=</span>memhooks
+</pre></div>
+</div>
 </section>
 </section>
 
