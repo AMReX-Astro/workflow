@@ -536,6 +536,29 @@ for a description of usage and arguments.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FI_MR_CACHE_MONITOR</span><span class="o">=</span>memhooks
 </pre></div>
 </div>
+<p>Some AMReX reports are that it hangs if the initial Arena size is too big, and we should do</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>amrex.the_arena_init_size<span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<p>The arena size would then grow as needed with time.  There is a suggestion that if the size is
+larger than</p>
+<p>Here’s a suggested script:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>purge
+module<span class="w"> </span>load<span class="w"> </span>PrgEnv-cray
+module<span class="w"> </span>load<span class="w"> </span>xpmem
+module<span class="w"> </span>unload<span class="w"> </span>cray-libsci
+module<span class="w"> </span>load<span class="w"> </span>cray-libsci/22.12.1.1
+module<span class="w"> </span>load<span class="w"> </span>cmake<span class="w"> </span>cray-python<span class="w"> </span>craype-x86-trento<span class="w"> </span>craype-accel-amd-gfx90a<span class="w"> </span>rocm/5.4.0
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">MPICH_GPU_SUPPORT_ENABLED</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FI_CXI_RX_MATCH_MODE</span><span class="o">=</span>software
+<span class="nb">export</span><span class="w"> </span><span class="nv">FI_MR_CACHE_MONITOR</span><span class="o">=</span>memhooks
+<span class="nb">export</span><span class="w"> </span><span class="nv">FI_MR_CACHE_MAX_COUNT</span><span class="o">=</span><span class="m">0</span>
+
+srun<span class="w"> </span>-u<span class="w"> </span>-N2<span class="w"> </span>-n16<span class="w"> </span>--gpus-per-node<span class="o">=</span><span class="m">8</span><span class="w"> </span>--gpu-bind<span class="o">=</span>closest<span class="w">  </span>main3d.hip.x86-trento.TPROF.MPI.HIP.ex<span class="w"> </span>inputs<span class="w"> </span>amr.n_cell<span class="o">=</span><span class="s2">&quot;256 256 32&quot;</span><span class="w"> </span>amr.do_tracers<span class="o">=</span><span class="m">0</span><span class="w"> </span>amrex.use_gpu_aware_mpi<span class="o">=</span><span class="m">1</span><span class="w"> </span>amrex.the_arena_is_managed<span class="o">=</span><span class="m">0</span><span class="w"> </span>amr.blocking_factor_x<span class="o">=</span><span class="m">16</span><span class="w"> </span>amr.blocking_factor_y<span class="o">=</span><span class="m">16</span><span class="w"> </span>amr.blocking_factor_z<span class="o">=</span><span class="m">16</span><span class="w"> </span>amr.max_grid_size<span class="o">=</span><span class="m">64</span>
+<span class="w"> </span>amr.plot_int<span class="o">=</span>-1<span class="w"> </span>&gt;<span class="w"> </span>output1.txt
+</pre></div>
+</div>
 </section>
 </section>
 

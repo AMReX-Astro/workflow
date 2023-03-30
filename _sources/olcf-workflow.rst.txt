@@ -443,3 +443,32 @@ Workaround to prevent hangs for collectives:
 
  export FI_MR_CACHE_MONITOR=memhooks
 
+
+Some AMReX reports are that it hangs if the initial Arena size is too big, and we should do
+
+::
+
+  amrex.the_arena_init_size=0
+
+The arena size would then grow as needed with time.  There is a suggestion that if the size is 
+larger than
+
+
+Here's a suggested script:
+
+::
+
+   module purge
+   module load PrgEnv-cray
+   module load xpmem
+   module unload cray-libsci
+   module load cray-libsci/22.12.1.1
+   module load cmake cray-python craype-x86-trento craype-accel-amd-gfx90a rocm/5.4.0
+
+   export MPICH_GPU_SUPPORT_ENABLED=1
+   export FI_CXI_RX_MATCH_MODE=software
+   export FI_MR_CACHE_MONITOR=memhooks
+   export FI_MR_CACHE_MAX_COUNT=0
+
+   srun -u -N2 -n16 --gpus-per-node=8 --gpu-bind=closest  main3d.hip.x86-trento.TPROF.MPI.HIP.ex inputs amr.n_cell="256 256 32" amr.do_tracers=0 amrex.use_gpu_aware_mpi=1 amrex.the_arena_is_managed=0 amr.blocking_factor_x=16 amr.blocking_factor_y=16 amr.blocking_factor_z=16 amr.max_grid_size=64
+    amr.plot_int=-1 > output1.txt
