@@ -542,21 +542,26 @@ for a description of usage and arguments.</p>
 </div>
 <p>The arena size would then grow as needed with time.  There is a suggestion that if the size is
 larger than</p>
-<p>Here’s a suggested script:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>purge
-module<span class="w"> </span>load<span class="w"> </span>PrgEnv-cray
-module<span class="w"> </span>load<span class="w"> </span>xpmem
-module<span class="w"> </span>unload<span class="w"> </span>cray-libsci
-module<span class="w"> </span>load<span class="w"> </span>cray-libsci/22.12.1.1
-module<span class="w"> </span>load<span class="w"> </span>cmake<span class="w"> </span>cray-python<span class="w"> </span>craype-x86-trento<span class="w"> </span>craype-accel-amd-gfx90a<span class="w"> </span>rocm/5.4.0
+<p>Here’s a script that runs with 2 nodes using all 8 GPUs per node:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -A AST106</span>
+<span class="c1">#SBATCH -J testing</span>
+<span class="c1">#SBATCH -o %x-%j.out</span>
+<span class="c1">#SBATCH -t 00:05:00</span>
+<span class="c1">#SBATCH -p batch</span>
+<span class="c1"># here N is the number of compute nodes</span>
+<span class="c1">#SBATCH -N 2</span>
+<span class="c1">#SBATCH --ntasks-per-node=8</span>
+<span class="c1">#SBATCH --cpus-per-task=7</span>
+<span class="c1">#SBATCH --gpus-per-task=1</span>
+<span class="c1">#SBATCH --gpu-bind=closest</span>
 
-<span class="nb">export</span><span class="w"> </span><span class="nv">MPICH_GPU_SUPPORT_ENABLED</span><span class="o">=</span><span class="m">1</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">FI_CXI_RX_MATCH_MODE</span><span class="o">=</span>software
-<span class="nb">export</span><span class="w"> </span><span class="nv">FI_MR_CACHE_MONITOR</span><span class="o">=</span>memhooks
-<span class="nb">export</span><span class="w"> </span><span class="nv">FI_MR_CACHE_MAX_COUNT</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">EXEC</span><span class="o">=</span>Castro3d.hip.x86-trento.MPI.HIP.ex
+<span class="nv">INPUTS</span><span class="o">=</span>inputs.3d.sph
 
-srun<span class="w"> </span>-u<span class="w"> </span>-N2<span class="w"> </span>-n16<span class="w"> </span>--gpus-per-node<span class="o">=</span><span class="m">8</span><span class="w"> </span>--gpu-bind<span class="o">=</span>closest<span class="w">  </span>main3d.hip.x86-trento.TPROF.MPI.HIP.ex<span class="w"> </span>inputs<span class="w"> </span>amr.n_cell<span class="o">=</span><span class="s2">&quot;256 256 32&quot;</span><span class="w"> </span>amr.do_tracers<span class="o">=</span><span class="m">0</span><span class="w"> </span>amrex.use_gpu_aware_mpi<span class="o">=</span><span class="m">1</span><span class="w"> </span>amrex.the_arena_is_managed<span class="o">=</span><span class="m">0</span><span class="w"> </span>amr.blocking_factor_x<span class="o">=</span><span class="m">16</span><span class="w"> </span>amr.blocking_factor_y<span class="o">=</span><span class="m">16</span><span class="w"> </span>amr.blocking_factor_z<span class="o">=</span><span class="m">16</span><span class="w"> </span>amr.max_grid_size<span class="o">=</span><span class="m">64</span>
-<span class="w"> </span>amr.plot_int<span class="o">=</span>-1<span class="w"> </span>&gt;<span class="w"> </span>output1.txt
+module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu<span class="w"> </span>craype-accel-amd-gfx90a<span class="w"> </span>cray-mpich<span class="w"> </span>rocm<span class="w"> </span>amd-mixed
+
+srun<span class="w"> </span>./<span class="nv">$EXEC</span><span class="w"> </span><span class="nv">$INPUTS</span><span class="w"> </span>amr.plot_files_output<span class="o">=</span><span class="m">0</span><span class="w"> </span>amr.checkpoint_files_output<span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">max_step</span><span class="o">=</span><span class="m">25</span><span class="w"> </span>amrex.the_arena_is_managed<span class="o">=</span><span class="m">1</span>
 </pre></div>
 </div>
 <p>Also see the WarpX docs: <a class="reference external" href="https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html">https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html</a></p>

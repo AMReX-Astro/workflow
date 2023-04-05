@@ -55,6 +55,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Compiling at OLCF</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#summit">Summit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#crusher">Crusher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#frontier">Frontier</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-workflow.html">Managing Jobs at OLCF</a></li>
@@ -163,6 +164,16 @@ exclude the bad nodes.  Currently use:</p>
 </div>
 </div>
 </section>
+<section id="frontier">
+<h2>Frontier<a class="headerlink" href="#frontier" title="Permalink to this heading">¶</a></h2>
+<p>log into: <code class="docutils literal notranslate"><span class="pre">frontier.olcf.ornl.gov</span></code></p>
+<p>see: <a class="reference external" href="https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#programming-environment">https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#programming-environment</a></p>
+<p>load modules:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu<span class="w"> </span>craype-accel-amd-gfx90a<span class="w"> </span>cray-mpich<span class="w"> </span>rocm<span class="w"> </span>amd-mixed</span>
+</pre></div></div><p>at the moment, that loads ROCm 5.3.0</p>
+<p>build via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">COMP</span><span class="o">=</span>gnu<span class="w"> </span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE</span>
+</pre></div></div></section>
 </section>
 
 

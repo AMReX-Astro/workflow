@@ -91,3 +91,26 @@ We can then build with:
    exclude the bad nodes.  Currently use::
 
    #SBATCH --exclude=crusher[025-027,036,038-040,060,081,127,136,141,101-105]
+
+
+Frontier
+--------
+
+log into: ``frontier.olcf.ornl.gov``
+
+see: https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#programming-environment
+
+load modules:
+
+.. prompt:: bash
+
+   module load PrgEnv-gnu craype-accel-amd-gfx90a cray-mpich rocm amd-mixed
+
+at the moment, that loads ROCm 5.3.0
+
+build via:
+
+.. prompt:: bash
+
+   make COMP=gnu USE_HIP=TRUE
+
