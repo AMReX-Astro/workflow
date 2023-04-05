@@ -476,6 +476,6 @@ Here's a script that runs with 2 nodes using all 8 GPUs per node:
 
    module load PrgEnv-gnu craype-accel-amd-gfx90a cray-mpich rocm amd-mixed
 
-   srun ./$EXEC $INPUTS amr.plot_files_output=0 amr.checkpoint_files_output=0 max_step=25 amrex.the_arena_is_managed=1
+   srun ./$EXEC $INPUTS
 
 Also see the WarpX docs: https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html
