@@ -171,6 +171,16 @@ exclude the bad nodes.  Currently use:</p>
 <p>load modules:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu<span class="w"> </span>craype-accel-amd-gfx90a<span class="w"> </span>cray-mpich<span class="w"> </span>rocm<span class="w"> </span>amd-mixed</span>
 </pre></div></div><p>at the moment, that loads ROCm 5.3.0</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>ROCm 5.4.3 does not seem to work with Castro&amp;mdash;there are memory access issues
+in the burner</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Tabulate rates seem to exhibit a strange slow down on Frontier, so it is best
+to run without rate tabulation.</p>
+</div>
 <p>build via:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">COMP</span><span class="o">=</span>gnu<span class="w"> </span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE</span>
 </pre></div></div></section>
