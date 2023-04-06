@@ -108,6 +108,16 @@ load modules:
 
 at the moment, that loads ROCm 5.3.0
 
+.. note::
+
+   ROCm 5.4.3 does not seem to work with Castro&mdash;there are memory access issues
+   in the burner
+
+.. note::
+
+   Tabulate rates seem to exhibit a strange slow down on Frontier, so it is best
+   to run without rate tabulation.
+
 build via:
 
 .. prompt:: bash
