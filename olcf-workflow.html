@@ -391,32 +391,37 @@ the latest file.</p>
 <span class="linenos">35</span><span class="w">    </span><span class="k">do</span>
 <span class="linenos">36</span><span class="w">        </span><span class="c1"># the Header is the last thing written -- if it&#39;s there, update the restart file</span>
 <span class="linenos">37</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">f</span><span class="si">}</span>/Header<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="linenos">38</span><span class="w">            </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="linenos">39</span><span class="w">        </span><span class="k">fi</span>
-<span class="linenos">40</span><span class="w">    </span><span class="k">done</span>
-<span class="linenos">41</span><span class="o">}</span>
-<span class="linenos">42</span>
-<span class="linenos">43</span><span class="c1"># look for 7-digit chk files</span>
-<span class="linenos">44</span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk???????&quot;</span>
-<span class="linenos">45</span>
-<span class="linenos">46</span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="linenos">47</span><span class="w">    </span><span class="c1"># look for 6-digit chk files</span>
-<span class="linenos">48</span><span class="w">    </span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk??????&quot;</span>
-<span class="linenos">49</span><span class="k">fi</span>
+<span class="linenos">38</span><span class="w">            </span><span class="c1"># The scratch FS sometimes gives I/O errors when trying to read</span>
+<span class="linenos">39</span><span class="w">            </span><span class="c1"># from recently-created files, which crashes Castro. Avoid this by</span>
+<span class="linenos">40</span><span class="w">            </span><span class="c1"># making sure we can read from all the data files.</span>
+<span class="linenos">41</span><span class="w">            </span><span class="k">if</span><span class="w"> </span>head<span class="w"> </span>--quiet<span class="w"> </span>-c1<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">/Header&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">&quot;</span>/Level_*/*<span class="w"> </span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="linenos">42</span><span class="w">                </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="linenos">43</span><span class="w">            </span><span class="k">fi</span>
+<span class="linenos">44</span><span class="w">        </span><span class="k">fi</span>
+<span class="linenos">45</span><span class="w">    </span><span class="k">done</span>
+<span class="linenos">46</span><span class="o">}</span>
+<span class="linenos">47</span>
+<span class="linenos">48</span><span class="c1"># look for 7-digit chk files</span>
+<span class="linenos">49</span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk???????&quot;</span>
 <span class="linenos">50</span>
 <span class="linenos">51</span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="linenos">52</span><span class="w">    </span><span class="c1"># look for 5-digit chk files</span>
-<span class="linenos">53</span><span class="w">    </span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk?????&quot;</span>
+<span class="linenos">52</span><span class="w">    </span><span class="c1"># look for 6-digit chk files</span>
+<span class="linenos">53</span><span class="w">    </span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk??????&quot;</span>
 <span class="linenos">54</span><span class="k">fi</span>
 <span class="linenos">55</span>
-<span class="linenos">56</span><span class="c1"># restartString will be empty if no chk files are found -- i.e. new run</span>
-<span class="linenos">57</span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="linenos">58</span><span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
-<span class="linenos">59</span><span class="k">else</span>
-<span class="linenos">60</span><span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;amr.restart=</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="linenos">61</span><span class="k">fi</span>
-<span class="linenos">62</span>
-<span class="linenos">63</span>jsrun<span class="w"> </span>-n<span class="nv">$n_res</span><span class="w"> </span>-c<span class="nv">$n_cpu_cores_per_res</span>$<span class="w"> </span>-a<span class="nv">$n_mpi_per_res</span><span class="w"> </span>-g<span class="nv">$n_gpu_per_res</span><span class="w"> </span>-r<span class="nv">$n_max_res_per_node</span><span class="w"> </span>./<span class="nv">$CASTRO</span><span class="w"> </span><span class="nv">$INPUTS</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
+<span class="linenos">56</span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="linenos">57</span><span class="w">    </span><span class="c1"># look for 5-digit chk files</span>
+<span class="linenos">58</span><span class="w">    </span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk?????&quot;</span>
+<span class="linenos">59</span><span class="k">fi</span>
+<span class="linenos">60</span>
+<span class="linenos">61</span><span class="c1"># restartString will be empty if no chk files are found -- i.e. new run</span>
+<span class="linenos">62</span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="linenos">63</span><span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="linenos">64</span><span class="k">else</span>
+<span class="linenos">65</span><span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;amr.restart=</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="linenos">66</span><span class="k">fi</span>
+<span class="linenos">67</span>
+<span class="linenos">68</span>jsrun<span class="w"> </span>-n<span class="nv">$n_res</span><span class="w"> </span>-c<span class="nv">$n_cpu_cores_per_res</span>$<span class="w"> </span>-a<span class="nv">$n_mpi_per_res</span><span class="w"> </span>-g<span class="nv">$n_gpu_per_res</span><span class="w"> </span>-r<span class="nv">$n_max_res_per_node</span><span class="w"> </span>./<span class="nv">$CASTRO</span><span class="w"> </span><span class="nv">$INPUTS</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
 </pre></div>
 </div>
 </section>
