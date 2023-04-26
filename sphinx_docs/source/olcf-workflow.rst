@@ -130,7 +130,7 @@ and fixed only one thread per MPI process by:
 
 .. code-block::
 
-   export OMP_NUM_THREADS = 1
+   export OMP_NUM_THREADS=1
 
 The next step is to submit our job. The command `jsrun`, provided with the *total number of resource sets*, the
 *number of CPU physical cores per resource set*, *the number of GPU's per resource set*, *the number of MPI processes allocated per resource set*,
@@ -205,20 +205,20 @@ In addition we add the modules statements, fixing only one thread per MPI proces
    module load cuda/11.5.2
    module load python
 
-   export OMP_NUM_THREADS = 1
+   export OMP_NUM_THREADS=1
 
 and define the enviroment variables:
 
 .. code-block::
 
-   CASTRO = ./Castro2d.gnu.MPI.CUDA.ex
+   CASTRO=./Castro2d.gnu.MPI.CUDA.ex
    INPUTS
 
-   n_res = 480                # The max allocated number of resource sets is
-   n_cpu_cores_per_res = 1    # nnodes * n_max_res_per_node. In this case we will
-   n_mpi_per_res = 1          # use all the allocated resource sets to run the job
-   n_gpu_per_res = 1          # below.
-   n_max_res_per_node = 6
+   n_res=480                # The max allocated number of resource sets is
+   n_cpu_cores_per_res=1    # nnodes * n_max_res_per_node. In this case we will
+   n_mpi_per_res=1          # use all the allocated resource sets to run the job
+   n_gpu_per_res=1          # below.
+   n_max_res_per_node=6
 
 Once the allocation ends, the job is downgraded/killed, leaving us as we started. As we pointed out, the maximum allocation
 time in Summit is 03:00 (three hours), but, we may need sometimes weeks, months, or maybe years to complete
@@ -242,15 +242,11 @@ the checkpoint was created. This is implemented as follows:
       restartFile=""
       for f in ${temp_files}
       do
-         # the Header is the last thing written -- check if it's there, otherwise,
-         # fall back to the second-to-last check file written
-         if [ ! -f ${f}/Header ]; then
-            restartFile=""
-         else
+         # the Header is the last thing written -- if it's there, update the restart file
+         if [ -f ${f}/Header ]; then
             restartFile="${f}"
          fi
       done
-
    }
 
    # look for 7-digit chk files
@@ -283,7 +279,7 @@ Finally, we run our job with the statement
 
 .. code-block::
 
-   jsrun -n$n_res -c$n_cpu_cores_per_res$ -a$mpi_per_res -g$n_gpu_per_res -r$n_max_res_per_node ./$CASTRO $INPUTS ${restartString}
+   jsrun -n$n_res -c$n_cpu_cores_per_res$ -a$n_mpi_per_res -g$n_gpu_per_res -r$n_max_res_per_node ./$CASTRO $INPUTS ${restartString}
 
 Finally, once the script is completed and saves as ``luna_script.sh``, we can submit it by:
 

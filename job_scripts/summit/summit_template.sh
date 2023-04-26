@@ -11,16 +11,16 @@ module load gcc/10.2.0
 module load cuda/11.5.2
 module load python
 
-export OMP_NUM_THREADS = 1
+export OMP_NUM_THREADS=1
 
-CASTRO = ./Castro2d.gnu.MPI.CUDA.ex
-INPUTS = inputs_luna
+CASTRO=./Castro2d.gnu.MPI.CUDA.ex
+INPUTS=inputs_luna
 
-n_res = 480                # The max allocated number of resource sets is
-n_cpu_cores_per_res = 1    # nnodes * n_max_res_per_node. In this case we will
-n_mpi_per_res = 1          # use all the allocated resource sets to run the job below,
-n_gpu_per_res = 1          # however we can define more enviroment variables to allocate two jobs
-n_max_res_per_node = 6     # simultaneous jobs, where n_res = n_res_1 + n_res2 allocates for two jobs.
+n_res=480                # The max allocated number of resource sets is
+n_cpu_cores_per_res=1    # nnodes * n_max_res_per_node. In this case we will
+n_mpi_per_res=1          # use all the allocated resource sets to run the job below,
+n_gpu_per_res=1          # however we can define more enviroment variables to allocate two jobs
+n_max_res_per_node=6     # simultaneous jobs, where n_res = n_res_1 + n_res2 allocates for two jobs.
 
 function find_chk_file {
     # find_chk_file takes a single argument -- the wildcard pattern
@@ -60,4 +60,4 @@ else
     restartString="amr.restart=${restartFile}"
 fi
 
-jsrun -n$n_res -c$n_cpu_cores_per_res$ -a$mpi_per_res -g$n_gpu_per_res -r$n_max_res_per_node ./$CASTRO $INPUTS ${restartString}
+jsrun -n$n_res -c$n_cpu_cores_per_res$ -a$n_mpi_per_res -g$n_gpu_per_res -r$n_max_res_per_node ./$CASTRO $INPUTS ${restartString}
