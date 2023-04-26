@@ -214,7 +214,7 @@ module<span class="w"> </span>load<span class="w"> </span>python
 </pre></div>
 </div>
 <p>and fixed only one thread per MPI process by:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
 </pre></div>
 </div>
 <p>The next step is to submit our job. The command <cite>jsrun</cite>, provided with the <em>total number of resource sets</em>, the
@@ -274,18 +274,18 @@ as follows:</p>
 module<span class="w"> </span>load<span class="w"> </span>cuda/11.5.2
 module<span class="w"> </span>load<span class="w"> </span>python
 
-<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
 </pre></div>
 </div>
 <p>and define the enviroment variables:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CASTRO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>./Castro2d.gnu.MPI.CUDA.ex
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CASTRO</span><span class="o">=</span>./Castro2d.gnu.MPI.CUDA.ex
 INPUTS
 
-<span class="nv">n_res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">480</span><span class="w">                </span><span class="c1"># The max allocated number of resource sets is</span>
-<span class="nv">n_cpu_cores_per_res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w">    </span><span class="c1"># nnodes * n_max_res_per_node. In this case we will</span>
-<span class="nv">n_mpi_per_res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w">          </span><span class="c1"># use all the allocated resource sets to run the job</span>
-<span class="nv">n_gpu_per_res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w">          </span><span class="c1"># below.</span>
-<span class="nv">n_max_res_per_node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span>
+<span class="nv">n_res</span><span class="o">=</span><span class="m">480</span><span class="w">                </span><span class="c1"># The max allocated number of resource sets is</span>
+<span class="nv">n_cpu_cores_per_res</span><span class="o">=</span><span class="m">1</span><span class="w">    </span><span class="c1"># nnodes * n_max_res_per_node. In this case we will</span>
+<span class="nv">n_mpi_per_res</span><span class="o">=</span><span class="m">1</span><span class="w">          </span><span class="c1"># use all the allocated resource sets to run the job</span>
+<span class="nv">n_gpu_per_res</span><span class="o">=</span><span class="m">1</span><span class="w">          </span><span class="c1"># below.</span>
+<span class="nv">n_max_res_per_node</span><span class="o">=</span><span class="m">6</span>
 </pre></div>
 </div>
 <p>Once the allocation ends, the job is downgraded/killed, leaving us as we started. As we pointed out, the maximum allocation
@@ -306,15 +306,11 @@ the checkpoint was created. This is implemented as follows:</p>
 <span class="w">   </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
 <span class="w">   </span><span class="k">for</span><span class="w"> </span>f<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">temp_files</span><span class="si">}</span>
 <span class="w">   </span><span class="k">do</span>
-<span class="w">      </span><span class="c1"># the Header is the last thing written -- check if it&#39;s there, otherwise,</span>
-<span class="w">      </span><span class="c1"># fall back to the second-to-last check file written</span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">f</span><span class="si">}</span>/Header<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">         </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
-<span class="w">      </span><span class="k">else</span>
+<span class="w">      </span><span class="c1"># the Header is the last thing written -- if it&#39;s there, update the restart file</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">f</span><span class="si">}</span>/Header<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
 <span class="w">         </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="w">      </span><span class="k">fi</span>
 <span class="w">   </span><span class="k">done</span>
-
 <span class="o">}</span>
 
 <span class="c1"># look for 7-digit chk files</span>
@@ -344,7 +340,7 @@ increase (with a minimum of 5 digits), we search for files with
 7-digits, 6-digits, and then finally 5-digits, to ensure we pick up
 the latest file.</p>
 <p>Finally, we run our job with the statement</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jsrun<span class="w"> </span>-n<span class="nv">$n_res</span><span class="w"> </span>-c<span class="nv">$n_cpu_cores_per_res</span>$<span class="w"> </span>-a<span class="nv">$mpi_per_res</span><span class="w"> </span>-g<span class="nv">$n_gpu_per_res</span><span class="w"> </span>-r<span class="nv">$n_max_res_per_node</span><span class="w"> </span>./<span class="nv">$CASTRO</span><span class="w"> </span><span class="nv">$INPUTS</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jsrun<span class="w"> </span>-n<span class="nv">$n_res</span><span class="w"> </span>-c<span class="nv">$n_cpu_cores_per_res</span>$<span class="w"> </span>-a<span class="nv">$n_mpi_per_res</span><span class="w"> </span>-g<span class="nv">$n_gpu_per_res</span><span class="w"> </span>-r<span class="nv">$n_max_res_per_node</span><span class="w"> </span>./<span class="nv">$CASTRO</span><span class="w"> </span><span class="nv">$INPUTS</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
 </pre></div>
 </div>
 <p>Finally, once the script is completed and saves as <code class="docutils literal notranslate"><span class="pre">luna_script.sh</span></code>, we can submit it by:</p>
@@ -371,16 +367,16 @@ the latest file.</p>
 <span class="linenos">11</span>module<span class="w"> </span>load<span class="w"> </span>cuda/11.5.2
 <span class="linenos">12</span>module<span class="w"> </span>load<span class="w"> </span>python
 <span class="linenos">13</span>
-<span class="linenos">14</span><span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>
+<span class="linenos">14</span><span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
 <span class="linenos">15</span>
-<span class="linenos">16</span><span class="nv">CASTRO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>./Castro2d.gnu.MPI.CUDA.ex
-<span class="linenos">17</span><span class="nv">INPUTS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>inputs_luna
+<span class="linenos">16</span><span class="nv">CASTRO</span><span class="o">=</span>./Castro2d.gnu.MPI.CUDA.ex
+<span class="linenos">17</span><span class="nv">INPUTS</span><span class="o">=</span>inputs_luna
 <span class="linenos">18</span>
-<span class="linenos">19</span><span class="nv">n_res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">480</span><span class="w">                </span><span class="c1"># The max allocated number of resource sets is</span>
-<span class="linenos">20</span><span class="nv">n_cpu_cores_per_res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w">    </span><span class="c1"># nnodes * n_max_res_per_node. In this case we will</span>
-<span class="linenos">21</span><span class="nv">n_mpi_per_res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w">          </span><span class="c1"># use all the allocated resource sets to run the job below,</span>
-<span class="linenos">22</span><span class="nv">n_gpu_per_res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w">          </span><span class="c1"># however we can define more enviroment variables to allocate two jobs</span>
-<span class="linenos">23</span><span class="nv">n_max_res_per_node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span><span class="w">     </span><span class="c1"># simultaneous jobs, where n_res = n_res_1 + n_res2 allocates for two jobs.</span>
+<span class="linenos">19</span><span class="nv">n_res</span><span class="o">=</span><span class="m">480</span><span class="w">                </span><span class="c1"># The max allocated number of resource sets is</span>
+<span class="linenos">20</span><span class="nv">n_cpu_cores_per_res</span><span class="o">=</span><span class="m">1</span><span class="w">    </span><span class="c1"># nnodes * n_max_res_per_node. In this case we will</span>
+<span class="linenos">21</span><span class="nv">n_mpi_per_res</span><span class="o">=</span><span class="m">1</span><span class="w">          </span><span class="c1"># use all the allocated resource sets to run the job below,</span>
+<span class="linenos">22</span><span class="nv">n_gpu_per_res</span><span class="o">=</span><span class="m">1</span><span class="w">          </span><span class="c1"># however we can define more enviroment variables to allocate two jobs</span>
+<span class="linenos">23</span><span class="nv">n_max_res_per_node</span><span class="o">=</span><span class="m">6</span><span class="w">     </span><span class="c1"># simultaneous jobs, where n_res = n_res_1 + n_res2 allocates for two jobs.</span>
 <span class="linenos">24</span>
 <span class="linenos">25</span><span class="k">function</span><span class="w"> </span>find_chk_file<span class="w"> </span><span class="o">{</span>
 <span class="linenos">26</span><span class="w">    </span><span class="c1"># find_chk_file takes a single argument -- the wildcard pattern</span>
@@ -420,7 +416,7 @@ the latest file.</p>
 <span class="linenos">60</span><span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;amr.restart=</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="linenos">61</span><span class="k">fi</span>
 <span class="linenos">62</span>
-<span class="linenos">63</span>jsrun<span class="w"> </span>-n<span class="nv">$n_res</span><span class="w"> </span>-c<span class="nv">$n_cpu_cores_per_res</span>$<span class="w"> </span>-a<span class="nv">$mpi_per_res</span><span class="w"> </span>-g<span class="nv">$n_gpu_per_res</span><span class="w"> </span>-r<span class="nv">$n_max_res_per_node</span><span class="w"> </span>./<span class="nv">$CASTRO</span><span class="w"> </span><span class="nv">$INPUTS</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
+<span class="linenos">63</span>jsrun<span class="w"> </span>-n<span class="nv">$n_res</span><span class="w"> </span>-c<span class="nv">$n_cpu_cores_per_res</span>$<span class="w"> </span>-a<span class="nv">$n_mpi_per_res</span><span class="w"> </span>-g<span class="nv">$n_gpu_per_res</span><span class="w"> </span>-r<span class="nv">$n_max_res_per_node</span><span class="w"> </span>./<span class="nv">$CASTRO</span><span class="w"> </span><span class="nv">$INPUTS</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
 </pre></div>
 </div>
 </section>
