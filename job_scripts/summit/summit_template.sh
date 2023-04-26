@@ -35,7 +35,12 @@ function find_chk_file {
     do
         # the Header is the last thing written -- if it's there, update the restart file
         if [ -f ${f}/Header ]; then
-            restartFile="${f}"
+            # The scratch FS sometimes gives I/O errors when trying to read
+            # from recently-created files, which crashes Castro. Avoid this by
+            # making sure we can read from all the data files.
+            if head --quiet -c1 "${f}/Header" "${f}"/Level_*/* >/dev/null; then
+                restartFile="${f}"
+            fi
         fi
     done
 }
