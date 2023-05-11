@@ -110,7 +110,7 @@ at the moment, that loads ROCm 5.3.0
 
 .. note::
 
-   ROCm 5.4.3 does not seem to work with Castro&mdash;there are memory access issues
+   ROCm 5.4.3 does not seem to work with Castro--there are memory access issues
    in the burner
 
 .. note::
