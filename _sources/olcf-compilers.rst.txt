@@ -124,3 +124,8 @@ build via:
 
    make COMP=gnu USE_HIP=TRUE
 
+
+.. note::
+
+   Compiling with ``DEBUG=TRUE`` takes a _very_ long time and may not work.
+
