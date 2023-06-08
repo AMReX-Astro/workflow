@@ -331,17 +331,6 @@ on the previous.  Your submission script should use the automatic
 restarting features discussed above.
 
 
-Frontier
---------
-
-For debugging:
-
-.. prompt:: bash
-
-   rocgdb --args ./Castro2d.hip.x86-trento.MPI.HIP.ex inputs_2d.testsuite
-
-then do ``run`` at the debugger prompt.
-
 
 Archiving to HPSS
 -----------------
@@ -410,6 +399,9 @@ for a description of usage and arguments.
 Frontier
 --------
 
+Machine details
+^^^^^^^^^^^^^^^
+
 Queue policies are here:
 https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#scheduling-policy
 
@@ -417,22 +409,11 @@ https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#scheduling-policy
 Filesystem is called ``orion``, and is Lustre:
 https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#data-and-storage
 
-Workaround to prevent hangs for collectives:
 
-::
+Submitting jobs
+^^^^^^^^^^^^^^^
 
- export FI_MR_CACHE_MONITOR=memhooks
-
-
-Some AMReX reports are that it hangs if the initial Arena size is too big, and we should do
-
-::
-
-  amrex.the_arena_init_size=0
-
-The arena size would then grow as needed with time.  There is a suggestion that if the size is 
-larger than
-
+Frontier uses SLURM.
 
 Here's a script that runs with 2 nodes using all 8 GPUs per node:
 
@@ -456,6 +437,92 @@ Here's a script that runs with 2 nodes using all 8 GPUs per node:
 
    module load PrgEnv-gnu craype-accel-amd-gfx90a cray-mpich rocm amd-mixed
 
-   srun ./$EXEC $INPUTS
+   export OMP_NUM_THREADS=1
+   export NMPI_PER_NODE=8
+   export TOTAL_NMPI=$(( ${SLURM_JOB_NUM_NODES} * ${NMPI_PER_NODE} ))
+
+   srun -n${TOTAL_NMPI} -N${SLURM_JOB_NUM_NODES} --ntasks-per-node=8 --gpus-per-task=1 ./$EXEC $INPUTS
+
+
+.. note::
+
+   As of June 2023, it is necessary to explicitly use ``-n`` and ``-N`` on the ``srun`` line.
+
+The job is submitted as:
+
+.. prompt:: bash
+
+   sbatch frontier.slurm
+
+where ``frontier.slurm`` is the name of the submission script.
+
+A sample job script that includes the automatic restart functions can be found here:
+https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/frontier/frontier.slurm
+
 
 Also see the WarpX docs: https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html
+
+
+Job Status
+^^^^^^^^^^
+
+You can check on the status of your jobs via:
+
+.. prompt:: bash
+
+   squeue --me
+
+and get an estimated start time via:
+
+.. prompt:: bash
+
+   squeue --me --start
+
+
+Job Chaining
+^^^^^^^^^^^^
+
+The script `chainslurm.sh </ccs/home/zingale/bin/chainslurm.sh>`_ can be used to start
+a job chain, with each job depending on the previous.  For example, to start up
+10 jobs:
+
+.. prompt:: bash
+
+   chainslurm -1 10 frontier.slurm
+
+If you want to add the chain to an existing queued job, change the ``-1`` to the job-id
+of the existing job.
+
+
+Debugging
+^^^^^^^^^
+
+For debugging:
+
+.. prompt:: bash
+
+   rocgdb --args ./Castro2d.hip.x86-trento.MPI.HIP.ex inputs_2d.testsuite
+
+then do ``run`` at the debugger prompt.
+
+
+
+Troubleshooting
+^^^^^^^^^^^^^^^
+
+Workaround to prevent hangs for collectives:
+
+::
+
+ export FI_MR_CACHE_MONITOR=memhooks
+
+
+Some AMReX reports are that it hangs if the initial Arena size is too big, and we should do
+
+::
+
+  amrex.the_arena_init_size=0
+
+The arena size would then grow as needed with time.  There is a suggestion that if the size is 
+larger than
+

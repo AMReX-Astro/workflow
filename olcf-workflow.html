@@ -64,9 +64,16 @@
 <li class="toctree-l4"><a class="reference internal" href="#chaining-jobs">Chaining jobs</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#frontier">Frontier</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#archiving-to-hpss">Archiving to HPSS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Frontier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#frontier">Frontier</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#machine-details">Machine details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#submitting-jobs">Submitting jobs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#job-status">Job Status</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#job-chaining">Job Chaining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#debugging">Debugging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-jupyter.html">Running Jupyter Remotely from OLCF</a></li>
@@ -114,10 +121,10 @@ All the exposed information in this section is a condensed version of the <a cla
 <p>In Summit, a node is composed by two sockets: each one with 21 CPU physical cores (+1 reserved for the system), 3 GPU’s and 1 RAM memory bank.
 The sockets are connected by a bus allowing communication among them. Each CPU physical core may define up to 4 threads.
 The whole structure of the node can be depicted as follows:</p>
-<figure class="align-center" id="id2">
+<figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="_images/summit-node-description-1.png"><img alt="_images/summit-node-description-1.png" src="_images/summit-node-description-1.png" style="width: 100%;" /></a>
 <figcaption>
-<p><span class="caption-text">Figure extracted from <code class="docutils literal notranslate"><span class="pre">https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun</span></code>.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">Figure extracted from <code class="docutils literal notranslate"><span class="pre">https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun</span></code>.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>A resource set is a minimal collection of CPU physical cores and GPU’s, on which a certain number of MPI processes and OpenMP
@@ -134,10 +141,10 @@ number of resource sets that may fit into one node.</p>
 <p>In Castro we construct each resource set with: 1 CPU physical core, 1 GPU, and only 1 MPI process.
 The next step is to see how many resources sets fits into one node. Acording to the node architecture depicted in Figure 1,
 we can fit up to 6 resource sets per node as in Figure 2.</p>
-<figure class="align-center" id="id3">
+<figure class="align-center" id="id2">
 <a class="reference internal image-reference" href="_images/image56.png"><img alt="_images/image56.png" src="_images/image56.png" style="width: 100%;" /></a>
 <figcaption>
-<p><span class="caption-text">Figure modified and extracted from <code class="docutils literal notranslate"><span class="pre">https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun</span></code>.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">Figure modified and extracted from <code class="docutils literal notranslate"><span class="pre">https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun</span></code>.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
 </section>
@@ -442,12 +449,6 @@ on the previous.  Your submission script should use the automatic
 restarting features discussed above.</p>
 </section>
 </section>
-<section id="frontier">
-<h2>Frontier<a class="headerlink" href="#frontier" title="Permalink to this heading">¶</a></h2>
-<p>For debugging:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">rocgdb<span class="w"> </span>--args<span class="w"> </span>./Castro2d.hip.x86-trento.MPI.HIP.ex<span class="w"> </span>inputs_2d.testsuite</span>
-</pre></div></div><p>then do <code class="docutils literal notranslate"><span class="pre">run</span></code> at the debugger prompt.</p>
-</section>
 <section id="archiving-to-hpss">
 <h2>Archiving to HPSS<a class="headerlink" href="#archiving-to-hpss" title="Permalink to this heading">¶</a></h2>
 <p>You can access HPSS from submit using the data transfer nodes by submitting a job
@@ -490,22 +491,18 @@ launch directory, the script will attempt to recover all plotfiles
 archived by <code class="docutils literal notranslate"><span class="pre">process.titan</span></code>. Try running <code class="code docutils literal notranslate"><span class="pre">./hpss_xfer.py</span> <span class="pre">--help</span></code>
 for a description of usage and arguments.</p>
 </section>
-<section id="id1">
-<h2>Frontier<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h2>
+<section id="frontier">
+<h2>Frontier<a class="headerlink" href="#frontier" title="Permalink to this heading">¶</a></h2>
+<section id="machine-details">
+<h3>Machine details<a class="headerlink" href="#machine-details" title="Permalink to this heading">¶</a></h3>
 <p>Queue policies are here:
 <a class="reference external" href="https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#scheduling-policy">https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#scheduling-policy</a></p>
 <p>Filesystem is called <code class="docutils literal notranslate"><span class="pre">orion</span></code>, and is Lustre:
 <a class="reference external" href="https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#data-and-storage">https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#data-and-storage</a></p>
-<p>Workaround to prevent hangs for collectives:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FI_MR_CACHE_MONITOR</span><span class="o">=</span>memhooks
-</pre></div>
-</div>
-<p>Some AMReX reports are that it hangs if the initial Arena size is too big, and we should do</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>amrex.the_arena_init_size<span class="o">=</span><span class="m">0</span>
-</pre></div>
-</div>
-<p>The arena size would then grow as needed with time.  There is a suggestion that if the size is
-larger than</p>
+</section>
+<section id="submitting-jobs">
+<h3>Submitting jobs<a class="headerlink" href="#submitting-jobs" title="Permalink to this heading">¶</a></h3>
+<p>Frontier uses SLURM.</p>
 <p>Here’s a script that runs with 2 nodes using all 8 GPUs per node:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#SBATCH -A AST106</span>
@@ -525,10 +522,59 @@ larger than</p>
 
 module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu<span class="w"> </span>craype-accel-amd-gfx90a<span class="w"> </span>cray-mpich<span class="w"> </span>rocm<span class="w"> </span>amd-mixed
 
-srun<span class="w"> </span>./<span class="nv">$EXEC</span><span class="w"> </span><span class="nv">$INPUTS</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">NMPI_PER_NODE</span><span class="o">=</span><span class="m">8</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">TOTAL_NMPI</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="si">${</span><span class="nv">SLURM_JOB_NUM_NODES</span><span class="si">}</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="si">${</span><span class="nv">NMPI_PER_NODE</span><span class="si">}</span><span class="w"> </span><span class="k">))</span>
+
+srun<span class="w"> </span>-n<span class="si">${</span><span class="nv">TOTAL_NMPI</span><span class="si">}</span><span class="w"> </span>-N<span class="si">${</span><span class="nv">SLURM_JOB_NUM_NODES</span><span class="si">}</span><span class="w"> </span>--ntasks-per-node<span class="o">=</span><span class="m">8</span><span class="w"> </span>--gpus-per-task<span class="o">=</span><span class="m">1</span><span class="w"> </span>./<span class="nv">$EXEC</span><span class="w"> </span><span class="nv">$INPUTS</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As of June 2023, it is necessary to explicitly use <code class="docutils literal notranslate"><span class="pre">-n</span></code> and <code class="docutils literal notranslate"><span class="pre">-N</span></code> on the <code class="docutils literal notranslate"><span class="pre">srun</span></code> line.</p>
+</div>
+<p>The job is submitted as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">sbatch<span class="w"> </span>frontier.slurm</span>
+</pre></div></div><p>where <code class="docutils literal notranslate"><span class="pre">frontier.slurm</span></code> is the name of the submission script.</p>
+<p>A sample job script that includes the automatic restart functions can be found here:
+<a class="reference external" href="https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/frontier/frontier.slurm">https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/frontier/frontier.slurm</a></p>
 <p>Also see the WarpX docs: <a class="reference external" href="https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html">https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html</a></p>
+</section>
+<section id="job-status">
+<h3>Job Status<a class="headerlink" href="#job-status" title="Permalink to this heading">¶</a></h3>
+<p>You can check on the status of your jobs via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">squeue<span class="w"> </span>--me</span>
+</pre></div></div><p>and get an estimated start time via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">squeue<span class="w"> </span>--me<span class="w"> </span>--start</span>
+</pre></div></div></section>
+<section id="job-chaining">
+<h3>Job Chaining<a class="headerlink" href="#job-chaining" title="Permalink to this heading">¶</a></h3>
+<p>The script <a class="reference external" href="/ccs/home/zingale/bin/chainslurm.sh">chainslurm.sh</a> can be used to start
+a job chain, with each job depending on the previous.  For example, to start up
+10 jobs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">chainslurm<span class="w"> </span>-1<span class="w"> </span><span class="m">10</span><span class="w"> </span>frontier.slurm</span>
+</pre></div></div><p>If you want to add the chain to an existing queued job, change the <code class="docutils literal notranslate"><span class="pre">-1</span></code> to the job-id
+of the existing job.</p>
+</section>
+<section id="debugging">
+<h3>Debugging<a class="headerlink" href="#debugging" title="Permalink to this heading">¶</a></h3>
+<p>For debugging:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">rocgdb<span class="w"> </span>--args<span class="w"> </span>./Castro2d.hip.x86-trento.MPI.HIP.ex<span class="w"> </span>inputs_2d.testsuite</span>
+</pre></div></div><p>then do <code class="docutils literal notranslate"><span class="pre">run</span></code> at the debugger prompt.</p>
+</section>
+<section id="troubleshooting">
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this heading">¶</a></h3>
+<p>Workaround to prevent hangs for collectives:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FI_MR_CACHE_MONITOR</span><span class="o">=</span>memhooks
+</pre></div>
+</div>
+<p>Some AMReX reports are that it hangs if the initial Arena size is too big, and we should do</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>amrex.the_arena_init_size<span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<p>The arena size would then grow as needed with time.  There is a suggestion that if the size is
+larger than</p>
+</section>
 </section>
 </section>
 
