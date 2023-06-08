@@ -53,8 +53,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="nersc.html">Working at NERSC</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="nersc-compilers.html">Compiling at NERSC</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Managing Jobs at NERSC</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#cori-haswell">Cori Haswell</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#perlmutter">Perlmutter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#perlmutter">Perlmutter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#chaining">Chaining</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nersc-hpss.html">Archiving Data to HPSS</a></li>
@@ -93,46 +95,6 @@
              
   <section id="managing-jobs-at-nersc">
 <h1>Managing Jobs at NERSC<a class="headerlink" href="#managing-jobs-at-nersc" title="Permalink to this heading">¶</a></h1>
-<section id="cori-haswell">
-<h2>Cori Haswell<a class="headerlink" href="#cori-haswell" title="Permalink to this heading">¶</a></h2>
-<p>Cori Haswell is configured with 32 cores per node, split between
-twi Intel Haswell 16-core processors.</p>
-<p>Jobs should be run in your <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> directory. By default,
-SLURM will change directory into the submission directory.</p>
-<p>A sample job submission script for pure MPI,
-<code class="docutils literal notranslate"><span class="pre">cori_haswell.MPI.slurm</span></code> is in the <a class="reference external" href="https://github.com/AMReX-Astro/workflow/blob/master/job_scripts/cori-haswell/">cori-haswell</a>
-directory (<code class="docutils literal notranslate"><span class="pre">workflow/job_scripts/cori-haswell/</span></code>) and includes logic
-to automatically add the correct restart options to the run to
-continue a simulation from the last checkpoint file in the submission
-directory.</p>
-<p>Jobs are submitted as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
-span.prompt1:before {
-  content: "$ ";
-}
-</style><span class="prompt1">sbatch<span class="w"> </span>script.slurm</span>
-</pre></div></div><p>To chain jobs, such that one queues up after the previous job
-finished, use the <code class="docutils literal notranslate"><span class="pre">chainslurm.sh</span></code> script in that same directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">chainslurm.sh<span class="w"> </span>jobid<span class="w"> </span>number<span class="w"> </span>script</span>
-</pre></div></div><p>where <code class="docutils literal notranslate"><span class="pre">jobid</span></code> is the existing job you want to start you chain from,
-<code class="docutils literal notranslate"><span class="pre">number</span></code> is the number of new jobs to chain from this starting job,
-and <code class="docutils literal notranslate"><span class="pre">script</span></code> is the job submission script to use (the same one you
-used originally most likely).</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The script can also create the initial job to start the chain.
-If <code class="docutils literal notranslate"><span class="pre">jobid</span></code> is set to <code class="docutils literal notranslate"><span class="pre">-1</span></code>, then the script will first submit a
-job with no dependencies and then chain the remaining <code class="docutils literal notranslate"><span class="pre">number</span></code>-1
-jobs to depend on the previous.</p>
-</div>
-<p>You can view the job dependency using:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">squeue<span class="w"> </span>-l<span class="w"> </span>-j<span class="w"> </span>job-id</span>
-</pre></div></div><p>where <code class="docutils literal notranslate"><span class="pre">job-id</span></code> is the number of the job.  A job can be canceled
-using <code class="docutils literal notranslate"><span class="pre">scancel</span></code>, and the status can be checked using <code class="docutils literal notranslate"><span class="pre">squeue</span> <span class="pre">-u</span>
-<span class="pre">username</span></code> or <code class="docutils literal notranslate"><span class="pre">squeue</span> <span class="pre">--me</span></code>.</p>
-<p>An estimate of the start time can be found via:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">sqs<span class="w"> </span>-u<span class="w"> </span>username</span>
-</pre></div></div></section>
 <section id="perlmutter">
 <h2>Perlmutter<a class="headerlink" href="#perlmutter" title="Permalink to this heading">¶</a></h2>
 <p>Perlmutter has 1536 GPU nodes, each with 4 NVIDIA A100 GPUs – therefore it is best to use
@@ -210,6 +172,41 @@ slack_job_start.py<span class="w"> </span><span class="s2">&quot;starting NERSC 
 srun<span class="w"> </span>-n<span class="w"> </span><span class="m">64</span><span class="w"> </span><span class="si">${</span><span class="nv">CASTRO_EXEC</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Jobs should be run in your <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> directory. By default,
+SLURM will change directory into the submission directory.</p>
+</div>
+<p>Jobs are submitted as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
+span.prompt1:before {
+  content: "$ ";
+}
+</style><span class="prompt1">sbatch<span class="w"> </span>script.slurm</span>
+</pre></div></div><p>An estimate of the start time can be found via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">sqs<span class="w"> </span>-u<span class="w"> </span>username</span>
+</pre></div></div><section id="chaining">
+<h3>Chaining<a class="headerlink" href="#chaining" title="Permalink to this heading">¶</a></h3>
+<p>To chain jobs, such that one queues up after the previous job
+finished, use the <code class="docutils literal notranslate"><span class="pre">chainslurm.sh</span></code> script in that same directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">chainslurm.sh<span class="w"> </span>jobid<span class="w"> </span>number<span class="w"> </span>script</span>
+</pre></div></div><p>where <code class="docutils literal notranslate"><span class="pre">jobid</span></code> is the existing job you want to start you chain from,
+<code class="docutils literal notranslate"><span class="pre">number</span></code> is the number of new jobs to chain from this starting job,
+and <code class="docutils literal notranslate"><span class="pre">script</span></code> is the job submission script to use (the same one you
+used originally most likely).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The script can also create the initial job to start the chain.
+If <code class="docutils literal notranslate"><span class="pre">jobid</span></code> is set to <code class="docutils literal notranslate"><span class="pre">-1</span></code>, then the script will first submit a
+job with no dependencies and then chain the remaining <code class="docutils literal notranslate"><span class="pre">number</span></code>-1
+jobs to depend on the previous.</p>
+</div>
+<p>You can view the job dependency using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">squeue<span class="w"> </span>-l<span class="w"> </span>-j<span class="w"> </span>job-id</span>
+</pre></div></div><p>where <code class="docutils literal notranslate"><span class="pre">job-id</span></code> is the number of the job.  A job can be canceled
+using <code class="docutils literal notranslate"><span class="pre">scancel</span></code>, and the status can be checked using <code class="docutils literal notranslate"><span class="pre">squeue</span> <span class="pre">-u</span>
+<span class="pre">username</span></code> or <code class="docutils literal notranslate"><span class="pre">squeue</span> <span class="pre">--me</span></code>.</p>
+</section>
 </section>
 </section>
 
