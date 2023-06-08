@@ -64,9 +64,9 @@
 <li class="toctree-l4"><a class="reference internal" href="#chaining-jobs">Chaining jobs</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#crusher">Crusher</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#archiving-to-hpss">Archiving to HPSS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#frontier">Frontier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#archiving-to-hpss">Archiving to HPSS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Frontier</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-jupyter.html">Running Jupyter Remotely from OLCF</a></li>
@@ -114,10 +114,10 @@ All the exposed information in this section is a condensed version of the <a cla
 <p>In Summit, a node is composed by two sockets: each one with 21 CPU physical cores (+1 reserved for the system), 3 GPU’s and 1 RAM memory bank.
 The sockets are connected by a bus allowing communication among them. Each CPU physical core may define up to 4 threads.
 The whole structure of the node can be depicted as follows:</p>
-<figure class="align-center" id="id1">
+<figure class="align-center" id="id2">
 <a class="reference internal image-reference" href="_images/summit-node-description-1.png"><img alt="_images/summit-node-description-1.png" src="_images/summit-node-description-1.png" style="width: 100%;" /></a>
 <figcaption>
-<p><span class="caption-text">Figure extracted from <code class="docutils literal notranslate"><span class="pre">https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun</span></code>.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">Figure extracted from <code class="docutils literal notranslate"><span class="pre">https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun</span></code>.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>A resource set is a minimal collection of CPU physical cores and GPU’s, on which a certain number of MPI processes and OpenMP
@@ -134,10 +134,10 @@ number of resource sets that may fit into one node.</p>
 <p>In Castro we construct each resource set with: 1 CPU physical core, 1 GPU, and only 1 MPI process.
 The next step is to see how many resources sets fits into one node. Acording to the node architecture depicted in Figure 1,
 we can fit up to 6 resource sets per node as in Figure 2.</p>
-<figure class="align-center" id="id2">
+<figure class="align-center" id="id3">
 <a class="reference internal image-reference" href="_images/image56.png"><img alt="_images/image56.png" src="_images/image56.png" style="width: 100%;" /></a>
 <figcaption>
-<p><span class="caption-text">Figure modified and extracted from <code class="docutils literal notranslate"><span class="pre">https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun</span></code>.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">Figure modified and extracted from <code class="docutils literal notranslate"><span class="pre">https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun</span></code>.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
 </section>
@@ -442,45 +442,8 @@ on the previous.  Your submission script should use the automatic
 restarting features discussed above.</p>
 </section>
 </section>
-<section id="crusher">
-<h2>Crusher<a class="headerlink" href="#crusher" title="Permalink to this heading">¶</a></h2>
-<p>The following batch script will run on 1 GPU</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
-<span class="c1">#SBATCH -A AST136_crusher</span>
-<span class="c1">#SBATCH -J testing</span>
-<span class="c1">#SBATCH -o %x-%j.out</span>
-<span class="c1">#SBATCH -t 00:05:00</span>
-<span class="c1">#SBATCH -p batch</span>
-<span class="c1">#SBATCH -N 1</span>
-
-<span class="c1"># here N is the number of compute nodes</span>
-
-<span class="nv">EXEC</span><span class="o">=</span>Castro2d.hip.x86-trento.MPI.HIP.ex
-<span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.testsuite
-
-srun<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>-c<span class="w"> </span><span class="m">2</span><span class="w"> </span>--ntasks-per-node<span class="o">=</span><span class="m">1</span><span class="w"> </span>rocprof<span class="w"> </span><span class="nv">$EXEC</span><span class="w"> </span><span class="nv">$INPUTS</span><span class="w"> </span>amr.plot_files_output<span class="o">=</span><span class="m">0</span><span class="w"> </span>amr.checkpoint_files_output<span class="o">=</span><span class="m">0</span>
-</pre></div>
-</div>
-<p>or for 8 GPUs on 1 node, the following script works:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
-<span class="c1">#SBATCH -A AST136_crusher</span>
-<span class="c1">#SBATCH -J testing</span>
-<span class="c1">#SBATCH -o %x-%j.out</span>
-<span class="c1">#SBATCH -t 00:05:00</span>
-<span class="c1">#SBATCH -p batch</span>
-<span class="c1">#SBATCH -N 1</span>
-
-<span class="c1"># here N is the number of compute nodes</span>
-
-<span class="nv">EXEC</span><span class="o">=</span>Castro2d.hip.x86-trento.MPI.HIP.ex
-<span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.testsuite
-
-srun<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>-c<span class="w"> </span><span class="m">8</span><span class="w"> </span>--ntasks-per-node<span class="o">=</span><span class="m">8</span><span class="w"> </span>--gpus-per-task<span class="o">=</span><span class="m">1</span><span class="w"> </span>--gpu-bind<span class="o">=</span>closest<span class="w"> </span>./<span class="nv">$EXEC</span><span class="w"> </span><span class="nv">$INPUTS</span><span class="w"> </span>amr.plot_files_output<span class="o">=</span><span class="m">0</span><span class="w"> </span>amr.checkpoint_files_output<span class="o">=</span><span class="m">0</span>
-</pre></div>
-</div>
-<p>for interactive:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">salloc<span class="w"> </span>-A<span class="w"> </span>ast136_crusher<span class="w"> </span>-J<span class="w"> </span>amrex<span class="w"> </span>-t<span class="w"> </span><span class="m">00</span>:30:00<span class="w"> </span>-p<span class="w"> </span>batch<span class="w"> </span>-N<span class="w"> </span><span class="m">1</span></span>
-</pre></div></div><p>then you can run your jobs directly on the compute node.</p>
+<section id="frontier">
+<h2>Frontier<a class="headerlink" href="#frontier" title="Permalink to this heading">¶</a></h2>
 <p>For debugging:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">rocgdb<span class="w"> </span>--args<span class="w"> </span>./Castro2d.hip.x86-trento.MPI.HIP.ex<span class="w"> </span>inputs_2d.testsuite</span>
 </pre></div></div><p>then do <code class="docutils literal notranslate"><span class="pre">run</span></code> at the debugger prompt.</p>
@@ -527,8 +490,8 @@ launch directory, the script will attempt to recover all plotfiles
 archived by <code class="docutils literal notranslate"><span class="pre">process.titan</span></code>. Try running <code class="code docutils literal notranslate"><span class="pre">./hpss_xfer.py</span> <span class="pre">--help</span></code>
 for a description of usage and arguments.</p>
 </section>
-<section id="frontier">
-<h2>Frontier<a class="headerlink" href="#frontier" title="Permalink to this heading">¶</a></h2>
+<section id="id1">
+<h2>Frontier<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h2>
 <p>Queue policies are here:
 <a class="reference external" href="https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#scheduling-policy">https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#scheduling-policy</a></p>
 <p>Filesystem is called <code class="docutils literal notranslate"><span class="pre">orion</span></code>, and is Lustre:

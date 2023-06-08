@@ -331,24 +331,8 @@ on the previous.  Your submission script should use the automatic
 restarting features discussed above.
 
 
-Crusher
--------
-
-The following batch script will run on 1 GPU
-
-.. literalinclude:: ../../job_scripts/crusher/crusher.slurm
-
-or for 8 GPUs on 1 node, the following script works:
-
-.. literalinclude:: ../../job_scripts/crusher/crusher_8gpu.slurm
-
-for interactive:
-
-.. prompt:: bash
-
-   salloc -A ast136_crusher -J amrex -t 00:30:00 -p batch -N 1
-
-then you can run your jobs directly on the compute node.
+Frontier
+--------
 
 For debugging:
 

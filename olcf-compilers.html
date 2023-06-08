@@ -54,7 +54,6 @@
 <li class="toctree-l1 current"><a class="reference internal" href="olcf.html">Working at OLCF</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Compiling at OLCF</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#summit">Summit</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#crusher">Crusher</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#frontier">Frontier</a></li>
 </ul>
 </li>
@@ -134,34 +133,6 @@ An example compilation line is:</p>
 <code class="docutils literal notranslate"><span class="pre">USE_OMP_OFFLOAD</span></code>, which will default to <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>, AMReX-Astro
 doesn’t use this feature.</p></li>
 </ul>
-</div>
-</section>
-<section id="crusher">
-<h2>Crusher<a class="headerlink" href="#crusher" title="Permalink to this heading">¶</a></h2>
-<p>log into <code class="docutils literal notranslate"><span class="pre">crusher.olcf.ornl.gov</span></code></p>
-<p>We want to build with ROCm/HIP.  Currently, we only work with ROCm 5.x,
-which you load as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-amd<span class="w"> </span>craype-accel-amd-gfx90a<span class="w"> </span>cray-mpich/8.1.16<span class="w"> </span>rocm/5.1.0</span>
-</pre></div></div><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>There are specific MPICH versions that work with each ROCm release,
-as described in: <a class="reference external" href="https://docs.olcf.ornl.gov/systems/crusher_quick_start_guide.html#determining-the-compatibility-of-cray-mpich-and-rocm">Determining the Compatibility of Cray MPICH and ROCm</a>.</p>
-</div>
-<p>We can then build with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">COMP</span><span class="o">=</span>gnu<span class="w"> </span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE</span>
-</pre></div></div><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Async I/O can sometimes have issues on crusher, so it is best to
-leave it off.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Sometimes the job will start (according to <code class="docutils literal notranslate"><span class="pre">squeue</span></code>) but appear to
-hang.  This is because there are often bad nodes, and you need to
-exclude the bad nodes.  Currently use:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#SBATCH --exclude=crusher[025-027,036,038-040,060,081,127,136,141,101-105]</span>
-</pre></div>
-</div>
 </div>
 </section>
 <section id="frontier">

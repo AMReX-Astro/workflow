@@ -54,44 +54,6 @@ The recommended/tested version pairs are:
      doesn't use this feature.
 
 
-Crusher
--------
-
-log into ``crusher.olcf.ornl.gov``
-
-We want to build with ROCm/HIP.  Currently, we only work with ROCm 5.x,
-which you load as:
-
-.. prompt:: bash
-
-   module load PrgEnv-amd craype-accel-amd-gfx90a cray-mpich/8.1.16 rocm/5.1.0
-
-.. note::
-
-   There are specific MPICH versions that work with each ROCm release,
-   as described in: `Determining the Compatibility of Cray MPICH and ROCm <https://docs.olcf.ornl.gov/systems/crusher_quick_start_guide.html#determining-the-compatibility-of-cray-mpich-and-rocm>`_.
-
-We can then build with:
-
-.. prompt:: bash
-
-   make COMP=gnu USE_HIP=TRUE
-
-
-.. note::
-
-   Async I/O can sometimes have issues on crusher, so it is best to
-   leave it off.
-
-
-.. note::
-
-   Sometimes the job will start (according to ``squeue``) but appear to
-   hang.  This is because there are often bad nodes, and you need to
-   exclude the bad nodes.  Currently use::
-
-   #SBATCH --exclude=crusher[025-027,036,038-040,060,081,127,136,141,101-105]
-
 
 Frontier
 --------
