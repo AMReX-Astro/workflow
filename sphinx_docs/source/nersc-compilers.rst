@@ -23,12 +23,18 @@ Load gcc and CUDA
 
    module load PrgEnv-gnu
    module load cudatoolkit
+   module load python
+
+
+.. note::
+
+   We require python >= 3.7 for the compilation process
 
 Build, e.g. the Castro Sedov hydro test problem
 
 .. prompt:: bash
 
-   make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE
+   make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE -j 4
 
 Hypre
 ^^^^^

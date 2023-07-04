@@ -34,12 +34,17 @@ Jobs are submitted as:
 
    sbatch script.slurm
 
-
-An estimate of the start time can be found via:
+You can check the status of your jobs via:
 
 .. prompt:: bash
 
-   sqs -u username
+   squeue --me
+
+and an estimate of the start time can be found via:
+
+.. prompt:: bash
+
+   squeue --me --start
 
 
 Chaining
