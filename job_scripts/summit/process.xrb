@@ -229,12 +229,12 @@ function process_files
 datestr=$(date +"%Y%m%d_%H%M_%S")
 ftime_files=$(find . -maxdepth 1 -name "ftime.out" -print)
 inputs_files=$(find . -maxdepth 1 -name "inputs*" -print)
-probin_files=$(find . -maxdepth 1 -name "probin*" -print)
+diag_files=$(find . -maxdepth 1 -name "*diag.out" -print)
 model_files=$(find . -maxdepth 1 -name "*.hse.*" -print)
 job_files=$(find . -maxdepth 1 -name "*.slurm" -print) $(find . -maxdepth 1 -name "*.submit" -print)
 process_files=$(find . -maxdepth 1 -name "process*" -print)
 
-${HTAR} -cvf ${HPSS_DIR}/diag_files_${datestr}.tar ${model_files} ${ftime_files} ${inputs_files} ${probin_files} ${slurm_files} ${process_files} >> /dev/null
+${HTAR} -cvf ${HPSS_DIR}/diag_files_${datestr}.tar ${model_files} ${ftime_files} ${inputs_files} ${probin_files} ${job_files} ${process_files} >> /dev/null
 
 
 # Loop, waiting for plt and chk directories to appear.
