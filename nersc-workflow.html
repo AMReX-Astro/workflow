@@ -172,6 +172,111 @@ slack_job_start.py<span class="w"> </span><span class="s2">&quot;starting NERSC 
 srun<span class="w"> </span>-n<span class="w"> </span><span class="m">64</span><span class="w"> </span><span class="si">${</span><span class="nv">CASTRO_EXEC</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
 </pre></div>
 </div>
+<p>Below is an example that runs on CPU-only nodes. Here <code class="docutils literal notranslate"><span class="pre">ntasks-per-node</span></code>
+refers to number of MPI processes (used for distributed parallelism) per node,
+and <code class="docutils literal notranslate"><span class="pre">cpus-per-task</span></code> refers to number of hyper threads used per task
+(used for shared-memory parallelism). Since Perlmutter CPU node has
+2 sockets * 64 cores/socket * 2 threads/core = 256 threads, set <code class="docutils literal notranslate"><span class="pre">cpus-per-task</span></code>
+to <code class="docutils literal notranslate"><span class="pre">256/(ntasks-per-node)</span></code>. However, it is actually best to assign
+each OpenMP thread per physical core, so it is best to set <code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code> to
+<code class="docutils literal notranslate"><span class="pre">cpus-per-task/2</span></code>. See more detailed instructions within the script.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH --job-name=perlmutter_script</span>
+<span class="c1">#SBATCH --account=m3018</span>
+<span class="c1">#SBATCH --nodes=16</span>
+<span class="c1">#SBATCH --ntasks-per-node=16</span>
+<span class="c1">#SBATCH --cpus-per-task=16</span>
+<span class="c1">#SBATCH --qos=regular</span>
+<span class="c1">#SBATCH --time=02:00:00</span>
+<span class="c1">#SBATCH --constraint=cpu</span>
+
+<span class="c1">#***********************INSTRUCTIONS*******************************************************</span>
+<span class="c1">#In order to couple each MPI process with OpenMP threads we have designed the following</span>
+<span class="c1">#strategy:</span>
+<span class="c1">#</span>
+<span class="c1"># 1. First we fix one node in the --qos debug queue and fix a 2**n number of</span>
+<span class="c1">#    --ntasks-per-node, starting with n=0.</span>
+<span class="c1">#</span>
+<span class="c1"># 2. Next, we compute the number --cpus-per-task=256/-ntask-per-node. This is</span>
+<span class="c1">#    the number of virtual cores available to each MPI process on each node.</span>
+<span class="c1">#    Each physical core is composed by two virtual cores in a (64+64) where each</span>
+<span class="c1">#    NUMA domain will contain 64 physical cores.</span>
+<span class="c1">#</span>
+<span class="c1"># 3. Based on the available number of virtual cores, we obtain the compute of physical</span>
+<span class="c1">#    cores and bind each OpenMP thread to each available physical core, using:</span>
+<span class="c1">#    export OMP_NUM_THREADS. Also, a lower number may also be selected (in case of</span>
+<span class="c1">#    memory shortage); however in principle we want to squeeze all the available resources</span>
+<span class="c1">#    first.</span>
+<span class="c1">#</span>
+<span class="c1"># 4. Run the script and check the wall-clock-timestep. In perlmutter I use</span>
+<span class="c1">#    grep Coarse &lt;slurm_output&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># 5. Repeat the steps 1-4 until the perfect MPI/OpenMP balance is reached for the</span>
+<span class="c1">#    choice of n.</span>
+<span class="c1">#</span>
+<span class="c1"># 6. Compare different amr.max_grid_size until the optimal value is reached. Usually is located</span>
+<span class="c1">#    near half the Level 0 half_size. Furthermore, test several amr.blocking_factor sizes.</span>
+<span class="c1">#</span>
+<span class="c1"># 7. Finally, increase the number of nodes from 1, 2, 4, 8 and compare the</span>
+<span class="c1">#    wall-clock time change. If the problem scales correctly, the wall-clock time will</span>
+<span class="c1">#    go down by a factor of ~ 2, as we increase the nodes. However such scaling will break after</span>
+<span class="c1">#    one particular bigger node choice. This is the perfect number of nodes we have to select.</span>
+<span class="c1">#</span>
+<span class="c1">#8. Run a chain of jobs using this script and ./chainslurm.sh</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">8</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_PLACES</span><span class="o">=</span>cores
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_PROC_BIND</span><span class="o">=</span>spread
+
+<span class="c1">#export MPICH_MAX_THREAD_SAFETY=multiple</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CASTRO_EXEC</span><span class="o">=</span>./Castro2d.gnu.x86-milan.MPI.OMP.ex
+<span class="nb">export</span><span class="w"> </span><span class="nv">INPUTS_FILE</span><span class="o">=</span>./inputs_nova_t7
+
+<span class="k">function</span><span class="w"> </span>find_chk_file<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># find_chk_file takes a single argument -- the wildcard pattern</span>
+<span class="w">    </span><span class="c1"># for checkpoint files to look through</span>
+<span class="w">    </span><span class="nv">chk</span><span class="o">=</span><span class="nv">$1</span>
+
+<span class="w">    </span><span class="c1"># find the latest 2 restart files.  This way if the latest didn&#39;t</span>
+<span class="w">    </span><span class="c1"># complete we fall back to the previous one.</span>
+<span class="w">    </span><span class="nv">temp_files</span><span class="o">=</span><span class="k">$(</span>find<span class="w"> </span>.<span class="w"> </span>-maxdepth<span class="w"> </span><span class="m">1</span><span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">chk</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>-print<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-2<span class="k">)</span>
+<span class="w">    </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span>f<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">temp_files</span><span class="si">}</span>
+<span class="w">    </span><span class="k">do</span>
+<span class="w">        </span><span class="c1"># the Header is the last thing written -- check if it&#39;s there, otherwise,</span>
+<span class="w">        </span><span class="c1"># fall back to the second-to-last check file written</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">f</span><span class="si">}</span>/Header<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">            </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="w">            </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">fi</span>
+<span class="w">    </span><span class="k">done</span>
+
+<span class="o">}</span>
+
+<span class="c1"># look for 7-digit chk files</span>
+find_chk_file<span class="w"> </span><span class="s2">&quot;*chk???????&quot;</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="c1"># look for 6-digit chk files</span>
+<span class="w">    </span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk??????&quot;</span>
+<span class="k">fi</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="c1"># look for 5-digit chk files</span>
+<span class="w">    </span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk?????&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># restartString will be empty if no chk files are found -- i.e. new run</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;amr.restart=</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">else</span>
+<span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="k">fi</span>
+
+srun<span class="w"> </span>-n<span class="w"> </span><span class="k">$((</span><span class="nv">SLURM_NTASKS_PER_NODE</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">SLURM_NNODES</span><span class="k">))</span><span class="w"> </span>-c<span class="w"> </span><span class="si">${</span><span class="nv">SLURM_CPUS_PER_TASK</span><span class="si">}</span><span class="w"> </span>--cpu-bind<span class="o">=</span>cores<span class="w">  </span><span class="si">${</span><span class="nv">CASTRO_EXEC</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">INPUTS_FILE</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span>
+</pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Jobs should be run in your <code class="docutils literal notranslate"><span class="pre">$SCRATCH</span></code> directory. By default,
