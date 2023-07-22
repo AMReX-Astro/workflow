@@ -22,6 +22,17 @@ includes the restart logic to allow for job chaining.
 .. literalinclude:: ../../job_scripts/perlmutter/perlmutter.submit
    :language: sh
 
+Below is an example that runs on CPU-only nodes. Here ``ntasks-per-node``
+refers to number of MPI processes (used for distributed parallelism) per node,
+and ``cpus-per-task`` refers to number of hyper threads used per task
+(used for shared-memory parallelism). Since Perlmutter CPU node has
+2 sockets * 64 cores/socket * 2 threads/core = 256 threads, set ``cpus-per-task``
+to ``256/(ntasks-per-node)``. However, it is actually best to assign
+each OpenMP thread per physical core, so it is best to set ``OMP_NUM_THREADS`` to
+``cpus-per-task/2``. See more detailed instructions within the script.
+
+.. literalinclude:: ../../job_scripts/perlmutter-cpu/perlmutter_cpu.slurm
+   :language: sh
 
 .. note::
 
