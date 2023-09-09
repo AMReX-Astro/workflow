@@ -34,7 +34,7 @@ Build, e.g. the Castro Sedov hydro test problem
 
 .. prompt:: bash
 
-   make -j COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE -j 4
+   make COMP=gnu TINY_PROFILE=TRUE USE_MPI=TRUE USE_OMP=FALSE USE_CUDA=TRUE -j 4
 
 Hypre
 ^^^^^

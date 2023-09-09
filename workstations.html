@@ -13,11 +13,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script src="_static/clipboard.min.js"></script>
-        <script src="_static/copybutton.js"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -88,13 +88,13 @@
            <div itemprop="articleBody">
              
   <section id="linux-workstations">
-<h1>Linux Workstations<a class="headerlink" href="#linux-workstations" title="Permalink to this heading">¶</a></h1>
+<h1>Linux Workstations<a class="headerlink" href="#linux-workstations" title="Link to this heading">¶</a></h1>
 <p>In general GCC 10.x works well on Linux workstations.</p>
 <section id="gpu-offloading">
-<h2>GPU offloading<a class="headerlink" href="#gpu-offloading" title="Permalink to this heading">¶</a></h2>
+<h2>GPU offloading<a class="headerlink" href="#gpu-offloading" title="Link to this heading">¶</a></h2>
 <p>We use the GNU compilers to build with nvcc and CUDA.</p>
 <section id="bender">
-<h3>bender<a class="headerlink" href="#bender" title="Permalink to this heading">¶</a></h3>
+<h3>bender<a class="headerlink" href="#bender" title="Link to this heading">¶</a></h3>
 <p>Compile as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">7.3</span>
 
@@ -108,7 +108,7 @@
 </div>
 </section>
 <section id="groot">
-<h3>groot<a class="headerlink" href="#groot" title="Permalink to this heading">¶</a></h3>
+<h3>groot<a class="headerlink" href="#groot" title="Link to this heading">¶</a></h3>
 <p>We need to work around a bug in the headers in the default GCC 10.2 on groot,
 so we load an older version for the GPU build.</p>
 <p>Compile as:</p>
@@ -121,7 +121,7 @@ so we load an older version for the GPU build.</p>
 </section>
 </section>
 <section id="remote-vis-with-jupyter">
-<h2>Remote vis with Jupyter<a class="headerlink" href="#remote-vis-with-jupyter" title="Permalink to this heading">¶</a></h2>
+<h2>Remote vis with Jupyter<a class="headerlink" href="#remote-vis-with-jupyter" title="Link to this heading">¶</a></h2>
 <p>You can connect to Jupyter on groot to do remote visualization.</p>
 <p>On groot, do:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">lab</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">browser</span> <span class="o">--</span><span class="n">ip</span><span class="o">=</span><span class="s2">&quot;groot&quot;</span>

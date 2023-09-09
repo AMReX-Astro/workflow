@@ -13,11 +13,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script src="_static/clipboard.min.js"></script>
-        <script src="_static/copybutton.js"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -90,11 +90,11 @@
            <div itemprop="articleBody">
              
   <section id="working-at-alcf">
-<h1>Working at ALCF<a class="headerlink" href="#working-at-alcf" title="Permalink to this heading">¶</a></h1>
+<h1>Working at ALCF<a class="headerlink" href="#working-at-alcf" title="Link to this heading">¶</a></h1>
 <p>Polaris has 560 nodes each with 4 NVIDIA A100 GPUs.</p>
 <p>The PBS scheduler is used.</p>
 <section id="logging-in">
-<h2>Logging In<a class="headerlink" href="#logging-in" title="Permalink to this heading">¶</a></h2>
+<h2>Logging In<a class="headerlink" href="#logging-in" title="Link to this heading">¶</a></h2>
 <p>ssh into:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>polaris.alcf.ornl.gov
 </pre></div>
@@ -103,7 +103,7 @@
 there.  This is read at the end of <code class="docutils literal notranslate"><span class="pre">/etc/bash.bashrc</span></code></p>
 </section>
 <section id="compiling">
-<h2>Compiling<a class="headerlink" href="#compiling" title="Permalink to this heading">¶</a></h2>
+<h2>Compiling<a class="headerlink" href="#compiling" title="Link to this heading">¶</a></h2>
 <p>Load the modules:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
 span.prompt1:before {
@@ -115,11 +115,11 @@ span.prompt1:before {
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">COMP</span><span class="o">=</span>gnu<span class="w"> </span><span class="nv">USE_CUDA</span><span class="o">=</span>TRUE</span>
 </pre></div></div></section>
 <section id="disks">
-<h2>Disks<a class="headerlink" href="#disks" title="Permalink to this heading">¶</a></h2>
+<h2>Disks<a class="headerlink" href="#disks" title="Link to this heading">¶</a></h2>
 <p>Project workspace is at: <code class="docutils literal notranslate"><span class="pre">/lus/grand/projects/AstroExplosions/</span></code></p>
 </section>
 <section id="queues">
-<h2>Queues<a class="headerlink" href="#queues" title="Permalink to this heading">¶</a></h2>
+<h2>Queues<a class="headerlink" href="#queues" title="Link to this heading">¶</a></h2>
 <p><a class="reference external" href="https://www.alcf.anl.gov/support/user-guides/polaris/queueing-and-running-jobs/job-and-queue-scheduling/index.html">https://www.alcf.anl.gov/support/user-guides/polaris/queueing-and-running-jobs/job-and-queue-scheduling/index.html</a></p>
 <p>For production jobs, you submit to the <code class="docutils literal notranslate"><span class="pre">prod</span></code> queue.</p>
 <div class="admonition note">
@@ -128,7 +128,7 @@ span.prompt1:before {
 </div>
 </section>
 <section id="submitting">
-<h2>Submitting<a class="headerlink" href="#submitting" title="Permalink to this heading">¶</a></h2>
+<h2>Submitting<a class="headerlink" href="#submitting" title="Link to this heading">¶</a></h2>
 <p>Clone the <code class="docutils literal notranslate"><span class="pre">GettingStarted</span></code> repo:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">git<span class="w"> </span>clone<span class="w"> </span>git@github.com:argonne-lcf/GettingStarted.git</span>
 </pre></div></div><p>you’ll want to use the examples in
@@ -137,7 +137,7 @@ span.prompt1:before {
 <code class="docutils literal notranslate"><span class="pre">set_affinity_gpu_polaris.sh</span></code> copied into your run directory.</p>
 <p>Here’s a submission script that will run on 2 nodes with 4 GPUs / node:</p>
 <div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">polaris.submit</span></code></span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">polaris.submit</span></code></span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
 <span class="c1">#PBS -l select=2:system=polaris</span>
 <span class="c1">#PBS -l place=scatter</span>
@@ -173,11 +173,11 @@ mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="si">${</sp
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">qstat<span class="w"> </span>-u<span class="w"> </span>username</span>
 </pre></div></div></section>
 <section id="automatic-restarting">
-<h2>Automatic Restarting<a class="headerlink" href="#automatic-restarting" title="Permalink to this heading">¶</a></h2>
+<h2>Automatic Restarting<a class="headerlink" href="#automatic-restarting" title="Link to this heading">¶</a></h2>
 <p>A version of the submission script that automatically restarts from
 the last checkpoint is:</p>
 <div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">polaris.submit</span></code></span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">polaris.submit</span></code></span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
 <span class="c1">#PBS -l select=2:system=polaris</span>
 <span class="c1">#PBS -l place=scatter</span>
@@ -254,10 +254,10 @@ mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="si">${</sp
 </div>
 </section>
 <section id="job-chaining">
-<h2>Job Chaining<a class="headerlink" href="#job-chaining" title="Permalink to this heading">¶</a></h2>
+<h2>Job Chaining<a class="headerlink" href="#job-chaining" title="Link to this heading">¶</a></h2>
 <p>A script that can be used to chain jobs with PBS is:</p>
 <div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">chainqsub.sh</span></code></span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">chainqsub.sh</span></code></span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -f</span>
 
 <span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>

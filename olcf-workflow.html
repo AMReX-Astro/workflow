@@ -13,11 +13,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script src="_static/clipboard.min.js"></script>
-        <script src="_static/copybutton.js"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -110,11 +110,11 @@
            <div itemprop="articleBody">
              
   <section id="managing-jobs-at-olcf">
-<h1>Managing Jobs at OLCF<a class="headerlink" href="#managing-jobs-at-olcf" title="Permalink to this heading">¶</a></h1>
+<h1>Managing Jobs at OLCF<a class="headerlink" href="#managing-jobs-at-olcf" title="Link to this heading">¶</a></h1>
 <section id="summit">
-<h2>Summit<a class="headerlink" href="#summit" title="Permalink to this heading">¶</a></h2>
+<h2>Summit<a class="headerlink" href="#summit" title="Link to this heading">¶</a></h2>
 <section id="summit-architecture">
-<h3>Summit Architecture:<a class="headerlink" href="#summit-architecture" title="Permalink to this heading">¶</a></h3>
+<h3>Summit Architecture:<a class="headerlink" href="#summit-architecture" title="Link to this heading">¶</a></h3>
 <p>Let us start by reviewing the node architecture of Summit. Our goal is to provide the necessary insight to make better
 decisions in the construction of our particular AMReX-Astro job scripts, and to explain how our code interacts with Summit.
 All the exposed information in this section is a condensed version of the <a class="reference external" href="https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun">Summit documentation guide</a>, and should not replace it.</p>
@@ -124,7 +124,7 @@ The whole structure of the node can be depicted as follows:</p>
 <figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="_images/summit-node-description-1.png"><img alt="_images/summit-node-description-1.png" src="_images/summit-node-description-1.png" style="width: 100%;" /></a>
 <figcaption>
-<p><span class="caption-text">Figure extracted from <code class="docutils literal notranslate"><span class="pre">https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun</span></code>.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">Figure extracted from <code class="docutils literal notranslate"><span class="pre">https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun</span></code>.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>A resource set is a minimal collection of CPU physical cores and GPU’s, on which a certain number of MPI processes and OpenMP
@@ -144,12 +144,12 @@ we can fit up to 6 resource sets per node as in Figure 2.</p>
 <figure class="align-center" id="id2">
 <a class="reference internal image-reference" href="_images/image56.png"><img alt="_images/image56.png" src="_images/image56.png" style="width: 100%;" /></a>
 <figcaption>
-<p><span class="caption-text">Figure modified and extracted from <code class="docutils literal notranslate"><span class="pre">https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun</span></code>.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">Figure modified and extracted from <code class="docutils literal notranslate"><span class="pre">https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun</span></code>.</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 </section>
 <section id="requesting-allocation">
-<h3>Requesting Allocation:<a class="headerlink" href="#requesting-allocation" title="Permalink to this heading">¶</a></h3>
+<h3>Requesting Allocation:<a class="headerlink" href="#requesting-allocation" title="Link to this heading">¶</a></h3>
 <p>To allocate the resource sets we need to summon the command <code class="docutils literal notranslate"><span class="pre">bsub</span></code> in addition to some flags:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -211,7 +211,7 @@ span.prompt1:before {
 </div>
 </section>
 <section id="submitting-a-job">
-<h3>Submitting a Job:<a class="headerlink" href="#submitting-a-job" title="Permalink to this heading">¶</a></h3>
+<h3>Submitting a Job:<a class="headerlink" href="#submitting-a-job" title="Link to this heading">¶</a></h3>
 <p>Once our allocation is granted, is important to load the same modules used in the compilation process of the executable and
 export the variable <code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code> to setup the number of threads per MPI process.</p>
 <p>In Castro, we have used the following modules:</p>
@@ -258,7 +258,7 @@ on each level balanced to maximize the use of the allocated resources.</p>
 </div>
 </section>
 <section id="writting-a-job-script">
-<h3>Writting a Job Script:<a class="headerlink" href="#writting-a-job-script" title="Permalink to this heading">¶</a></h3>
+<h3>Writting a Job Script:<a class="headerlink" href="#writting-a-job-script" title="Link to this heading">¶</a></h3>
 <p>In order to make our life easier, instead of submitting an allocation command line, loading the modules, setting the threads/MPI process, and writing
 another command line to submit our jobs, we can make an script to pack all these command into one executable <code class="docutils literal notranslate"><span class="pre">.sh</span></code> file, that can be submitted</p>
 <blockquote>
@@ -354,12 +354,12 @@ the latest file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">bsub<span class="w"> </span>luna_script.sh</span>
 </pre></div></div></section>
 <section id="monitoring-a-job">
-<h3>Monitoring a Job:<a class="headerlink" href="#monitoring-a-job" title="Permalink to this heading">¶</a></h3>
+<h3>Monitoring a Job:<a class="headerlink" href="#monitoring-a-job" title="Link to this heading">¶</a></h3>
 <p>You can monitor the status of your jobs using <code class="docutils literal notranslate"><span class="pre">bjobs</span></code>. Also, a slightly nicer view of your jobs can be viewed using <code class="docutils literal notranslate"><span class="pre">jobstat</span></code> as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">jobstat<span class="w"> </span>-u<span class="w"> </span>username</span>
 </pre></div></div></section>
 <section id="script-template">
-<h3>Script Template:<a class="headerlink" href="#script-template" title="Permalink to this heading">¶</a></h3>
+<h3>Script Template:<a class="headerlink" href="#script-template" title="Link to this heading">¶</a></h3>
 <p>Packing all the information before, lead us to the following script template</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="ch">#!/bin/bash</span>
 <span class="linenos"> 2</span><span class="c1">#BSUB -P ast106</span>
@@ -433,7 +433,7 @@ the latest file.</p>
 </div>
 </section>
 <section id="chaining-jobs">
-<h3>Chaining jobs<a class="headerlink" href="#chaining-jobs" title="Permalink to this heading">¶</a></h3>
+<h3>Chaining jobs<a class="headerlink" href="#chaining-jobs" title="Link to this heading">¶</a></h3>
 <p>The script <code class="docutils literal notranslate"><span class="pre">job_scripts/summit/chain_submit.sh</span></code> can be used to setup job dependencies,
 i.e., a job chain.</p>
 <p>First you submit a job as usual using <code class="docutils literal notranslate"><span class="pre">bsub</span></code>, and make note of the
@@ -450,7 +450,7 @@ restarting features discussed above.</p>
 </section>
 </section>
 <section id="archiving-to-hpss">
-<h2>Archiving to HPSS<a class="headerlink" href="#archiving-to-hpss" title="Permalink to this heading">¶</a></h2>
+<h2>Archiving to HPSS<a class="headerlink" href="#archiving-to-hpss" title="Link to this heading">¶</a></h2>
 <p>You can access HPSS from submit using the data transfer nodes by submitting a job
 via SLURM:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">sbatch<span class="w"> </span>-N<span class="w"> </span><span class="m">1</span><span class="w"> </span>-t<span class="w"> </span><span class="m">15</span>:00<span class="w"> </span>-A<span class="w"> </span>ast106<span class="w"> </span>--cluster<span class="w"> </span>dtn<span class="w"> </span>test_hpss.sh</span>
@@ -492,16 +492,16 @@ archived by <code class="docutils literal notranslate"><span class="pre">process
 for a description of usage and arguments.</p>
 </section>
 <section id="frontier">
-<h2>Frontier<a class="headerlink" href="#frontier" title="Permalink to this heading">¶</a></h2>
+<h2>Frontier<a class="headerlink" href="#frontier" title="Link to this heading">¶</a></h2>
 <section id="machine-details">
-<h3>Machine details<a class="headerlink" href="#machine-details" title="Permalink to this heading">¶</a></h3>
+<h3>Machine details<a class="headerlink" href="#machine-details" title="Link to this heading">¶</a></h3>
 <p>Queue policies are here:
 <a class="reference external" href="https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#scheduling-policy">https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#scheduling-policy</a></p>
 <p>Filesystem is called <code class="docutils literal notranslate"><span class="pre">orion</span></code>, and is Lustre:
 <a class="reference external" href="https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#data-and-storage">https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#data-and-storage</a></p>
 </section>
 <section id="submitting-jobs">
-<h3>Submitting jobs<a class="headerlink" href="#submitting-jobs" title="Permalink to this heading">¶</a></h3>
+<h3>Submitting jobs<a class="headerlink" href="#submitting-jobs" title="Link to this heading">¶</a></h3>
 <p>Frontier uses SLURM.</p>
 <p>Here’s a script that runs with 2 nodes using all 8 GPUs per node:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
@@ -541,14 +541,14 @@ srun<span class="w"> </span>-n<span class="si">${</span><span class="nv">TOTAL_N
 <p>Also see the WarpX docs: <a class="reference external" href="https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html">https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html</a></p>
 </section>
 <section id="job-status">
-<h3>Job Status<a class="headerlink" href="#job-status" title="Permalink to this heading">¶</a></h3>
+<h3>Job Status<a class="headerlink" href="#job-status" title="Link to this heading">¶</a></h3>
 <p>You can check on the status of your jobs via:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">squeue<span class="w"> </span>--me</span>
 </pre></div></div><p>and get an estimated start time via:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">squeue<span class="w"> </span>--me<span class="w"> </span>--start</span>
 </pre></div></div></section>
 <section id="job-chaining">
-<h3>Job Chaining<a class="headerlink" href="#job-chaining" title="Permalink to this heading">¶</a></h3>
+<h3>Job Chaining<a class="headerlink" href="#job-chaining" title="Link to this heading">¶</a></h3>
 <p>The script <a class="reference external" href="/ccs/home/zingale/bin/chainslurm.sh">chainslurm.sh</a> can be used to start
 a job chain, with each job depending on the previous.  For example, to start up
 10 jobs:</p>
@@ -557,13 +557,13 @@ a job chain, with each job depending on the previous.  For example, to start up
 of the existing job.</p>
 </section>
 <section id="debugging">
-<h3>Debugging<a class="headerlink" href="#debugging" title="Permalink to this heading">¶</a></h3>
+<h3>Debugging<a class="headerlink" href="#debugging" title="Link to this heading">¶</a></h3>
 <p>For debugging:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">rocgdb<span class="w"> </span>--args<span class="w"> </span>./Castro2d.hip.x86-trento.MPI.HIP.ex<span class="w"> </span>inputs_2d.testsuite</span>
 </pre></div></div><p>then do <code class="docutils literal notranslate"><span class="pre">run</span></code> at the debugger prompt.</p>
 </section>
 <section id="troubleshooting">
-<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this heading">¶</a></h3>
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h3>
 <p>Workaround to prevent hangs for collectives:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FI_MR_CACHE_MONITOR</span><span class="o">=</span>memhooks
 </pre></div>
