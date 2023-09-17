@@ -179,12 +179,15 @@ from the 480 resources available, 398 resources will remain idle until the two w
 Writting a Job Script:
 ^^^^^^^^^^^^^^^^^^^^^^
 
-In order to make our life easier, instead of submitting an allocation command line, loading the modules, setting the threads/MPI process, and writing
-another command line to submit our jobs, we can make an script to pack all these command into one executable ``.sh`` file, that can be submitted
- via ``bsub`` just once.
+In order to make our life easier, instead of submitting an allocation
+command line, loading the modules, setting the threads/MPI process,
+and writing another command line to submit our jobs, we can make an
+script to pack all these command into one executable ``.sh`` file,
+that can be submitted via ``bsub`` just once.
 
-We start our job script, summoning the shell with the statement ``!/bin/bash``. Then we add the ``bsub`` allocations flags, starting with ``#BSUB``
-as follows:
+We start our job script, summoning the shell with the statement
+``!/bin/bash``. Then we add the ``bsub`` allocations flags, starting
+with ``#BSUB`` as follows:
 
 .. code-block:: bash
 
@@ -482,7 +485,7 @@ and get an estimated start time via:
 Job Chaining
 ^^^^^^^^^^^^
 
-The script `chainslurm.sh </ccs/home/zingale/bin/chainslurm.sh>`_ can be used to start
+The script `chainslurm.sh <https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/slurm/chainslurm.sh>`_ can be used to start
 a job chain, with each job depending on the previous.  For example, to start up
 10 jobs:
 
