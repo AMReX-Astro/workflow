@@ -259,13 +259,14 @@ on each level balanced to maximize the use of the allocated resources.</p>
 </section>
 <section id="writting-a-job-script">
 <h3>Writting a Job Script:<a class="headerlink" href="#writting-a-job-script" title="Link to this heading">¶</a></h3>
-<p>In order to make our life easier, instead of submitting an allocation command line, loading the modules, setting the threads/MPI process, and writing
-another command line to submit our jobs, we can make an script to pack all these command into one executable <code class="docutils literal notranslate"><span class="pre">.sh</span></code> file, that can be submitted</p>
-<blockquote>
-<div><p>via <code class="docutils literal notranslate"><span class="pre">bsub</span></code> just once.</p>
-</div></blockquote>
-<p>We start our job script, summoning the shell with the statement <code class="docutils literal notranslate"><span class="pre">!/bin/bash</span></code>. Then we add the <code class="docutils literal notranslate"><span class="pre">bsub</span></code> allocations flags, starting with <code class="docutils literal notranslate"><span class="pre">#BSUB</span></code>
-as follows:</p>
+<p>In order to make our life easier, instead of submitting an allocation
+command line, loading the modules, setting the threads/MPI process,
+and writing another command line to submit our jobs, we can make an
+script to pack all these command into one executable <code class="docutils literal notranslate"><span class="pre">.sh</span></code> file,
+that can be submitted via <code class="docutils literal notranslate"><span class="pre">bsub</span></code> just once.</p>
+<p>We start our job script, summoning the shell with the statement
+<code class="docutils literal notranslate"><span class="pre">!/bin/bash</span></code>. Then we add the <code class="docutils literal notranslate"><span class="pre">bsub</span></code> allocations flags, starting
+with <code class="docutils literal notranslate"><span class="pre">#BSUB</span></code> as follows:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#BSUB -P ast106</span>
 <span class="c1">#BSUB -W 2:00</span>
@@ -549,7 +550,7 @@ srun<span class="w"> </span>-n<span class="si">${</span><span class="nv">TOTAL_N
 </pre></div></div></section>
 <section id="job-chaining">
 <h3>Job Chaining<a class="headerlink" href="#job-chaining" title="Link to this heading">¶</a></h3>
-<p>The script <a class="reference external" href="/ccs/home/zingale/bin/chainslurm.sh">chainslurm.sh</a> can be used to start
+<p>The script <a class="reference external" href="https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/slurm/chainslurm.sh">chainslurm.sh</a> can be used to start
 a job chain, with each job depending on the previous.  For example, to start up
 10 jobs:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">chainslurm<span class="w"> </span>-1<span class="w"> </span><span class="m">10</span><span class="w"> </span>frontier.slurm</span>
