@@ -72,7 +72,7 @@ at the moment, that loads ROCm 5.3.0
 
 .. note::
 
-   ROCm 5.4.3 does not seem to work with Castro--there are memory access issues
+   ROCm 5.4.3 and higher doe not seem to work with Castro--there are memory access issues
    in the burner
 
 .. note::
@@ -85,9 +85,3 @@ build via:
 .. prompt:: bash
 
    make COMP=gnu USE_HIP=TRUE
-
-
-.. note::
-
-   Compiling with ``DEBUG=TRUE`` takes a _very_ long time and may not work.
-

@@ -14,7 +14,8 @@
 EXEC=Castro2d.hip.x86-trento.MPI.HIP.SMPLSDC.ex
 INPUTS=inputs_2d.N14.coarse
 
-module load PrgEnv-gnu craype-accel-amd-gfx90a cray-mpich rocm amd-mixed
+module load PrgEnv-gnu craype-accel-amd-gfx90a cray-mpich rocm/5.3.0
+module amd-mixed/5.3.0
 
 function find_chk_file {
     # find_chk_file takes a single argument -- the wildcard pattern
