@@ -438,7 +438,8 @@ Here's a script that runs with 2 nodes using all 8 GPUs per node:
    EXEC=Castro3d.hip.x86-trento.MPI.HIP.ex
    INPUTS=inputs.3d.sph
 
-   module load PrgEnv-gnu craype-accel-amd-gfx90a cray-mpich rocm amd-mixed
+   module load PrgEnv-gnu craype-accel-amd-gfx90a cray-mpich rocm/5.3.0
+   module load amd-mixed/5.3.0
 
    export OMP_NUM_THREADS=1
    export NMPI_PER_NODE=8
