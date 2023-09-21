@@ -284,6 +284,41 @@ Finally, we run our job with the statement
 
    jsrun -n$n_res -c$n_cpu_cores_per_res$ -a$n_mpi_per_res -g$n_gpu_per_res -r$n_max_res_per_node ./$CASTRO $INPUTS ${restartString}
 
+We can ask the job manager to send a warning signal some amount of
+time before the allocation expires by passing ``-wa 'signal'`` and
+``-wt '[hour:]minute'`` to ``bsub``.  We can then have bash create a
+``dump_and_stop`` file when it receives the signal, which will tell
+Castro to output a checkpoint file and exit cleanly after it finishes
+the current timestep.  An important detail that I couldn't find
+documented anywhere is that the job manager sends the signal to all
+the processes in the job, not just the submission script, and we have
+to use a signal that is ignored by default so Castro doesn't
+immediately crash upon receiving it.  SIGCHLD, SIGURG, and SIGWINCH
+are the only signals that fit this requirement and of these, SIGURG is
+the least likely to be triggered by other events.
+
+.. code-block:: bash
+
+   #BSUB -wa URG
+   #BSUB -wt 2
+
+   ...
+
+   function sig_handler {
+      touch dump_and_stop
+      # disable this signal handler
+      trap - URG
+      echo "BATCH: allocation ending soon; telling Castro to dump a checkpoint and stop"
+   }
+   trap sig_handler URG
+
+   # execute jsrun in the background then use the builtin wait so bash can
+   # handle the signal
+   jsrun ... &
+   wait
+   # use jswait to wait for Castro to exit and then get the exit code
+   jswait 1
+
 Finally, once the script is completed and saves as ``luna_script.sh``, we can submit it by:
 
 .. prompt:: bash

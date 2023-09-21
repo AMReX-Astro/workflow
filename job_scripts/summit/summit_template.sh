@@ -8,7 +8,6 @@
 #BSUB -e luna_sniffing_output.%J
 #BSUB -wa URG
 #BSUB -wt 2
-# last 2 options are used for graceful exit
 
 module load gcc/10.2.0
 module load cuda/11.5.2
@@ -68,10 +67,10 @@ else
     restartString="amr.restart=${restartFile}"
 fi
 
-# clean up any run management files that may be left over from previous runs
-rm -f dump_and_continue dump_and_stop stop_run
+# clean up any run management files left over from previous runs
+rm -f dump_and_stop
 
-warning_time=$(bjobs -noheader -o action_warning_time $LSB_JOBID)
+warning_time=$(bjobs -noheader -o action_warning_time "$LSB_JOBID")
 # The `-wa URG -wt <n>` options tell bsub to send SIGURG to all processes n
 # minutes before the runtime limit, so we can exit gracefully.
 # SIGURG is ignored by default, so it won't make Castro crash.
