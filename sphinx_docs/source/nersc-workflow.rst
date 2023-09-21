@@ -39,6 +39,9 @@ each OpenMP thread per physical core, so it is best to set ``OMP_NUM_THREADS`` t
    Jobs should be run in your ``$SCRATCH`` directory. By default,
    SLURM will change directory into the submission directory.
 
+   Alternately, you can run in the common file system, ``$CFS/m3018``,
+   which everyone in the project has access to.
+
 Jobs are submitted as:
 
 .. prompt:: bash
@@ -57,12 +60,14 @@ and an estimate of the start time can be found via:
 
    squeue --me --start
 
+to cancel a job, you would use ``scancel``.
+
 
 Chaining
 ^^^^^^^^
 
 To chain jobs, such that one queues up after the previous job
-finished, use the ``chainslurm.sh`` script in that same directory:
+finished, use the `chainslurm.sh <https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/slurm/chainslurm.sh>`_  script in that same directory:
 
 .. prompt:: bash
 
