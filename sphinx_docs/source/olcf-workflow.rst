@@ -16,7 +16,7 @@ decisions in the construction of our particular AMReX-Astro job scripts, and to 
 All the exposed information in this section is a condensed version of the `Summit documentation guide
 <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun>`_, and should not replace it.
 
-In Summit, a node is composed by two sockets: each one with 21 CPU physical cores (+1 reserved for the system), 3 GPU's and 1 RAM memory bank.
+In Summit, a node is composed by two sockets: each one with 21 CPU physical cores (+1 reserved for the system), 3 GPUs and 1 RAM memory bank.
 The sockets are connected by a bus allowing communication among them. Each CPU physical core may define up to 4 threads.
 The whole structure of the node can be depicted as follows:
 
@@ -26,12 +26,12 @@ The whole structure of the node can be depicted as follows:
 
    Figure extracted from ``https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun``.
 
-A resource set is a minimal collection of CPU physical cores and GPU's, on which a certain number of MPI processes and OpenMP
+A resource set is a minimal collection of CPU physical cores and GPUs, on which a certain number of MPI processes and OpenMP
 threads operates through the execution of the code. Therefore, for each resource set, we neet to allocate:
 
 - A number of CPU physical cores.
 
-- A number of physical GPU's.
+- A number of physical GPUs.
 
 - A number of MPI processes.
 
@@ -133,12 +133,12 @@ and fixed only one thread per MPI process by:
    export OMP_NUM_THREADS=1
 
 The next step is to submit our job. The command `jsrun`, provided with the *total number of resource sets*, the
-*number of CPU physical cores per resource set*, *the number of GPU's per resource set*, *the number of MPI processes allocated per resource set*,
+*number of CPU physical cores per resource set*, *the number of GPUs per resource set*, *the number of MPI processes allocated per resource set*,
 works as follows:
 
 .. prompt:: bash
 
-   jsrun -n[number of resource sets] -c[number of CPU physical cores] -g[number of GPU's] -a[number of MPI processes] -r[number of max resources per node] ./[executable] [executable inputs]
+   jsrun -n[number of resource sets] -c[number of CPU physical cores] -g[number of GPUs] -a[number of MPI processes] -r[number of max resources per node] ./[executable] [executable inputs]
 
 In Castro we will use:
 
@@ -215,7 +215,7 @@ and define the enviroment variables:
 .. code-block::
 
    CASTRO=./Castro2d.gnu.MPI.CUDA.ex
-   INPUTS
+   INPUTS=inputs_luna
 
    n_res=480                # The max allocated number of resource sets is
    n_cpu_cores_per_res=1    # nnodes * n_max_res_per_node. In this case we will
@@ -282,7 +282,7 @@ Finally, we run our job with the statement
 
 .. code-block::
 
-   jsrun -n$n_res -c$n_cpu_cores_per_res$ -a$n_mpi_per_res -g$n_gpu_per_res -r$n_max_res_per_node ./$CASTRO $INPUTS ${restartString}
+   jsrun -n$n_res -c$n_cpu_cores_per_res -a$n_mpi_per_res -g$n_gpu_per_res -r$n_max_res_per_node $CASTRO $INPUTS ${restartString}
 
 We can ask the job manager to send a warning signal some amount of
 time before the allocation expires by passing ``-wa 'signal'`` and
@@ -319,7 +319,7 @@ the least likely to be triggered by other events.
    # use jswait to wait for Castro to exit and then get the exit code
    jswait 1
 
-Finally, once the script is completed and saves as ``luna_script.sh``, we can submit it by:
+Finally, once the script is completed and saved as ``luna_script.sh``, we can submit it by:
 
 .. prompt:: bash
 
