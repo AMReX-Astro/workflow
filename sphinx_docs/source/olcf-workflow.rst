@@ -27,7 +27,7 @@ The whole structure of the node can be depicted as follows:
    Figure extracted from ``https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun``.
 
 A resource set is a minimal collection of CPU physical cores and GPUs, on which a certain number of MPI processes and OpenMP
-threads operates through the execution of the code. Therefore, for each resource set, we neet to allocate:
+threads operates through the execution of the code. Therefore, for each resource set, we need to allocate:
 
 - A number of CPU physical cores.
 
@@ -42,7 +42,7 @@ discussion here. For now, we fix just only one thread through the whole executio
 number of resource sets that may fit into one node.
 
 In Castro we construct each resource set with: 1 CPU physical core, 1 GPU, and only 1 MPI process.
-The next step is to see how many resources sets fits into one node. Acording to the node architecture depicted in Figure 1,
+The next step is to see how many resources sets fits into one node. According to the node architecture depicted in Figure 1,
 we can fit up to 6 resource sets per node as in Figure 2.
 
 .. figure:: ./figs/image56.png
@@ -76,7 +76,7 @@ To allocate the resource sets we need to summon the command ``bsub`` in addition
    * - ``-alloc_flags``
      - allocates the maximum number of threads available per CPU core. By default the option is ``smt4`` that
        allows 4 threads per core. However, since we will consider only one thread through the whole execution
-       we will setup the option ``stm1``. Also ``-alloc_flags`` stands for more options, however we are only
+       we will setup the option ``smt1``. Also ``-alloc_flags`` stands for more options, however we are only
        interested in the one discussed before.
 
 
@@ -146,10 +146,10 @@ In Castro we will use:
 
    jsrun -n [number of resource sets] -a1 -c1 -g1 -r6 ./$CASTRO $INPUTS
 
-where the ``CASTRO`` and ``INPUTS`` enviroment variables are placeholders to the executable and input file names respectively.
+where the ``CASTRO`` and ``INPUTS`` environment variables are placeholders to the executable and input file names respectively.
 
 Now, in order to use all the resources we have allocated to run our jobs, the number of resource sets should match the number of AMReX boxes (grids)
-of the corresponing level with the biggest number of them. Let us consider an extract piece from a Castro problem standard output:
+of the corresponding level with the biggest number of them. Let us consider an extract piece from a Castro problem standard output:
 
 .. code-block::
 
@@ -210,7 +210,7 @@ In addition we add the modules statements, fixing only one thread per MPI proces
 
    export OMP_NUM_THREADS=1
 
-and define the enviroment variables:
+and define the environment variables:
 
 .. code-block::
 
