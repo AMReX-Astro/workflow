@@ -16,7 +16,7 @@ decisions in the construction of our particular AMReX-Astro job scripts, and to 
 All the exposed information in this section is a condensed version of the `Summit documentation guide
 <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun>`_, and should not replace it.
 
-In Summit, a node is composed by two sockets: each one with 21 CPU physical cores (+1 reserved for the system), 3 GPU's and 1 RAM memory bank.
+In Summit, a node is composed by two sockets: each one with 21 CPU physical cores (+1 reserved for the system), 3 GPUs and 1 RAM memory bank.
 The sockets are connected by a bus allowing communication among them. Each CPU physical core may define up to 4 threads.
 The whole structure of the node can be depicted as follows:
 
@@ -26,12 +26,12 @@ The whole structure of the node can be depicted as follows:
 
    Figure extracted from ``https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-launcher-jsrun``.
 
-A resource set is a minimal collection of CPU physical cores and GPU's, on which a certain number of MPI processes and OpenMP
-threads operates through the execution of the code. Therefore, for each resource set, we neet to allocate:
+A resource set is a minimal collection of CPU physical cores and GPUs, on which a certain number of MPI processes and OpenMP
+threads operates through the execution of the code. Therefore, for each resource set, we need to allocate:
 
 - A number of CPU physical cores.
 
-- A number of physical GPU's.
+- A number of physical GPUs.
 
 - A number of MPI processes.
 
@@ -42,7 +42,7 @@ discussion here. For now, we fix just only one thread through the whole executio
 number of resource sets that may fit into one node.
 
 In Castro we construct each resource set with: 1 CPU physical core, 1 GPU, and only 1 MPI process.
-The next step is to see how many resources sets fits into one node. Acording to the node architecture depicted in Figure 1,
+The next step is to see how many resources sets fits into one node. According to the node architecture depicted in Figure 1,
 we can fit up to 6 resource sets per node as in Figure 2.
 
 .. figure:: ./figs/image56.png
@@ -76,7 +76,7 @@ To allocate the resource sets we need to summon the command ``bsub`` in addition
    * - ``-alloc_flags``
      - allocates the maximum number of threads available per CPU core. By default the option is ``smt4`` that
        allows 4 threads per core. However, since we will consider only one thread through the whole execution
-       we will setup the option ``stm1``. Also ``-alloc_flags`` stands for more options, however we are only
+       we will setup the option ``smt1``. Also ``-alloc_flags`` stands for more options, however we are only
        interested in the one discussed before.
 
 
@@ -133,12 +133,12 @@ and fixed only one thread per MPI process by:
    export OMP_NUM_THREADS=1
 
 The next step is to submit our job. The command `jsrun`, provided with the *total number of resource sets*, the
-*number of CPU physical cores per resource set*, *the number of GPU's per resource set*, *the number of MPI processes allocated per resource set*,
+*number of CPU physical cores per resource set*, *the number of GPUs per resource set*, *the number of MPI processes allocated per resource set*,
 works as follows:
 
 .. prompt:: bash
 
-   jsrun -n[number of resource sets] -c[number of CPU physical cores] -g[number of GPU's] -a[number of MPI processes] -r[number of max resources per node] ./[executable] [executable inputs]
+   jsrun -n[number of resource sets] -c[number of CPU physical cores] -g[number of GPUs] -a[number of MPI processes] -r[number of max resources per node] ./[executable] [executable inputs]
 
 In Castro we will use:
 
@@ -146,10 +146,10 @@ In Castro we will use:
 
    jsrun -n [number of resource sets] -a1 -c1 -g1 -r6 ./$CASTRO $INPUTS
 
-where the ``CASTRO`` and ``INPUTS`` enviroment variables are placeholders to the executable and input file names respectively.
+where the ``CASTRO`` and ``INPUTS`` environment variables are placeholders to the executable and input file names respectively.
 
 Now, in order to use all the resources we have allocated to run our jobs, the number of resource sets should match the number of AMReX boxes (grids)
-of the corresponing level with the biggest number of them. Let us consider an extract piece from a Castro problem standard output:
+of the corresponding level with the biggest number of them. Let us consider an extract piece from a Castro problem standard output:
 
 .. code-block::
 
@@ -210,12 +210,12 @@ In addition we add the modules statements, fixing only one thread per MPI proces
 
    export OMP_NUM_THREADS=1
 
-and define the enviroment variables:
+and define the environment variables:
 
 .. code-block::
 
    CASTRO=./Castro2d.gnu.MPI.CUDA.ex
-   INPUTS
+   INPUTS=inputs_luna
 
    n_res=480                # The max allocated number of resource sets is
    n_cpu_cores_per_res=1    # nnodes * n_max_res_per_node. In this case we will
@@ -278,13 +278,47 @@ increase (with a minimum of 5 digits), we search for files with
 7-digits, 6-digits, and then finally 5-digits, to ensure we pick up
 the latest file.
 
-Finally, we run our job with the statement
+We can also ask the job manager to send a warning signal some amount
+of time before the allocation expires by passing ``-wa 'signal'`` and
+``-wt '[hour:]minute'`` to ``bsub``.  We can then have bash create a
+``dump_and_stop`` file when it receives the signal, which will tell
+Castro to output a checkpoint file and exit cleanly after it finishes
+the current timestep.  An important detail that I couldn't find
+documented anywhere is that the job manager sends the signal to all
+the processes in the job, not just the submission script, and we have
+to use a signal that is ignored by default so Castro doesn't
+immediately crash upon receiving it.  SIGCHLD, SIGURG, and SIGWINCH
+are the only signals that fit this requirement and of these, SIGURG is
+the least likely to be triggered by other events.
 
-.. code-block::
+.. code-block:: bash
 
-   jsrun -n$n_res -c$n_cpu_cores_per_res$ -a$n_mpi_per_res -g$n_gpu_per_res -r$n_max_res_per_node ./$CASTRO $INPUTS ${restartString}
+   #BSUB -wa URG
+   #BSUB -wt 2
 
-Finally, once the script is completed and saves as ``luna_script.sh``, we can submit it by:
+   ...
+
+   function sig_handler {
+      touch dump_and_stop
+      # disable this signal handler
+      trap - URG
+      echo "BATCH: allocation ending soon; telling Castro to dump a checkpoint and stop"
+   }
+   trap sig_handler URG
+
+We use the ``jsrun`` command to launch Castro on the compute nodes. In
+order for bash to handle the warning signal before Castro exits, we
+must put ``jsrun`` in the background and use the shell builtin
+``wait``:
+
+.. code-block:: bash
+
+   jsrun -n$n_res -c$n_cpu_cores_per_res -a$n_mpi_per_res -g$n_gpu_per_res -r$n_max_res_per_node $CASTRO $INPUTS ${restartString} &
+   wait
+   # use jswait to wait for Castro (job step 1/1) to finish and get the exit code
+   jswait 1
+
+Finally, once the script is completed and saved as ``luna_script.sh``, we can submit it by:
 
 .. prompt:: bash
 

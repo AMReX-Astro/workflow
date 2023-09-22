@@ -25,7 +25,7 @@ echo chaining $numjobs jobs starting with $oldjob
 for count in `seq 1 1 $numjobs`
 do
   echo starting job $count to depend on $oldjob
-  aout=`bsub -w "ended(${oldjob})" $script`
+  aout=`bsub -w "done(${oldjob})" $script`
   id=`echo $aout | head -n1 | cut -d'<' -f2 | cut -d'>' -f1`
   echo "   " jobid: $id
   echo " "
