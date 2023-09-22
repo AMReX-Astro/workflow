@@ -278,14 +278,8 @@ increase (with a minimum of 5 digits), we search for files with
 7-digits, 6-digits, and then finally 5-digits, to ensure we pick up
 the latest file.
 
-Finally, we run our job with the statement
-
-.. code-block::
-
-   jsrun -n$n_res -c$n_cpu_cores_per_res -a$n_mpi_per_res -g$n_gpu_per_res -r$n_max_res_per_node $CASTRO $INPUTS ${restartString}
-
-We can ask the job manager to send a warning signal some amount of
-time before the allocation expires by passing ``-wa 'signal'`` and
+We can also ask the job manager to send a warning signal some amount
+of time before the allocation expires by passing ``-wa 'signal'`` and
 ``-wt '[hour:]minute'`` to ``bsub``.  We can then have bash create a
 ``dump_and_stop`` file when it receives the signal, which will tell
 Castro to output a checkpoint file and exit cleanly after it finishes
@@ -312,11 +306,16 @@ the least likely to be triggered by other events.
    }
    trap sig_handler URG
 
-   # execute jsrun in the background then use the builtin wait so bash can
-   # handle the signal
-   jsrun ... &
+We use the ``jsrun`` command to launch Castro on the compute nodes. In
+order for bash to handle the warning signal before Castro exits, we
+must put ``jsrun`` in the background and use the shell builtin
+``wait``:
+
+.. code-block:: bash
+
+   jsrun -n$n_res -c$n_cpu_cores_per_res -a$n_mpi_per_res -g$n_gpu_per_res -r$n_max_res_per_node $CASTRO $INPUTS ${restartString} &
    wait
-   # use jswait to wait for Castro to exit and then get the exit code
+   # use jswait to wait for Castro (job step 1/1) to finish and get the exit code
    jswait 1
 
 Finally, once the script is completed and saved as ``luna_script.sh``, we can submit it by:

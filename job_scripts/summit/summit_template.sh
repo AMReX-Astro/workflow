@@ -86,5 +86,5 @@ trap sig_handler URG
 # handle the signal
 jsrun -n$n_res -c$n_cpu_cores_per_res -a$n_mpi_per_res -g$n_gpu_per_res -r$n_max_res_per_node $CASTRO $INPUTS ${restartString} &
 wait
-# use jswait to wait for Castro to exit and then get the exit code
+# use jswait to wait for Castro (job step 1/1) to finish and get the exit code
 jswait 1
