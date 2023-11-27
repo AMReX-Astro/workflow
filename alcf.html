@@ -110,6 +110,8 @@ span.prompt1:before {
   content: "$ ";
 }
 </style><span class="prompt1">module<span class="w"> </span>swap<span class="w"> </span>PrgEnv-nvhpc<span class="w"> </span>PrgEnv-gnu</span>
+<span class="prompt1"><span class="c1"># load gcc/11.2.0 version since CUDA doesn&#39;t support gcc 12 yet</span></span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>gcc/11.2.0</span>
 <span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>nvhpc-mixed</span>
 </pre></div></div><p>Then you can compile via:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">COMP</span><span class="o">=</span>gnu<span class="w"> </span><span class="nv">USE_CUDA</span><span class="o">=</span>TRUE</span>
