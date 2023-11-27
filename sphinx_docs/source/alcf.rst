@@ -28,6 +28,8 @@ Load the modules:
 .. prompt:: bash
 
    module swap PrgEnv-nvhpc PrgEnv-gnu
+   # load gcc/11.2.0 version since CUDA doesn't support gcc 12 yet
+   module load gcc/11.2.0
    module load nvhpc-mixed
 
 Then you can compile via:
