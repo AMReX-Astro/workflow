@@ -535,13 +535,70 @@ of the existing job.
 Debugging
 ^^^^^^^^^
 
-For debugging:
+Debugging is done with ``rocgdb``.  Here's a workflow that works:
+
+Setup the environment:
 
 .. prompt:: bash
 
-   rocgdb --args ./Castro2d.hip.x86-trento.MPI.HIP.ex inputs_2d.testsuite
+   module load PrgEnv-cray
+   module load cray-mpich/8.1.27
+   module load craype-accel-amd-gfx90a
+   module load amd-mixed/5.6.0
 
-then do ``run`` at the debugger prompt.
+Build the executable.  Usually it's best to disable MPI if possible
+and maybe turn on ``TEST=TRUE``:
+
+.. prompt:: bash
+
+   make USE_HIP=TRUE TEST=TRUE USE_MPI=FALSE -j 4
+
+Startup an interactive session:
+
+.. prompt:: bash
+
+   salloc -A ast106 -J mz -t 0:30:00 -p batch -N 1
+
+This will automatically log you onto the compute now.  Now set the following
+environment variables:
+
+.. prompt:: bash
+
+   export HIP_ENABLE_DEFERRED_LOADING=0
+   export AMD_LOG_LEVEL=3
+   export AMD_SERIALIZE_KERNEL=3
+   export AMD_SERIALIZE_COPY=3
+
+Run the debugger:
+
+.. prompt:: bash
+
+   rocgdb ./Castro2d.hip.x86-trento.HIP.ex
+
+Set the following inside of the debugger:
+
+.. prompt::
+   :prompts: (gdb)
+
+   set pagination off
+   b abort
+
+The run:
+
+.. prompt::
+   :prompts: (gdb)
+
+   run inputs
+
+If it doesn't crash with the trace, then try:
+
+.. prompt::
+   :prompts: (gdb)
+
+   interrupt
+   bt
+
+
 
 
 
@@ -561,6 +618,5 @@ Some AMReX reports are that it hangs if the initial Arena size is too big, and w
 
   amrex.the_arena_init_size=0
 
-The arena size would then grow as needed with time.  There is a suggestion that if the size is 
+The arena size would then grow as needed with time.  There is a suggestion that if the size is
 larger than
-
