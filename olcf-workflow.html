@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Managing Jobs at OLCF &mdash; AMReX-Astro 1.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=5694489b" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -153,8 +155,8 @@ we can fit up to 6 resource sets per node as in Figure 2.</p>
 <p>To allocate the resource sets we need to summon the command <code class="docutils literal notranslate"><span class="pre">bsub</span></code> in addition to some flags:</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 25%" />
-<col style="width: 75%" />
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Flag</p></th>
@@ -614,10 +616,38 @@ of the existing job.</p>
 </section>
 <section id="debugging">
 <h3>Debugging<a class="headerlink" href="#debugging" title="Link to this heading">¶</a></h3>
-<p>For debugging:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">rocgdb<span class="w"> </span>--args<span class="w"> </span>./Castro2d.hip.x86-trento.MPI.HIP.ex<span class="w"> </span>inputs_2d.testsuite</span>
-</pre></div></div><p>then do <code class="docutils literal notranslate"><span class="pre">run</span></code> at the debugger prompt.</p>
-</section>
+<p>Debugging is done with <code class="docutils literal notranslate"><span class="pre">rocgdb</span></code>.  Here’s a workflow that works:</p>
+<p>Setup the environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-cray</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>cray-mpich/8.1.27</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>craype-accel-amd-gfx90a</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>amd-mixed/5.6.0</span>
+</pre></div></div><p>Build the executable.  Usually it’s best to disable MPI if possible
+and maybe turn on <code class="docutils literal notranslate"><span class="pre">TEST=TRUE</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE<span class="w"> </span><span class="nv">TEST</span><span class="o">=</span>TRUE<span class="w"> </span><span class="nv">USE_MPI</span><span class="o">=</span>FALSE<span class="w"> </span>-j<span class="w"> </span><span class="m">4</span></span>
+</pre></div></div><p>Startup an interactive session:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">salloc<span class="w"> </span>-A<span class="w"> </span>ast106<span class="w"> </span>-J<span class="w"> </span>mz<span class="w"> </span>-t<span class="w"> </span><span class="m">0</span>:30:00<span class="w"> </span>-p<span class="w"> </span>batch<span class="w"> </span>-N<span class="w"> </span><span class="m">1</span></span>
+</pre></div></div><p>This will automatically log you onto the compute now.  Now set the following
+environment variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1"><span class="nb">export</span><span class="w"> </span><span class="nv">HIP_ENABLE_DEFERRED_LOADING</span><span class="o">=</span><span class="m">0</span></span>
+<span class="prompt1"><span class="nb">export</span><span class="w"> </span><span class="nv">AMD_LOG_LEVEL</span><span class="o">=</span><span class="m">3</span></span>
+<span class="prompt1"><span class="nb">export</span><span class="w"> </span><span class="nv">AMD_SERIALIZE_KERNEL</span><span class="o">=</span><span class="m">3</span></span>
+<span class="prompt1"><span class="nb">export</span><span class="w"> </span><span class="nv">AMD_SERIALIZE_COPY</span><span class="o">=</span><span class="m">3</span></span>
+</pre></div></div><p>Run the debugger:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">rocgdb<span class="w"> </span>./Castro2d.hip.x86-trento.HIP.ex</span>
+</pre></div></div><p>Set the following inside of the debugger:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
+span.prompt2:before {
+  content: "(gdb) ";
+}
+</style><span class="prompt2">set pagination off</span>
+<span class="prompt2">b abort</span>
+</pre></div></div><p>The run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt2">run inputs</span>
+</pre></div></div><p>If it doesn’t crash with the trace, then try:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt2">interrupt</span>
+<span class="prompt2">bt</span>
+</pre></div></div></section>
 <section id="troubleshooting">
 <h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h3>
 <p>Workaround to prevent hangs for collectives:</p>
