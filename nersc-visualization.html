@@ -113,6 +113,29 @@ following the steps here:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">deactivate</span>
 </pre></div>
 </div>
+<p>A sample submission script to run a python script on 1 CPU on 1 node is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1">#SBATCH -A m3018</span>
+<span class="c1">#SBATCH -C cpu</span>
+<span class="c1">#SBATCH -J vis</span>
+<span class="c1">#SBATCH -o vis_%j.out</span>
+<span class="c1">#SBATCH -t 0:01:00</span>
+<span class="c1">#SBATCH -N 1</span>
+<span class="c1">#SBATCH -c 1</span>
+<span class="c1">#SBATCH --ntasks-per-node=1</span>
+<span class="c1">#SBATCH -q regular</span>
+
+<span class="n">export</span> <span class="n">OMP_NUM_THREADS</span><span class="o">=</span><span class="mi">8</span>
+<span class="n">export</span> <span class="n">OMP_PLACES</span><span class="o">=</span><span class="n">cores</span>
+<span class="n">export</span> <span class="n">OMP_PROC_BIND</span><span class="o">=</span><span class="n">spread</span>
+
+<span class="n">module</span> <span class="n">load</span> <span class="n">python</span>
+<span class="n">conda</span> <span class="n">activate</span> <span class="n">myenv</span>
+
+<span class="n">srun</span> <span class="n">python</span> <span class="n">massive_star_multi</span><span class="o">.</span><span class="n">py</span> <span class="n">plt19862</span>
+</pre></div>
+</div>
 </section>
 
 
