@@ -10,7 +10,7 @@ in particular, something like::
 
     module load python
     conda init
-    conda create --name myenv python=3.8
+    conda create --name myenv python=3.11
     conda activate myenv
 
 then you can install yt as::
