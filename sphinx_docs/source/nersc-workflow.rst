@@ -63,6 +63,23 @@ and an estimate of the start time can be found via:
 to cancel a job, you would use ``scancel``.
 
 
+Filesystems
+^^^^^^^^^^^
+
+We can run on the common filesystem, CFS, to share files with everyone
+in the project.  For instance, for project ``m3018``, we would do:
+
+.. prompt:: bash
+
+   cd $CFS/m3018
+
+There is a 20 TB quota here, which can be checked via:
+
+.. prompt:: bash
+
+   showquota m3018
+
+
 Chaining
 ^^^^^^^^
 
