@@ -618,7 +618,7 @@ of the existing job.</p>
 <h3>Debugging<a class="headerlink" href="#debugging" title="Link to this heading">¶</a></h3>
 <p>Debugging is done with <code class="docutils literal notranslate"><span class="pre">rocgdb</span></code>.  Here’s a workflow that works:</p>
 <p>Setup the environment:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-cray</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu</span>
 <span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>cray-mpich/8.1.27</span>
 <span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>craype-accel-amd-gfx90a</span>
 <span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>amd-mixed/5.6.0</span>
@@ -627,13 +627,24 @@ and maybe turn on <code class="docutils literal notranslate"><span class="pre">T
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE<span class="w"> </span><span class="nv">TEST</span><span class="o">=</span>TRUE<span class="w"> </span><span class="nv">USE_MPI</span><span class="o">=</span>FALSE<span class="w"> </span>-j<span class="w"> </span><span class="m">4</span></span>
 </pre></div></div><p>Startup an interactive session:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">salloc<span class="w"> </span>-A<span class="w"> </span>ast106<span class="w"> </span>-J<span class="w"> </span>mz<span class="w"> </span>-t<span class="w"> </span><span class="m">0</span>:30:00<span class="w"> </span>-p<span class="w"> </span>batch<span class="w"> </span>-N<span class="w"> </span><span class="m">1</span></span>
-</pre></div></div><p>This will automatically log you onto the compute now.  Now set the following
-environment variables:</p>
+</pre></div></div><p>This will automatically log you onto the compute now.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It’s a good idea to do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>restore</span>
+</pre></div></div><p>and then reload <em>the same</em> modules used for compiling in the interactive shell.</p>
+</div>
+<p>Now set the following environment variables:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1"><span class="nb">export</span><span class="w"> </span><span class="nv">HIP_ENABLE_DEFERRED_LOADING</span><span class="o">=</span><span class="m">0</span></span>
-<span class="prompt1"><span class="nb">export</span><span class="w"> </span><span class="nv">AMD_LOG_LEVEL</span><span class="o">=</span><span class="m">3</span></span>
 <span class="prompt1"><span class="nb">export</span><span class="w"> </span><span class="nv">AMD_SERIALIZE_KERNEL</span><span class="o">=</span><span class="m">3</span></span>
 <span class="prompt1"><span class="nb">export</span><span class="w"> </span><span class="nv">AMD_SERIALIZE_COPY</span><span class="o">=</span><span class="m">3</span></span>
-</pre></div></div><p>Run the debugger:</p>
+</pre></div></div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can also set</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1"><span class="nb">export</span><span class="w"> </span><span class="nv">AMD_LOG_LEVEL</span><span class="o">=</span><span class="m">3</span></span>
+</pre></div></div><p>to get <em>a lot</em> of information about the GPU calls.</p>
+</div>
+<p>Run the debugger:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">rocgdb<span class="w"> </span>./Castro2d.hip.x86-trento.HIP.ex</span>
 </pre></div></div><p>Set the following inside of the debugger:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">

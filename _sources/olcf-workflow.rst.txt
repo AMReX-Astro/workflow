@@ -541,7 +541,7 @@ Setup the environment:
 
 .. prompt:: bash
 
-   module load PrgEnv-cray
+   module load PrgEnv-gnu
    module load cray-mpich/8.1.27
    module load craype-accel-amd-gfx90a
    module load amd-mixed/5.6.0
@@ -559,15 +559,35 @@ Startup an interactive session:
 
    salloc -A ast106 -J mz -t 0:30:00 -p batch -N 1
 
-This will automatically log you onto the compute now.  Now set the following
-environment variables:
+This will automatically log you onto the compute now.
+
+.. note::
+
+   It's a good idea to do:
+
+   .. prompt:: bash
+
+      module restore
+
+   and then reload *the same* modules used for compiling in the interactive shell.
+
+Now set the following environment variables:
 
 .. prompt:: bash
 
    export HIP_ENABLE_DEFERRED_LOADING=0
-   export AMD_LOG_LEVEL=3
    export AMD_SERIALIZE_KERNEL=3
    export AMD_SERIALIZE_COPY=3
+
+.. note::
+
+   You can also set
+
+   .. prompt:: bash
+
+      export AMD_LOG_LEVEL=3
+
+   to get *a lot* of information about the GPU calls.
 
 Run the debugger:
 
