@@ -40,7 +40,7 @@ then
     echo " "
     oldjob=$aout
     firstcount=2
-    sleep 3
+    sleep 2
 else
     echo chaining $numjobs jobs starting with $oldjob
 fi
@@ -52,5 +52,5 @@ do
   echo "   " jobid: $aout
   echo " "
   oldjob=$aout
-  sleep 3
+  sleep 2
 done
