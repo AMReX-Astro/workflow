@@ -2,52 +2,71 @@
 Archiving Data to HPSS
 ======================
 
-.. note::
+The [NERSC HPSS Archive](https://docs.nersc.gov/filesystems/archive/)
+is a large tape library that can store the simulations files for long
+periods of time.  It is recommended to move your data to HPSS
+frequently, since the scratch filesystems fill up and NERSC will purge
+data periodically.
 
-   Access to the xfer queue is done by loading the ``esslurm`` queue:
+
+The script ``nersc.xfer.slurm``:
+
+:download:`nersc.xfer.slurm <../../job_scripts/perlmutter/nersc.xfer.slurm>`
+
+can be used to archive data to
+HPSS automatically. This is submitted to the xfer queue and runs the
+script ``process.xrb``:
+
+:download:`process.xrb <../../job_scripts/perlmutter/process.xrb>`
+
+which continually looks for output and stores
+it to HPSS.
+
+The following describes how to use the scripts:
+
+1. Create a directory in HPSS that has the same
+   name as the directory your plotfiles are located in
+   (just the directory name, not the full path). e.g. if you are running in a directory call
+   ``/pscratch/sd/z/zingale/wdconvect/`` run, then do:
 
    .. prompt:: bash
 
-      module load esslurm
+      hsi
+      mkdir wdconvect_run
 
-   Then you can use ``sbatch`` and ``squeue`` to submit and monitor
-   jobs in the ``xfer`` queue.  Details are provided at:
-   https://docs.nersc.gov/jobs/examples/#xfer-queue
+   .. note::
 
+      If the ``hsi`` command prompts you for your password, you will need
+      to talk to the NERSC help desk to ask for password-less access to
+      HPSS.
 
-The script ``nersc.xfer.slurm`` in
-``workflow/job_scripts/cori-haswell/`` can be used to archive data to
-HPSS automatically. This is submitted to the xfer queue and runs the
-script ``process.xrb`` which continually looks for output and stores
-it to HPSS.
+2. Copy the ``process.xrb`` script and the slurm script ``nersc.xfer.slurm``
+   into the directory with the plotfiles.
 
-To use the scripts, first create a directory in HPSS that has the same
-name as the directory on lustre you are running in (just the directory
-name, not the full path). E.g. if you are running in a directory call
-``wdconvect/`` run, then do:
+3. Submit the archive job:
 
-.. prompt:: bash
+   .. prompt:: bash
 
-   hsi
-   mkdir wdconvect_run
+      sbatch nersc.xfer.slurm
 
-.. note::
+   The script ``process.xrb`` is called from the xfer job and will run in
+   the background and continually wait until checkpoint or plotfiles are
+   created.
 
-   If the ``hsi`` command prompts you for your password, you will need
-   to talk to the NERSC help desk to ask for password-less access to
-   HPSS.
+   .. note::
 
-The script ``process.xrb`` is called from the xfer job and will run in
-the background and continually wait until checkpoint or plotfiles are
-created (actually, it always leaves the most recent one alone, since
-data may still be written to it, so it waits until there are more than
-1 in the directory).  Then the script will use ``htar`` to archive the
-plotfiles and checkpoints to HPSS. If the ``htar`` command was
-successful, then the plotfiles are copied into a ``plotfile/``
-subdirectory. This is actually important, since you don’t want to try
-archiving the data a second time and overwriting the stored copy,
-especially if a purge took place. The same is done with checkpoint
-files.
+      ``process.xrb`` always leaves the most recent plotfile and checkpoint file alone, since
+      data may still be written to it.
+
+   The script will use ``htar`` to archive the plotfiles and
+   checkpoints to HPSS.
+
+   If the ``htar`` command was successful, then the plotfiles are
+   copied into a ``plotfile/`` subdirectory. This is actually important,
+   since you don’t want to try archiving the data a second time and
+   overwriting the stored copy, especially if a purge took place. The
+   same is done with checkpoint files.
+
 
 Additionally, if the ``ftime`` executable is in your path
 (``ftime.cpp`` lives in ``amrex/Tools/Plotfile/``), then
