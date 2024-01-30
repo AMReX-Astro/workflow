@@ -91,28 +91,30 @@
              
   <section id="archiving-data-to-hpss">
 <h1>Archiving Data to HPSS<a class="headerlink" href="#archiving-data-to-hpss" title="Link to this heading">¶</a></h1>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Access to the xfer queue is done by loading the <code class="docutils literal notranslate"><span class="pre">esslurm</span></code> queue:</p>
+<p>The [NERSC HPSS Archive](<a class="reference external" href="https://docs.nersc.gov/filesystems/archive/">https://docs.nersc.gov/filesystems/archive/</a>)
+is a large tape library that can store the simulations files for long
+periods of time.  It is recommended to move your data to HPSS
+frequently, since the scratch filesystems fill up and NERSC will purge
+data periodically.</p>
+<p>The script <code class="docutils literal notranslate"><span class="pre">nersc.xfer.slurm</span></code>:</p>
+<p><a class="reference download internal" download="" href="_downloads/05203ba4d0d4aa143482b601abe7c8b1/nersc.xfer.slurm"><code class="xref download docutils literal notranslate"><span class="pre">nersc.xfer.slurm</span></code></a></p>
+<p>can be used to archive data to
+HPSS automatically. This is submitted to the xfer queue and runs the
+script <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code>:</p>
+<p><a class="reference download internal" download="" href="_downloads/f1505febfbe5937d242281ec790ebc2d/process.xrb"><code class="xref download docutils literal notranslate"><span class="pre">process.xrb</span></code></a></p>
+<p>which continually looks for output and stores
+it to HPSS.</p>
+<p>The following describes how to use the scripts:</p>
+<ol class="arabic">
+<li><p>Create a directory in HPSS that has the same
+name as the directory your plotfiles are located in
+(just the directory name, not the full path). e.g. if you are running in a directory call
+<code class="docutils literal notranslate"><span class="pre">/pscratch/sd/z/zingale/wdconvect/</span></code> run, then do:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>esslurm</span>
-</pre></div></div><p>Then you can use <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> and <code class="docutils literal notranslate"><span class="pre">squeue</span></code> to submit and monitor
-jobs in the <code class="docutils literal notranslate"><span class="pre">xfer</span></code> queue.  Details are provided at:
-<a class="reference external" href="https://docs.nersc.gov/jobs/examples/#xfer-queue">https://docs.nersc.gov/jobs/examples/#xfer-queue</a></p>
-</div>
-<p>The script <code class="docutils literal notranslate"><span class="pre">nersc.xfer.slurm</span></code> in
-<code class="docutils literal notranslate"><span class="pre">workflow/job_scripts/cori-haswell/</span></code> can be used to archive data to
-HPSS automatically. This is submitted to the xfer queue and runs the
-script <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> which continually looks for output and stores
-it to HPSS.</p>
-<p>To use the scripts, first create a directory in HPSS that has the same
-name as the directory on lustre you are running in (just the directory
-name, not the full path). E.g. if you are running in a directory call
-<code class="docutils literal notranslate"><span class="pre">wdconvect/</span></code> run, then do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">hsi</span>
+</style><span class="prompt1">hsi</span>
 <span class="prompt1">mkdir<span class="w"> </span>wdconvect_run</span>
 </pre></div></div><div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -120,17 +122,28 @@ name, not the full path). E.g. if you are running in a directory call
 to talk to the NERSC help desk to ask for password-less access to
 HPSS.</p>
 </div>
-<p>The script <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> is called from the xfer job and will run in
+</li>
+<li><p>Copy the <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> script and the slurm script <code class="docutils literal notranslate"><span class="pre">nersc.xfer.slurm</span></code>
+into the directory with the plotfiles.</p></li>
+<li><p>Submit the archive job:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">sbatch<span class="w"> </span>nersc.xfer.slurm</span>
+</pre></div></div><p>The script <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> is called from the xfer job and will run in
 the background and continually wait until checkpoint or plotfiles are
-created (actually, it always leaves the most recent one alone, since
-data may still be written to it, so it waits until there are more than
-1 in the directory).  Then the script will use <code class="docutils literal notranslate"><span class="pre">htar</span></code> to archive the
-plotfiles and checkpoints to HPSS. If the <code class="docutils literal notranslate"><span class="pre">htar</span></code> command was
-successful, then the plotfiles are copied into a <code class="docutils literal notranslate"><span class="pre">plotfile/</span></code>
-subdirectory. This is actually important, since you don’t want to try
-archiving the data a second time and overwriting the stored copy,
-especially if a purge took place. The same is done with checkpoint
-files.</p>
+created.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> always leaves the most recent plotfile and checkpoint file alone, since
+data may still be written to it.</p>
+</div>
+<p>The script will use <code class="docutils literal notranslate"><span class="pre">htar</span></code> to archive the plotfiles and
+checkpoints to HPSS.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">htar</span></code> command was successful, then the plotfiles are
+copied into a <code class="docutils literal notranslate"><span class="pre">plotfile/</span></code> subdirectory. This is actually important,
+since you don’t want to try archiving the data a second time and
+overwriting the stored copy, especially if a purge took place. The
+same is done with checkpoint files.</p>
+</li>
+</ol>
 <p>Additionally, if the <code class="docutils literal notranslate"><span class="pre">ftime</span></code> executable is in your path
 (<code class="docutils literal notranslate"><span class="pre">ftime.cpp</span></code> lives in <code class="docutils literal notranslate"><span class="pre">amrex/Tools/Plotfile/</span></code>), then
 the script will create a file called <code class="docutils literal notranslate"><span class="pre">ftime.out</span></code> that lists the name
