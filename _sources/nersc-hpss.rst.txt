@@ -2,7 +2,7 @@
 Archiving Data to HPSS
 ======================
 
-The [NERSC HPSS Archive](https://docs.nersc.gov/filesystems/archive/)
+The `NERSC HPSS Archive <https://docs.nersc.gov/filesystems/archive/>`_
 is a large tape library that can store the simulations files for long
 periods of time.  It is recommended to move your data to HPSS
 frequently, since the scratch filesystems fill up and NERSC will purge
