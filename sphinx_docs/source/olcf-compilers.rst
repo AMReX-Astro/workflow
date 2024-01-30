@@ -6,9 +6,11 @@ Compiling at OLCF
 Summit
 ------
 
-In order to compile you will need to swap the xl module with gcc (you need to use atleast gcc/7.4.0 due to C++17 support)::
+In order to compile you will need to swap the xl module with gcc (you need to use atleast gcc/7.4.0 due to C++17 support):
 
-  module load gcc/7.4.0
+.. prompt:: bash
+
+   module load gcc/10.2.0
 
 .. note::
 
@@ -16,28 +18,34 @@ In order to compile you will need to swap the xl module with gcc (you need to us
    submissions script, otherwise the code won't find the shared
    libraries at runtime.
 
-Then load CUDA::
+Then load CUDA:
 
-  module load cuda/11.2.0
+.. prompt:: bash
+
+  module load cuda/11.5.2
 
 .. note::
 
    Presently you will see a warning when you load a CUDA 11 module, but the packages
    should work fine.
 
-You also need to make sure you have the python module loaded::
+You also need to make sure you have the python module loaded:
 
-  module load python/3.7.0
+.. prompt:: bash
+
+  module load python
 
 Compile with ``USE_CUDA=TRUE`` (and ``COMP=gnu`` which is usually the default).
-Do not compile with ``USE_OMP=TRUE`` since this is currently disallowed by Castro.
-An example compilation line is::
+Is important to setup ``USE_OMP=FALSE``, since the ``TRUE`` option is currently disallowed by Castro.
+An example compilation line is:
+
+.. prompt:: bash
 
   make COMP=gnu USE_MPI=TRUE USE_CUDA=TRUE -j 4
 
 The recommended/tested version pairs are:
 
-  * ``gcc/7.4.0`` + ``cuda/11.2.0``
+  * ``gcc/10.2.0`` + ``cuda/11.5.2``
 
 .. note::
 
@@ -46,42 +54,34 @@ The recommended/tested version pairs are:
      doesn't use this feature.
 
 
-Crusher
--------
 
-log into::
+Frontier
+--------
 
-   crusher.olcf.ornl.gov
+log into: ``frontier.olcf.ornl.gov``
 
-We want to build with ROCm/HIP.  Currently, we only work with ROCm 4.5.0, 
-which you load as::
+see: https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#programming-environment
 
-    module load PrgEnv-gnu craype-accel-amd-gfx90a rocm/4.5.0
+load modules:
 
-If you want to try ROCm 5.x, you need to use ``PrgEnv-amd`` instead of
-``PrgEnv-gnu``::
+.. prompt:: bash
 
-   module load PrgEnv-amd craype-accel-amd-gfx90a rocm/5.1.0
+   module load PrgEnv-gnu craype-accel-amd-gfx90a cray-mpich rocm amd-mixed
 
-But this currently gives memory errors with Castro.
-
-We can then build with::
-
-   COMP=gnu USE_HIP=TRUE
-
+at the moment, that loads ROCm 5.3.0
 
 .. note::
 
-   Async I/O can sometimes have issues on crusher, so it is best to
-   leave it off.
-
+   ROCm 5.4.3 and higher doe not seem to work with Castro--there are memory access issues
+   in the burner
 
 .. note::
 
-   Sometimes the job will start (according to ``squeue``) but appear to
-   hang.  This is because there are often bad nodes, and you need to
-   exclude the bad nodes.  Currently use::
+   Tabulate rates seem to exhibit a strange slow down on Frontier, so it is best
+   to run without rate tabulation.
 
-   #SBATCH --exclude=crusher[025-027,036,038-040,060,081,127,136,141,101-105]
+build via:
 
+.. prompt:: bash
 
+   make COMP=gnu USE_HIP=TRUE

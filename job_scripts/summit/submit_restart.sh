@@ -45,15 +45,16 @@ function find_chk_file {
     restartFile=""
     for f in ${temp_files}
     do
-        # the Header is the last thing written -- check if it's there, otherwise,
-        # fall back to the second-to-last check file written
-        if [ ! -f ${f}/Header ]; then
-            restartFile=""
-        else
-            restartFile="${f}"
+        # the Header is the last thing written -- if it's there, update the restart file
+        if [ -f ${f}/Header ]; then
+            # The scratch FS sometimes gives I/O errors when trying to read
+            # from recently-created files, which crashes Castro. Avoid this by
+            # making sure we can read from all the data files.
+            if head --quiet -c1 "${f}/Header" "${f}"/Level_*/* >/dev/null; then
+                restartFile="${f}"
+            fi
         fi
     done
-
 }
 
 # look for 7-digit chk files

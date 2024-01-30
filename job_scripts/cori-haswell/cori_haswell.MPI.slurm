@@ -1,22 +1,19 @@
 #!/bin/bash
+#SBATCH --job-name=f3anw-strang
+#SBATCH --account=m3018
+#SBATCH --nodes=20
+#SBATCH --tasks-per-node=32
+#SBATCH --qos=regular
+#SBATCH --time=02:00:00
+#SBATCH --constraint=haswell
 
-#SBATCH -A m3018_g
-#SBATCH -C gpu
-#SBATCH -q regular
-#SBATCH -J Castro
-#SBATCH -o subch_%j.out
-#SBATCH -t 2:00:00
-#SBATCH -N 16
-#SBATCH --ntasks-per-node=4
-#SBATCH --gpus-per-task=1
-#SBATCH --gpu-bind=map_gpu:0,1,2,3
-#SBATCH --signal=B:URG@2
+# Cori Haswell has 2 Intel "Haswell" processors each with 16 cores.
+# number of nodes = # of MPI * number of threads / 32 (cores / node)
 
-export CASTRO_EXEC=./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
-export INPUTS=inputs_2d.N14
-
-module load PrgEnv-gnu
-module load cudatoolkit
+export OMP_NUM_THREADS=1
+export MPICH_MAX_THREAD_SAFETY=multiple
+export CASTRO_EXEC=./Castro2d.intel.haswell.MPI.ex
+export INPUTS=inputs
 
 function find_chk_file {
     # find_chk_file takes a single argument -- the wildcard pattern
@@ -57,34 +54,8 @@ else
     restartString="amr.restart=${restartFile}"
 fi
 
-# clean up any run management files left over from previous runs
-rm -f dump_and_stop
-
-# The `--signal=B:URG@<n>` option tells slurm to send SIGURG to this batch
-# script n minutes before the runtime limit, so we can exit gracefully.
-function sig_handler {
-    touch dump_and_stop
-    # disable this signal handler
-    trap - URG
-    echo "BATCH: allocation ending soon; telling Castro to dump a checkpoint and stop"
-}
-trap sig_handler URG
-
 workdir=`basename ${SLURM_SUBMIT_DIR}`
 slack_job_start.py "starting NERSC job: ${workdir} ${restartFile}" @michael
 
+srun ${CASTRO_EXEC} ${INPUTS} ${restartString}
 
-# execute srun in the background then use the builtin wait so the shell can
-# handle the signal
-srun -n 64 ${CASTRO_EXEC} ${INPUTS} ${restartString} &
-pid=$!
-wait $pid
-ret=$?
-
-if (( ret == 128 + 23 )); then
-    # received SIGURG, keep waiting
-    wait $pid
-    ret=$?
-fi
-
-exit $ret
