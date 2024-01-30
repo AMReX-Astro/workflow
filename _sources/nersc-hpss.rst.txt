@@ -67,21 +67,27 @@ The following describes how to use the scripts:
    overwriting the stored copy, especially if a purge took place. The
    same is done with checkpoint files.
 
+Some additional notes:
 
-Additionally, if the ``ftime`` executable is in your path
-(``ftime.cpp`` lives in ``amrex/Tools/Plotfile/``), then
-the script will create a file called ``ftime.out`` that lists the name
-of the plotfile and the corresponding simulation time.
+* If the ``ftime`` executable is in your path (``ftime.cpp`` lives in
+  ``amrex/Tools/Plotfile/``), then the script will create a file
+  called ``ftime.out`` that lists the name of the plotfile and the
+  corresponding simulation time.
 
-Finally, right when the job is submitted, the script will tar up all
-of the diagnostic files, ``ftime.out``, submission script, inputs and
-probin, and archive them on HPSS. The .tar file is given a name that
-contains the date-string to allow multiple archives to co-exist.  When
-``process.xrb`` is running, it creates a lockfile (called
-``process.pid``) that ensures that only one instance of the script is
-running at any one time. Sometimes if the machine crashes, the
-``process.pid`` file will be left behind, in which case, the script
-aborts. Just delete that if you know the script is not running.
+* Right when the job is run, the script will tar up all of the
+  diagnostic files, ``ftime.out``, submission script, and inputs and
+  archive them on HPSS. The ``.tar`` file is given a name that contains
+  the date-string to allow multiple archives to co-exist.
+
+* When ``process.xrb`` is running, it creates a lockfile (called
+  ``process.pid``) that ensures that only one instance of the script
+  is running at any one time.
+
+  .. warning::
+
+     Sometimes if the job is not terminated normally, the
+     ``process.pid`` file will be left behind, in which case, the script
+     aborts. Just delete that if you know the script is not running.
 
 Jobs in the xfer queue start up quickly. The best approach is to start
 one as you start your main job (or make it dependent on the main

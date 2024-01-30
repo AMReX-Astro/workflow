@@ -144,19 +144,27 @@ overwriting the stored copy, especially if a purge took place. The
 same is done with checkpoint files.</p>
 </li>
 </ol>
-<p>Additionally, if the <code class="docutils literal notranslate"><span class="pre">ftime</span></code> executable is in your path
-(<code class="docutils literal notranslate"><span class="pre">ftime.cpp</span></code> lives in <code class="docutils literal notranslate"><span class="pre">amrex/Tools/Plotfile/</span></code>), then
-the script will create a file called <code class="docutils literal notranslate"><span class="pre">ftime.out</span></code> that lists the name
-of the plotfile and the corresponding simulation time.</p>
-<p>Finally, right when the job is submitted, the script will tar up all
-of the diagnostic files, <code class="docutils literal notranslate"><span class="pre">ftime.out</span></code>, submission script, inputs and
-probin, and archive them on HPSS. The .tar file is given a name that
-contains the date-string to allow multiple archives to co-exist.  When
-<code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> is running, it creates a lockfile (called
-<code class="docutils literal notranslate"><span class="pre">process.pid</span></code>) that ensures that only one instance of the script is
-running at any one time. Sometimes if the machine crashes, the
+<p>Some additional notes:</p>
+<ul>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">ftime</span></code> executable is in your path (<code class="docutils literal notranslate"><span class="pre">ftime.cpp</span></code> lives in
+<code class="docutils literal notranslate"><span class="pre">amrex/Tools/Plotfile/</span></code>), then the script will create a file
+called <code class="docutils literal notranslate"><span class="pre">ftime.out</span></code> that lists the name of the plotfile and the
+corresponding simulation time.</p></li>
+<li><p>Right when the job is run, the script will tar up all of the
+diagnostic files, <code class="docutils literal notranslate"><span class="pre">ftime.out</span></code>, submission script, and inputs and
+archive them on HPSS. The <code class="docutils literal notranslate"><span class="pre">.tar</span></code> file is given a name that contains
+the date-string to allow multiple archives to co-exist.</p></li>
+<li><p>When <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> is running, it creates a lockfile (called
+<code class="docutils literal notranslate"><span class="pre">process.pid</span></code>) that ensures that only one instance of the script
+is running at any one time.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Sometimes if the job is not terminated normally, the
 <code class="docutils literal notranslate"><span class="pre">process.pid</span></code> file will be left behind, in which case, the script
 aborts. Just delete that if you know the script is not running.</p>
+</div>
+</li>
+</ul>
 <p>Jobs in the xfer queue start up quickly. The best approach is to start
 one as you start your main job (or make it dependent on the main
 job). The sample <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> script will wait for output and then
