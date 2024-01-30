@@ -17,7 +17,7 @@ work_dir=`pwd`
 HPSS_DIR=`basename $work_dir`
 
 # set HTAR command
-HTAR=/usr/common/mss/bin/htar
+HTAR=/usr/bin/htar
 
 # path to the ftime executable -- used for making a simple ftime.out file
 # listing the name of the plotfile and its simulation time

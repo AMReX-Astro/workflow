@@ -4,13 +4,6 @@
 #SBATCH -t 12:00:00
 #SBATCH --licenses=SCRATCH
 
-# note: you need to do
-#
-#  module laod esslurm
-#  sbatch edison.xfer.slurm
-#
-# to launch a transfer job
-
 cd $SLURM_SUBMIT_DIR
 
 # do our archiving
