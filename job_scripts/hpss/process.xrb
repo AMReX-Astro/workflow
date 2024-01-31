@@ -3,7 +3,7 @@
 #----------------------------------------------------------------------------
 # user modifiable variables:
 
-# pidfile is a lock file that is used to make sure that only one instance 
+# pidfile is a lock file that is used to make sure that only one instance
 # of this script is working on the current directory
 pidfile=process.pid
 
@@ -67,7 +67,7 @@ fi
 
 # Process Files.  Once a plotfile is successfully processed, we will output
 # a file pltXXXXX.processed (checkpoint files are only archived, with a
-# chkXXXXX.processed file appearing once the archiving is successful).  
+# chkXXXXX.processed file appearing once the archiving is successful).
 # Subsequent invocations of this routine will skip over any plotfiles or
 # checkpoint files that have a corresponding .processed file.
 
@@ -82,9 +82,9 @@ function process_files
 
   # plotfiles
 
-  # Take all but the final plt file -- we want to ensure they're completely 
-  # written to disk.  Strip out any tar files that are lying around as well 
-  # as pltXXXXX.processed files.  We restrict the find command to a depth of 
+  # Take all but the final plt file -- we want to ensure they're completely
+  # written to disk.  Strip out any tar files that are lying around as well
+  # as pltXXXXX.processed files.  We restrict the find command to a depth of
   # 1 to avoid catching any already-processed files in the plotfiles/
   # directory
   pltlist5=$(find . -maxdepth 1 -type d -name "${plt_prefix}?????" -print | sort)
@@ -117,35 +117,35 @@ function process_files
         # store the file on HPSS
         ${HTAR} -H copies=2 -cvf ${HPSS_DIR}/${dir}.tar ${dir} > ${dir}.htar
 
-	# Ordinarily, we'd check htar's exit status (0 = successful), but 
-	# on some machines (like Atlas) htar doesn't return a valid exit
-	# status.  Instead we'll grep for the success line at the end of 
-	# htar's output (which we piped into a file) and check the output 
-	# status of grep
-	grep "HTAR: HTAR SUCCESSFUL" ${dir}.htar >> /dev/null
+        # Ordinarily, we'd check htar's exit status (0 = successful), but
+        # on some machines (like Atlas) htar doesn't return a valid exit
+        # status.  Instead we'll grep for the success line at the end of
+        # htar's output (which we piped into a file) and check the output
+        # status of grep
+        grep "HTAR: HTAR SUCCESSFUL" ${dir}.htar >> /dev/null
 
-	# The variable $? holds the exit status of the previous command
-	if [ $? -eq 0 ]; then
-	    
+        # The variable $? holds the exit status of the previous command
+        if [ $? -eq 0 ]; then
+
           # mark this file as processed so we skip it next time
           date > ${dir}.processed
 
-	  # output the plotfile name and simulation time to ftime.out
-	  if [ `command -v ${FTIME_EXE}` ] ; then
-	      ${FTIME_EXE} ${dir} >> ftime.out
-	  fi
+          # output the plotfile name and simulation time to ftime.out
+          if [ `command -v ${FTIME_EXE}` ] ; then
+            ${FTIME_EXE} ${dir} >> ftime.out
+          fi
 
-	  # remove the htar temporary file
-	  rm ${dir}.htar
+          # remove the htar temporary file
+          rm ${dir}.htar
 
-	  # move the plotfile into the plotfiles directory
-	  mv ${dir} plotfiles/
+          # move the plotfile into the plotfiles directory
+          mv ${dir} plotfiles/
 
-	  # ..and the corresponding .processed file too.
-	  mv ${dir}.processed plotfiles/
+          # ..and the corresponding .processed file too.
+          mv ${dir}.processed plotfiles/
 
-	  # and visualize it
-	  #runtimevis.py plotfiles/${dir}
+          # and visualize it
+          #runtimevis.py plotfiles/${dir}
 
         fi
 
@@ -158,10 +158,10 @@ function process_files
 
   # checkpoint files
 
-  # Take all but the final chk file -- we want to ensure they're completely 
-  # written to disk.  Strip out any tar files that are lying around as well 
+  # Take all but the final chk file -- we want to ensure they're completely
+  # written to disk.  Strip out any tar files that are lying around as well
   # as chkXXXXX.processed files.  We restrict the find command to a depth of
-  # 1 to avoid catching any already-processed files in the checkfiles/ 
+  # 1 to avoid catching any already-processed files in the checkfiles/
   # directory
   chklist5=$(find . -maxdepth 1 -type d -name "${chk_prefix}?[05]000" -print | sort)
   chklist6=$(find . -maxdepth 1 -type d -name "${chk_prefix}??[05]000" -print | sort)
@@ -189,15 +189,15 @@ function process_files
         # store the file on HPSS
         ${HTAR} -H copies=2 -cvf ${HPSS_DIR}/${dir}.tar ${dir} > ${dir}.htar
 
-	# Ordinarily, we'd check htar's exit status (0 = successful), but 
-	# on some machines (like Atlas) htar doesn't return a valid exit
-	# status.  Instead we'll grep for the success line at the end of 
-	# htar's output (which we piped into a file) and check the output 
-	# status of grep
+        # Ordinarily, we'd check htar's exit status (0 = successful), but
+        # on some machines (like Atlas) htar doesn't return a valid exit
+        # status.  Instead we'll grep for the success line at the end of
+        # htar's output (which we piped into a file) and check the output
+        # status of grep
         grep "HTAR: HTAR SUCCESSFUL" ${dir}.htar >> /dev/null
 
-	# The variable $? holds the exit status of the previous command
-	if [ $? -eq 0 ]; then
+        # The variable $? holds the exit status of the previous command
+        if [ $? -eq 0 ]; then
 
           # mark this file as processed so we skip it next time
           date > ${dir}.processed
@@ -205,11 +205,11 @@ function process_files
           # remove the htar temporary file
           rm ${dir}.htar
 
-	  # move the checkpoint file into the checkfiles directory
-	  mv ${dir} checkfiles/
+          # move the checkpoint file into the checkfiles directory
+          mv ${dir} checkfiles/
 
-	  # ..and the corresponding .processed file too.
-	  mv ${dir}.processed checkfiles/
+          # ..and the corresponding .processed file too.
+          mv ${dir}.processed checkfiles/
 
         fi
 
@@ -224,7 +224,7 @@ function process_files
 #----------------------------------------------------------------------------
 # the main function
 
-# archive any diagnostic files first -- give them a unique name, appending 
+# archive any diagnostic files first -- give them a unique name, appending
 # the date string, to make sure that we don't overwrite anything
 datestr=$(date +"%Y%m%d_%H%M_%S")
 ftime_files=$(find . -maxdepth 1 -name "ftime.out" -print)
