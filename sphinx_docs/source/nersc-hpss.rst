@@ -32,7 +32,7 @@ The following describes how to use the scripts:
    .. prompt:: bash
 
       hsi
-      mkdir wdconvect_run
+      mkdir wdconvect
 
    .. note::
 
