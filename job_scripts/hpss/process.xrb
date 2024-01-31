@@ -255,5 +255,7 @@ ${HTAR} -P -cvf ${HPSS_DIR}/diag_files_${datestr}.tar "${all_files[@]}" >> /dev/
 while true
 do
   process_files
-  sleep $N
+  # put sleep in the background so the shell can handle signals
+  sleep $N &
+  wait
 done
