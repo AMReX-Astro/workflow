@@ -19,6 +19,10 @@ HPSS_DIR=`basename $work_dir`
 # set HTAR command
 HTAR=htar
 
+# extra arguments to HTAR
+# -P will create intermediate directories on HPSS (i.e. mkdir -p)
+HTAR_ARGS=(-H copies=2 -P)
+
 # path to the ftime executable -- used for making a simple ftime.out file
 # listing the name of the plotfile and its simulation time
 FTIME_EXE=ftime.Linux.gfortran.exe
@@ -107,7 +111,7 @@ function process_files
         # do processing
 
         # store the file on HPSS
-        ${HTAR} -H copies=2 -cvf ${HPSS_DIR}/${dir}.tar ${dir} > ${dir}.htar
+        ${HTAR} "${HTAR_ARGS[@]}" -cvf ${HPSS_DIR}/${dir}.tar ${dir} > ${dir}.htar
 
         # Ordinarily, we'd check htar's exit status (0 = successful), but
         # on some machines (like Atlas) htar doesn't return a valid exit
@@ -171,7 +175,7 @@ function process_files
       if [ ! -f ${dir}.processed ] && [ ! -f checkfiles/${dir}.processed ]; then
 
         # store the file on HPSS
-        ${HTAR} -H copies=2 -cvf ${HPSS_DIR}/${dir}.tar ${dir} > ${dir}.htar
+        ${HTAR} "${HTAR_ARGS[@]}" -cvf ${HPSS_DIR}/${dir}.tar ${dir} > ${dir}.htar
 
         # Ordinarily, we'd check htar's exit status (0 = successful), but
         # on some machines (like Atlas) htar doesn't return a valid exit
@@ -220,7 +224,7 @@ all_files=($(
   find . -maxdepth 1 -name "process*" -print
 ))
 
-${HTAR} -cvf ${HPSS_DIR}/diag_files_${datestr}.tar "${all_files[@]}" >> /dev/null
+${HTAR} -P -cvf ${HPSS_DIR}/diag_files_${datestr}.tar "${all_files[@]}" >> /dev/null
 
 
 # Loop, waiting for plt and chk directories to appear.
