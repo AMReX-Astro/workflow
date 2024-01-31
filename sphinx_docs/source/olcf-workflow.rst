@@ -383,14 +383,13 @@ where ``test_hpss.sh`` is a SLURM script that contains the ``htar``
 commands needed to archive your data.  This uses ``slurm`` as the job
 manager.
 
-An example is provided by the ``process.xrb`` archiving script and
-associated ``summit_hpss.submit`` submission script in
-``jobs_scripts/summit/``.  Together these will detect new plotfiles as
-they are generated, tar them up (using ``htar``) and archive them onto
-HPSS.  They will also store the inputs, probin, and other runtime
-generated files.  If ``ftime`` is found in your path, it will also
-create a file called ``ftime.out`` that lists the simulation time
-corresponding to each plotfile.
+An example is provided by the ``process.xrb`` archiving script in
+``job_scripts/hpss/`` and associated ``summit_hpss.submit`` submission script
+in ``jobs_scripts/summit/``.  Together these will detect new plotfiles as they
+are generated, tar them up (using ``htar``) and archive them onto HPSS.  They
+will also store the inputs, probin, and other runtime generated files.  If
+``ftime`` is found in your path, it will also create a file called
+``ftime.out`` that lists the simulation time corresponding to each plotfile.
 
 Once the plotfiles are archived they are moved to a subdirectory under
 your run directory called ``plotfiles/``.

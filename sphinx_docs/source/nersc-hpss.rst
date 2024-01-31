@@ -9,15 +9,15 @@ frequently, since the scratch filesystems fill up and NERSC will purge
 data periodically.
 
 
-The script ``nersc.xfer.slurm``:
+The script ``nersc.xfer.slurm`` in ``job_scripts/perlmutter/``:
 
 :download:`nersc.xfer.slurm <../../job_scripts/perlmutter/nersc.xfer.slurm>`
 
 can be used to archive data to
 HPSS automatically. This is submitted to the xfer queue and runs the
-script ``process.xrb``:
+script ``process.xrb`` in ``job_scripts/hpss/``:
 
-:download:`process.xrb <../../job_scripts/perlmutter/process.xrb>`
+:download:`process.xrb <../../job_scripts/hpss/process.xrb>`
 
 which continually looks for output and stores
 it to HPSS.
