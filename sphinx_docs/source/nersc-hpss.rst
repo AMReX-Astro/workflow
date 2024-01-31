@@ -19,31 +19,17 @@ script ``process.xrb`` in ``job_scripts/hpss/``:
 
 :download:`process.xrb <../../job_scripts/hpss/process.xrb>`
 
-which continually looks for output and stores
-it to HPSS.
+which continually looks for output and stores it to HPSS.
+By default, the destination directory on HPSS will be have the same name
+as the directory your plotfiles are located in.  This can be changed by
+editing the``$HPSS_DIR`` variable at the top of ``process.xrb``.
 
 The following describes how to use the scripts:
 
-1. Create a directory in HPSS that has the same
-   name as the directory your plotfiles are located in
-   (just the directory name, not the full path). e.g. if you are running in a directory call
-   ``/pscratch/sd/z/zingale/wdconvect/`` run, then do:
-
-   .. prompt:: bash
-
-      hsi
-      mkdir wdconvect
-
-   .. note::
-
-      If the ``hsi`` command prompts you for your password, you will need
-      to talk to the NERSC help desk to ask for password-less access to
-      HPSS.
-
-2. Copy the ``process.xrb`` script and the slurm script ``nersc.xfer.slurm``
+#. Copy the ``process.xrb`` script and the slurm script ``nersc.xfer.slurm``
    into the directory with the plotfiles.
 
-3. Submit the archive job:
+#. Submit the archive job:
 
    .. prompt:: bash
 
@@ -80,14 +66,16 @@ Some additional notes:
   the date-string to allow multiple archives to co-exist.
 
 * When ``process.xrb`` is running, it creates a lockfile (called
-  ``process.pid``) that ensures that only one instance of the script
+  ``process.jobid``) that ensures that only one instance of the script
   is running at any one time.
 
   .. warning::
 
      Sometimes if the job is not terminated normally, the
-     ``process.pid`` file will be left behind, in which case, the script
-     aborts. Just delete that if you know the script is not running.
+     ``process.jobid`` file will be left behind. Later jobs should be
+     able to detect this and clean up the stale lockfile, but if this
+     doesn't work, you can delete the file if you know the script is not
+     running.
 
 Jobs in the xfer queue start up quickly. The best approach is to start
 one as you start your main job (or make it dependent on the main
