@@ -383,27 +383,26 @@ where ``test_hpss.sh`` is a SLURM script that contains the ``htar``
 commands needed to archive your data.  This uses ``slurm`` as the job
 manager.
 
-An example is provided by the ``process.xrb`` archiving script and
-associated ``summit_hpss.submit`` submission script in
-``jobs_scripts/summit/``.  Together these will detect new plotfiles as
-they are generated, tar them up (using ``htar``) and archive them onto
-HPSS.  They will also store the inputs, probin, and other runtime
-generated files.  If ``ftime`` is found in your path, it will also
-create a file called ``ftime.out`` that lists the simulation time
-corresponding to each plotfile.
+An example is provided by the ``process.xrb`` archiving script in
+``job_scripts/hpss/`` and associated ``summit_hpss.submit`` submission script
+in ``jobs_scripts/summit/``.  Together these will detect new plotfiles as they
+are generated, tar them up (using ``htar``) and archive them onto HPSS.  They
+will also store the inputs, probin, and other runtime generated files.  If
+``ftime`` is found in your path, it will also create a file called
+``ftime.out`` that lists the simulation time corresponding to each plotfile.
 
 Once the plotfiles are archived they are moved to a subdirectory under
 your run directory called ``plotfiles/``.
 
+By default, the files will be archived to a directory in HPSS with the same
+name as the directory your plotfiles are located in.  This can be changed
+by editing the ``$HPSS_DIR`` variable at the top of ``process.xrb``.
+
 
 To use this, we do the following:
 
-#. Enter the HPSS system via ``hsi``
-
-#. Create the output directory -- this should have the same name as the directory
-   you are running in on summit
-
-#. Exit HPSS
+#. Copy the ``process.xrb`` and ``summit_hpss.submit`` scripts into the
+   directory with the plotfiles.
 
 #. Launch the script via:
 
@@ -411,7 +410,7 @@ To use this, we do the following:
 
       sbatch summit_hpss.submit
 
-   It will for the full time you asked, searching for plotfiles as
+   It will run for the full time you asked, searching for plotfiles as
    they are created and moving them to HPSS as they are produced (it
    will always leave the very last plotfile alone, since it can't tell
    if it is still being written).

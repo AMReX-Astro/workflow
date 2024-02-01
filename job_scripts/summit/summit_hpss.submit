@@ -5,13 +5,7 @@
 #SBATCH -N 1
 
 # do our archiving
-pidfile=process.pid
+cd "$SLURM_SUBMIT_DIR" || exit
 
-cd $SLURM_SUBMIT_DIR
-
-./process.xrb
-
-PID=$!
-trap 'kill -s TERM $PID' EXIT TERM HUP XCPU KILL
-
-rm -f process.pid
+# use srun so any control signals get sent to the child too
+srun ./process.xrb
