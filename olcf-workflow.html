@@ -514,25 +514,25 @@ via SLURM:</p>
 </pre></div></div><p>where <code class="docutils literal notranslate"><span class="pre">test_hpss.sh</span></code> is a SLURM script that contains the <code class="docutils literal notranslate"><span class="pre">htar</span></code>
 commands needed to archive your data.  This uses <code class="docutils literal notranslate"><span class="pre">slurm</span></code> as the job
 manager.</p>
-<p>An example is provided by the <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> archiving script and
-associated <code class="docutils literal notranslate"><span class="pre">summit_hpss.submit</span></code> submission script in
-<code class="docutils literal notranslate"><span class="pre">jobs_scripts/summit/</span></code>.  Together these will detect new plotfiles as
-they are generated, tar them up (using <code class="docutils literal notranslate"><span class="pre">htar</span></code>) and archive them onto
-HPSS.  They will also store the inputs, probin, and other runtime
-generated files.  If <code class="docutils literal notranslate"><span class="pre">ftime</span></code> is found in your path, it will also
-create a file called <code class="docutils literal notranslate"><span class="pre">ftime.out</span></code> that lists the simulation time
-corresponding to each plotfile.</p>
+<p>An example is provided by the <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> archiving script in
+<code class="docutils literal notranslate"><span class="pre">job_scripts/hpss/</span></code> and associated <code class="docutils literal notranslate"><span class="pre">summit_hpss.submit</span></code> submission script
+in <code class="docutils literal notranslate"><span class="pre">jobs_scripts/summit/</span></code>.  Together these will detect new plotfiles as they
+are generated, tar them up (using <code class="docutils literal notranslate"><span class="pre">htar</span></code>) and archive them onto HPSS.  They
+will also store the inputs, probin, and other runtime generated files.  If
+<code class="docutils literal notranslate"><span class="pre">ftime</span></code> is found in your path, it will also create a file called
+<code class="docutils literal notranslate"><span class="pre">ftime.out</span></code> that lists the simulation time corresponding to each plotfile.</p>
 <p>Once the plotfiles are archived they are moved to a subdirectory under
 your run directory called <code class="docutils literal notranslate"><span class="pre">plotfiles/</span></code>.</p>
+<p>By default, the files will be archived to a directory in HPSS with the same
+name as the directory your plotfiles are located in.  This can be changed
+by editing the <code class="docutils literal notranslate"><span class="pre">$HPSS_DIR</span></code> variable at the top of <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code>.</p>
 <p>To use this, we do the following:</p>
 <ol class="arabic">
-<li><p>Enter the HPSS system via <code class="docutils literal notranslate"><span class="pre">hsi</span></code></p></li>
-<li><p>Create the output directory – this should have the same name as the directory
-you are running in on summit</p></li>
-<li><p>Exit HPSS</p></li>
+<li><p>Copy the <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> and <code class="docutils literal notranslate"><span class="pre">summit_hpss.submit</span></code> scripts into the
+directory with the plotfiles.</p></li>
 <li><p>Launch the script via:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">sbatch<span class="w"> </span>summit_hpss.submit</span>
-</pre></div></div><p>It will for the full time you asked, searching for plotfiles as
+</pre></div></div><p>It will run for the full time you asked, searching for plotfiles as
 they are created and moving them to HPSS as they are produced (it
 will always leave the very last plotfile alone, since it can’t tell
 if it is still being written).</p>

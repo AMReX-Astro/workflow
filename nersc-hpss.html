@@ -96,37 +96,26 @@ is a large tape library that can store the simulations files for long
 periods of time.  It is recommended to move your data to HPSS
 frequently, since the scratch filesystems fill up and NERSC will purge
 data periodically.</p>
-<p>The script <code class="docutils literal notranslate"><span class="pre">nersc.xfer.slurm</span></code>:</p>
+<p>The script <code class="docutils literal notranslate"><span class="pre">nersc.xfer.slurm</span></code> in <code class="docutils literal notranslate"><span class="pre">job_scripts/perlmutter/</span></code>:</p>
 <p><a class="reference download internal" download="" href="_downloads/05203ba4d0d4aa143482b601abe7c8b1/nersc.xfer.slurm"><code class="xref download docutils literal notranslate"><span class="pre">nersc.xfer.slurm</span></code></a></p>
 <p>can be used to archive data to
 HPSS automatically. This is submitted to the xfer queue and runs the
-script <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code>:</p>
-<p><a class="reference download internal" download="" href="_downloads/f1505febfbe5937d242281ec790ebc2d/process.xrb"><code class="xref download docutils literal notranslate"><span class="pre">process.xrb</span></code></a></p>
-<p>which continually looks for output and stores
-it to HPSS.</p>
+script <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> in <code class="docutils literal notranslate"><span class="pre">job_scripts/hpss/</span></code>:</p>
+<p><a class="reference download internal" download="" href="_downloads/cd10ec9dd07537d7054ccb73c28380f4/process.xrb"><code class="xref download docutils literal notranslate"><span class="pre">process.xrb</span></code></a></p>
+<p>which continually looks for output and stores it to HPSS.
+By default, the destination directory on HPSS will be have the same name
+as the directory your plotfiles are located in.  This can be changed by
+editing the``$HPSS_DIR`` variable at the top of <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code>.</p>
 <p>The following describes how to use the scripts:</p>
 <ol class="arabic">
-<li><p>Create a directory in HPSS that has the same
-name as the directory your plotfiles are located in
-(just the directory name, not the full path). e.g. if you are running in a directory call
-<code class="docutils literal notranslate"><span class="pre">/pscratch/sd/z/zingale/wdconvect/</span></code> run, then do:</p>
+<li><p>Copy the <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> script and the slurm script <code class="docutils literal notranslate"><span class="pre">nersc.xfer.slurm</span></code>
+into the directory with the plotfiles.</p></li>
+<li><p>Submit the archive job:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">hsi</span>
-<span class="prompt1">mkdir<span class="w"> </span>wdconvect</span>
-</pre></div></div><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If the <code class="docutils literal notranslate"><span class="pre">hsi</span></code> command prompts you for your password, you will need
-to talk to the NERSC help desk to ask for password-less access to
-HPSS.</p>
-</div>
-</li>
-<li><p>Copy the <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> script and the slurm script <code class="docutils literal notranslate"><span class="pre">nersc.xfer.slurm</span></code>
-into the directory with the plotfiles.</p></li>
-<li><p>Submit the archive job:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">sbatch<span class="w"> </span>nersc.xfer.slurm</span>
+</style><span class="prompt1">sbatch<span class="w"> </span>nersc.xfer.slurm</span>
 </pre></div></div><p>The script <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> is called from the xfer job and will run in
 the background and continually wait until checkpoint or plotfiles are
 created.</p>
@@ -155,13 +144,15 @@ diagnostic files, <code class="docutils literal notranslate"><span class="pre">f
 archive them on HPSS. The <code class="docutils literal notranslate"><span class="pre">.tar</span></code> file is given a name that contains
 the date-string to allow multiple archives to co-exist.</p></li>
 <li><p>When <code class="docutils literal notranslate"><span class="pre">process.xrb</span></code> is running, it creates a lockfile (called
-<code class="docutils literal notranslate"><span class="pre">process.pid</span></code>) that ensures that only one instance of the script
+<code class="docutils literal notranslate"><span class="pre">process.jobid</span></code>) that ensures that only one instance of the script
 is running at any one time.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Sometimes if the job is not terminated normally, the
-<code class="docutils literal notranslate"><span class="pre">process.pid</span></code> file will be left behind, in which case, the script
-aborts. Just delete that if you know the script is not running.</p>
+<code class="docutils literal notranslate"><span class="pre">process.jobid</span></code> file will be left behind. Later jobs should be
+able to detect this and clean up the stale lockfile, but if this
+doesn’t work, you can delete the file if you know the script is not
+running.</p>
 </div>
 </li>
 </ul>

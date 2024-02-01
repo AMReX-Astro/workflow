@@ -1,0 +1,261 @@
+#!/bin/ksh -p
+
+#----------------------------------------------------------------------------
+# user modifiable variables:
+
+# jobidfile is a lock file that is used to make sure that only one instance
+# of this script is working on the current directory
+jobidfile=process.jobid
+
+
+# set the prefix of the plotfiles and checkpoint files
+plt_prefix=*plt
+chk_prefix=*chk
+
+# directory to archive to on HPSS -- set this to the working directory
+work_dir=`pwd`
+HPSS_DIR=`basename $work_dir`
+
+# set HTAR command
+HTAR=htar
+
+# extra arguments to HTAR
+# -P will create intermediate directories on HPSS (i.e. mkdir -p)
+HTAR_ARGS=(-H copies=2 -P)
+
+# path to the ftime executable -- used for making a simple ftime.out file
+# listing the name of the plotfile and its simulation time
+FTIME_EXE=ftime.Linux.gfortran.exe
+
+
+#----------------------------------------------------------------------------
+# initialization stuff
+
+# check to make sure that the lock file does not already exist.
+if [ -f "$jobidfile" ]; then
+  # check if job is still running
+  existing_job=$(<"$jobidfile")
+  if [ "$(sacct -X -P -n -o State -j "$existing_job")" != RUNNING ]; then
+    echo "process: removing stale lock file for job $existing_job"
+    rm "$jobidfile"
+  else
+    echo "process job $existing_job is still running"
+    exit 2
+  fi
+fi
+
+# create the lock file
+echo "$SLURM_JOB_ID" > "$jobidfile"
+
+# if our process is killed, remove the lock file first
+function cleanup {
+  echo "process: received signal; removing $jobidfile"
+  command rm -f "$jobidfile"
+  # remove the EXIT handler, since we only want to do this once
+  trap - EXIT
+  # don't exit, so we can finish the current operation:
+  # $jobidfile is checked at the start of each loop iteration in process_files()
+}
+trap cleanup EXIT HUP INT QUIT TERM XCPU
+
+# Number of seconds to sleep before checking again.
+N=60
+
+
+#----------------------------------------------------------------------------
+# make storage directories
+
+# once we process a file, we will move the plotfiles into the plotfiles/
+# directory.  This then hides them from the script, so if the system
+# later purges the files in the pltXXXXX directory and the .processed
+# file, we don't overwrite our archived data with a tarred empty
+# directory structure.  We do the same with the checkpoint files (using
+# checkfiles/)
+
+if [ ! -d plotfiles ]; then
+  mkdir plotfiles
+fi
+
+if [ ! -d checkfiles ]; then
+  mkdir checkfiles
+fi
+
+
+#----------------------------------------------------------------------------
+# the processing function
+
+# Process Files.  Once a plotfile is successfully processed, we will output
+# a file pltXXXXX.processed (checkpoint files are only archived, with a
+# chkXXXXX.processed file appearing once the archiving is successful).
+# Subsequent invocations of this routine will skip over any plotfiles or
+# checkpoint files that have a corresponding .processed file.
+
+
+function process_files
+{
+  if [ ! -f $jobidfile ]; then
+    echo "process: $jobidfile has been removed, exiting"
+    exit
+  fi
+
+
+  # plotfiles
+
+  # Take all but the final plt file -- we want to ensure they're completely
+  # written to disk.  Strip out any tar files that are lying around as well
+  # as pltXXXXX.processed files.  We restrict the find command to a depth of
+  # 1 to avoid catching any already-processed files in the plotfiles/
+  # directory
+  pltlist=($(
+    find . -maxdepth 1 -type d -name "${plt_prefix}?????" -print | sort
+    find . -maxdepth 1 -type d -name "${plt_prefix}??????" -print | sort
+    find . -maxdepth 1 -type d -name "${plt_prefix}???????" -print | sort
+  ))
+
+  # Don't process the final plt file
+  unset "pltlist[-1]"
+
+  for dir in "${pltlist[@]}"
+  do
+    if [ ! -f $jobidfile ]; then
+      echo "process: $jobidfile has been removed, exiting"
+      exit
+    fi
+    if [ -d ${dir} ]; then
+
+      # only work on the file if there is not a .processed file in the
+      # main directory or the plotfiles/ directory
+      if [ ! -f ${dir}.processed ] && [ ! -f plotfiles/${dir}.processed ]; then
+
+        # do processing
+
+        # store the file on HPSS
+        ${HTAR} "${HTAR_ARGS[@]}" -cvf ${HPSS_DIR}/${dir}.tar ${dir} > ${dir}.htar
+
+        # Ordinarily, we'd check htar's exit status (0 = successful), but
+        # on some machines (like Atlas) htar doesn't return a valid exit
+        # status.  Instead we'll grep for the success line at the end of
+        # htar's output (which we piped into a file) and check the output
+        # status of grep
+        grep "HTAR: HTAR SUCCESSFUL" ${dir}.htar >> /dev/null
+
+        # The variable $? holds the exit status of the previous command
+        if [ $? -eq 0 ]; then
+
+          # mark this file as processed so we skip it next time
+          date > ${dir}.processed
+
+          # output the plotfile name and simulation time to ftime.out
+          if [ `command -v ${FTIME_EXE}` ] ; then
+            ${FTIME_EXE} ${dir} >> ftime.out
+          fi
+
+          # remove the htar temporary file
+          rm ${dir}.htar
+
+          # move the plotfile into the plotfiles directory
+          mv ${dir} plotfiles/
+
+          # ..and the corresponding .processed file too.
+          mv ${dir}.processed plotfiles/
+
+          # and visualize it
+          #runtimevis.py plotfiles/${dir}
+
+        fi
+
+      fi   # end test of whether plotfile already processed
+
+    fi   # end test of whether plotfile is a directory (as it should be)
+
+  done
+
+
+  # checkpoint files
+
+  # Take all but the final chk file -- we want to ensure they're completely
+  # written to disk.  Strip out any tar files that are lying around as well
+  # as chkXXXXX.processed files.  We restrict the find command to a depth of
+  # 1 to avoid catching any already-processed files in the checkfiles/
+  # directory
+  chklist=($(
+    find . -maxdepth 1 -type d -name "${chk_prefix}?[05]000" -print | sort
+    find . -maxdepth 1 -type d -name "${chk_prefix}??[05]000" -print | sort
+    find . -maxdepth 1 -type d -name "${chk_prefix}???[05]000" -print | sort
+  ))
+
+  # Don't process the final chk file
+  unset "chklist[-1]"
+
+  for dir in "${chklist[@]}"
+  do
+    if [ ! -f $jobidfile ]; then
+      echo "process: $jobidfile has been removed, exiting"
+      exit
+    fi
+    if [ -d ${dir} ]; then
+
+      if [ ! -f ${dir}.processed ] && [ ! -f checkfiles/${dir}.processed ]; then
+
+        # store the file on HPSS
+        ${HTAR} "${HTAR_ARGS[@]}" -cvf ${HPSS_DIR}/${dir}.tar ${dir} > ${dir}.htar
+
+        # Ordinarily, we'd check htar's exit status (0 = successful), but
+        # on some machines (like Atlas) htar doesn't return a valid exit
+        # status.  Instead we'll grep for the success line at the end of
+        # htar's output (which we piped into a file) and check the output
+        # status of grep
+        grep "HTAR: HTAR SUCCESSFUL" ${dir}.htar >> /dev/null
+
+        # The variable $? holds the exit status of the previous command
+        if [ $? -eq 0 ]; then
+
+          # mark this file as processed so we skip it next time
+          date > ${dir}.processed
+
+          # remove the htar temporary file
+          rm ${dir}.htar
+
+          # move the checkpoint file into the checkfiles directory
+          mv ${dir} checkfiles/
+
+          # ..and the corresponding .processed file too.
+          mv ${dir}.processed checkfiles/
+
+        fi
+
+      fi
+
+    fi
+  done
+
+}
+
+
+#----------------------------------------------------------------------------
+# the main function
+
+# archive any diagnostic files first -- give them a unique name, appending
+# the date string, to make sure that we don't overwrite anything
+datestr=$(date +"%Y%m%d_%H%M_%S")
+all_files=($(
+  find . -maxdepth 1 -name "ftime.out" -print
+  find . -maxdepth 1 -name "inputs*" -print
+  find . -maxdepth 1 -name "*diag.out" -print
+  find . -maxdepth 1 -name "*.hse.*" -print
+  find . -maxdepth 1 -name "*.slurm" -print; find . -maxdepth 1 -name "*.submit" -print
+  find . -maxdepth 1 -name "process*" -print
+))
+
+${HTAR} -P -cvf ${HPSS_DIR}/diag_files_${datestr}.tar "${all_files[@]}" >> /dev/null
+
+
+# Loop, waiting for plt and chk directories to appear.
+
+while true
+do
+  process_files
+  # put sleep in the background so the shell can handle signals
+  sleep $N &
+  wait
+done
