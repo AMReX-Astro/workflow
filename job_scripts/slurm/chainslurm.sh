@@ -35,7 +35,7 @@ then
     echo chaining $numjobs jobs
     
     echo starting job 1 with no dependency
-    aout=`sbatch --parsable ${script}`
+    aout=`sbatch --parsable ${script} | cut -d';' -f1`
     echo "   " jobid: $aout
     echo " "
     oldjob=$aout
@@ -48,7 +48,7 @@ fi
 for count in `seq $firstcount 1 $numjobs`
 do
   echo starting job $count to depend on $oldjob
-  aout=`sbatch --parsable -d afterany:${oldjob} ${script}`
+  aout=`sbatch --parsable -d afterany:${oldjob} ${script} | cut -d';' -f1`
   echo "   " jobid: $aout
   echo " "
   oldjob=$aout
