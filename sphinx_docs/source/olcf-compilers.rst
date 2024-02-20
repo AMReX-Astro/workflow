@@ -85,3 +85,22 @@ build via:
 .. prompt:: bash
 
    make COMP=gnu USE_HIP=TRUE
+
+
+HIP Function Inlining
+^^^^^^^^^^^^^^^^^^^^^
+
+By default, the ROCm compiler inlines all function calls in device code
+(for better compatibility with codes that use file- or function-scoped
+``__shared__`` variables). This greatly increases the time it takes to
+compile and link, and may be detrimental for the templated Microphysics
+networks with lots of compile-time loop unrolling.
+
+This can be disabled by passing flags to ``hipcc`` to allow non-inlined
+function calls:
+
+.. prompt:: bash
+
+   make USE_HIP=TRUE EXTRACXXFLAGS='-mllvm -amdgpu-function-calls=true'
+
+See also https://rocm.docs.amd.com/en/docs-5.3.3/reference/rocmcc/rocmcc.html#rocm-compiler-interfaces
