@@ -56,7 +56,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="olcf.html">Working at OLCF</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Compiling at OLCF</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#summit">Summit</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#frontier">Frontier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#frontier">Frontier</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hip-function-inlining">HIP Function Inlining</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-workflow.html">Managing Jobs at OLCF</a></li>
@@ -155,8 +158,20 @@ in the burner</p>
 to run without rate tabulation.</p>
 </div>
 <p>build via:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">COMP</span><span class="o">=</span>gnu<span class="w"> </span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE</span>
-</pre></div></div></section>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE</span>
+</pre></div></div><section id="hip-function-inlining">
+<h3>HIP Function Inlining<a class="headerlink" href="#hip-function-inlining" title="Link to this heading">¶</a></h3>
+<p>By default, the ROCm compiler inlines all function calls in device code
+(for better compatibility with codes that use file- or function-scoped
+<code class="docutils literal notranslate"><span class="pre">__shared__</span></code> variables). This greatly increases the time it takes to
+compile and link, and may be detrimental for the templated Microphysics
+networks with lots of compile-time loop unrolling.</p>
+<p>This can be disabled by passing flags to <code class="docutils literal notranslate"><span class="pre">hipcc</span></code> to allow non-inlined
+function calls:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE<span class="w"> </span><span class="nv">EXTRACXXFLAGS</span><span class="o">=</span><span class="s1">&#39;-mllvm -amdgpu-function-calls=true&#39;</span></span>
+</pre></div></div><p>See also <a class="reference external" href="https://rocm.docs.amd.com/en/docs-5.3.3/reference/rocmcc/rocmcc.html#rocm-compiler-interfaces">https://rocm.docs.amd.com/en/docs-5.3.3/reference/rocmcc/rocmcc.html#rocm-compiler-interfaces</a></p>
+</section>
+</section>
 </section>
 
 
