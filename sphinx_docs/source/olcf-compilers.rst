@@ -84,7 +84,7 @@ build via:
 
 .. prompt:: bash
 
-   make COMP=gnu USE_HIP=TRUE
+   make USE_HIP=TRUE
 
 
 HIP Function Inlining
