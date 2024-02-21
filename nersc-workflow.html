@@ -122,7 +122,7 @@ includes the restart logic to allow for job chaining.</p>
 <span class="c1">#SBATCH --ntasks-per-node=4</span>
 <span class="c1">#SBATCH --gpus-per-task=1</span>
 <span class="c1">#SBATCH --gpu-bind=map_gpu:0,1,2,3</span>
-<span class="c1">#SBATCH --signal=B:URG@2</span>
+<span class="c1">#SBATCH --signal=B:URG@120</span>
 
 <span class="nb">export</span><span class="w"> </span><span class="nv">CASTRO_EXEC</span><span class="o">=</span>./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
 <span class="nb">export</span><span class="w"> </span><span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.N14
@@ -173,7 +173,7 @@ find_chk_file<span class="w"> </span><span class="s2">&quot;*chk???????&quot;</s
 rm<span class="w"> </span>-f<span class="w"> </span>dump_and_stop
 
 <span class="c1"># The `--signal=B:URG@&lt;n&gt;` option tells slurm to send SIGURG to this batch</span>
-<span class="c1"># script n minutes before the runtime limit, so we can exit gracefully.</span>
+<span class="c1"># script n seconds before the runtime limit, so we can exit gracefully.</span>
 <span class="k">function</span><span class="w"> </span>sig_handler<span class="w"> </span><span class="o">{</span>
 <span class="w">    </span>touch<span class="w"> </span>dump_and_stop
 <span class="w">    </span><span class="c1"># disable this signal handler</span>
