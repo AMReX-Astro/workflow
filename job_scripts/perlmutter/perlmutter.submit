@@ -10,7 +10,7 @@
 #SBATCH --ntasks-per-node=4
 #SBATCH --gpus-per-task=1
 #SBATCH --gpu-bind=map_gpu:0,1,2,3
-#SBATCH --signal=B:URG@2
+#SBATCH --signal=B:URG@120
 
 export CASTRO_EXEC=./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
 export INPUTS=inputs_2d.N14
@@ -61,7 +61,7 @@ fi
 rm -f dump_and_stop
 
 # The `--signal=B:URG@<n>` option tells slurm to send SIGURG to this batch
-# script n minutes before the runtime limit, so we can exit gracefully.
+# script n seconds before the runtime limit, so we can exit gracefully.
 function sig_handler {
     touch dump_and_stop
     # disable this signal handler
