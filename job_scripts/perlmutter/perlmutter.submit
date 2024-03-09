@@ -76,7 +76,7 @@ slack_job_start.py "starting NERSC job: ${workdir} ${restartFile}" @michael
 
 # execute srun in the background then use the builtin wait so the shell can
 # handle the signal
-srun -n 64 ${CASTRO_EXEC} ${INPUTS} ${restartString} &
+srun -n $((SLURM_NTASKS_PER_NODE * SLURM_NNODES)) ${CASTRO_EXEC} ${INPUTS} ${restartString} &
 pid=$!
 wait $pid
 ret=$?
