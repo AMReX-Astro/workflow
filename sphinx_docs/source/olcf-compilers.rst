@@ -66,14 +66,18 @@ load modules:
 
 .. prompt:: bash
 
-   module load PrgEnv-gnu craype-accel-amd-gfx90a cray-mpich rocm amd-mixed
+   module load PrgEnv-gnu
+   module load cray-mpich/8.1.27
+   module load craype-accel-amd-gfx90a
+   module load amd-mixed/6.0.0
+   module unload darshan-runtime
 
-at the moment, that loads ROCm 5.3.0
+this will load ROCm 6.0.0
 
 .. note::
 
-   Tabulate rates seem to exhibit a strange slow down on Frontier, so it is best
-   to run without rate tabulation.
+   Tabulate rates seem to exhibit a strange slow down on Frontier, so
+   it is best to run without rate tabulation.
 
 build via:
 
@@ -99,3 +103,8 @@ function calls:
    make USE_HIP=TRUE EXTRACXXFLAGS='-mllvm -amdgpu-function-calls=true'
 
 See also https://rocm.docs.amd.com/en/docs-5.3.3/reference/rocmcc/rocmcc.html#rocm-compiler-interfaces
+
+.. note::
+
+   Inline is automatically disabled via our ``Microphysics`` repository
+   when it detects a HIP build.
