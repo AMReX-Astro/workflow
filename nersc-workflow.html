@@ -188,7 +188,7 @@ slack_job_start.py<span class="w"> </span><span class="s2">&quot;starting NERSC 
 
 <span class="c1"># execute srun in the background then use the builtin wait so the shell can</span>
 <span class="c1"># handle the signal</span>
-srun<span class="w"> </span>-n<span class="w"> </span><span class="m">64</span><span class="w"> </span><span class="si">${</span><span class="nv">CASTRO_EXEC</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span><span class="w"> </span><span class="p">&amp;</span>
+srun<span class="w"> </span>-n<span class="w"> </span><span class="k">$((</span><span class="nv">SLURM_NTASKS_PER_NODE</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">SLURM_NNODES</span><span class="k">))</span><span class="w"> </span><span class="si">${</span><span class="nv">CASTRO_EXEC</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span><span class="w"> </span><span class="p">&amp;</span>
 <span class="nv">pid</span><span class="o">=</span><span class="nv">$!</span>
 <span class="nb">wait</span><span class="w"> </span><span class="nv">$pid</span>
 <span class="nv">ret</span><span class="o">=</span><span class="nv">$?</span>
