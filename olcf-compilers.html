@@ -145,12 +145,16 @@ doesn’t use this feature.</p></li>
 <p>log into: <code class="docutils literal notranslate"><span class="pre">frontier.olcf.ornl.gov</span></code></p>
 <p>see: <a class="reference external" href="https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#programming-environment">https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#programming-environment</a></p>
 <p>load modules:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu<span class="w"> </span>craype-accel-amd-gfx90a<span class="w"> </span>cray-mpich<span class="w"> </span>rocm<span class="w"> </span>amd-mixed</span>
-</pre></div></div><p>at the moment, that loads ROCm 5.3.0</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>cray-mpich/8.1.27</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>craype-accel-amd-gfx90a</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>amd-mixed/6.0.0</span>
+<span class="prompt1">module<span class="w"> </span>unload<span class="w"> </span>darshan-runtime</span>
+</pre></div></div><p>this will load ROCm 6.0.0</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Tabulate rates seem to exhibit a strange slow down on Frontier, so it is best
-to run without rate tabulation.</p>
+<p>Tabulate rates seem to exhibit a strange slow down on Frontier, so
+it is best to run without rate tabulation.</p>
 </div>
 <p>build via:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE</span>
@@ -165,6 +169,11 @@ networks with lots of compile-time loop unrolling.</p>
 function calls:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE<span class="w"> </span><span class="nv">EXTRACXXFLAGS</span><span class="o">=</span><span class="s1">&#39;-mllvm -amdgpu-function-calls=true&#39;</span></span>
 </pre></div></div><p>See also <a class="reference external" href="https://rocm.docs.amd.com/en/docs-5.3.3/reference/rocmcc/rocmcc.html#rocm-compiler-interfaces">https://rocm.docs.amd.com/en/docs-5.3.3/reference/rocmcc/rocmcc.html#rocm-compiler-interfaces</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Inline is automatically disabled via our <code class="docutils literal notranslate"><span class="pre">Microphysics</span></code> repository
+when it detects a HIP build.</p>
+</div>
 </section>
 </section>
 </section>
