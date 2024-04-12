@@ -577,8 +577,10 @@ for a description of usage and arguments.</p>
 <span class="nv">EXEC</span><span class="o">=</span>Castro3d.hip.x86-trento.MPI.HIP.ex
 <span class="nv">INPUTS</span><span class="o">=</span>inputs.3d.sph
 
-module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu<span class="w"> </span>craype-accel-amd-gfx90a<span class="w"> </span>cray-mpich<span class="w"> </span>rocm/5.3.0
-module<span class="w"> </span>load<span class="w"> </span>amd-mixed/5.3.0
+module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu
+module<span class="w"> </span>load<span class="w"> </span>craype-accel-amd-gfx90a
+module<span class="w"> </span>load<span class="w"> </span>cray-mpich/8.1.27
+module<span class="w"> </span>load<span class="w"> </span>amd-mixed/6.0.0
 
 <span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">NMPI_PER_NODE</span><span class="o">=</span><span class="m">8</span>
