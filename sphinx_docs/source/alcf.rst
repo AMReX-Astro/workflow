@@ -28,8 +28,6 @@ Load the modules:
 .. prompt:: bash
 
    module swap PrgEnv-nvhpc PrgEnv-gnu
-   # load gcc/11.2.0 version since CUDA doesn't support gcc 12 yet
-   module load gcc/11.2.0
    module load nvhpc-mixed
 
 Then you can compile via:
@@ -37,6 +35,32 @@ Then you can compile via:
 .. prompt:: bash
 
    make COMP=gnu USE_CUDA=TRUE
+
+
+Workaround for ``GCC < 8 not supported.``
+-----------------------------------------
+
+Since the update on 2024-04-22 (https://docs.alcf.anl.gov/polaris/system-updates/#2024-04-22), ``gcc --version`` returns 7.5.0, which is the default system version.
+Loading the ``gcc-native`` module doesn't change this, as the newer compiler versions are located at ``/usr/bin/gcc-12`` and ``/usr/bin/g++-12``, rather than under a versioned subdirectory.
+To work around this until the ALCF folks fix it, we can override the CC and CXX variables passed to make:
+
+* For CPU builds without MPI (e.g. plotfile diagnostics):
+
+  .. prompt:: bash
+
+     make CC=gcc-12 CXX=g++-12 COMP=gnu
+
+* For CPU builds with MPI:
+
+  .. prompt:: bash
+
+     make CC=cc CXX=CC COMP=gnu USE_MPI=TRUE
+
+* For GPU builds with MPI:
+
+  .. prompt:: bash
+
+     make NVCC_CCBIN=g++-12 COMP=gnu USE_MPI=TRUE USE_CUDA=TRUE
 
 
 Disks
