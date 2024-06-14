@@ -144,7 +144,6 @@ is loaded:
    VENV_DIR="venvs/polaris"
    source "${VENV_DIR}/bin/activate"
 
-
 Once the virtual environment is active, any extra package can be installed with
 the use of ``pip``:
 
