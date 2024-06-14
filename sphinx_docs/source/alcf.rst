@@ -27,16 +27,15 @@ Load the modules:
 
 .. prompt:: bash
 
-   module swap PrgEnv-nvhpc PrgEnv-gnu
-   # load gcc/11.2.0 version since CUDA doesn't support gcc 12 yet
-   module load gcc/11.2.0
+   module use /soft/modulefiles
+   module load PrgEnv-gnu
    module load nvhpc-mixed
 
 Then you can compile via:
 
 .. prompt:: bash
 
-   make COMP=gnu USE_CUDA=TRUE
+   make COMP=cray USE_CUDA=TRUE
 
 
 Disks
@@ -51,6 +50,10 @@ Queues
 https://www.alcf.anl.gov/support/user-guides/polaris/queueing-and-running-jobs/job-and-queue-scheduling/index.html
 
 For production jobs, you submit to the ``prod`` queue.
+
+For debugging jobs, there are two options: the ``debug`` queue for only one node use jobs, and 
+``debug-scaling`` for jobs that require between two nodes and 10-nodes. The former is used mainly for
+tunning the optimal parameters and compare the scalability of the allocated resources.
 
 .. note::
 
@@ -108,3 +111,43 @@ A script that can be used to chain jobs with PBS is:
 .. literalinclude:: ../../job_scripts/polaris/chainqsub.sh
    :caption: ``chainqsub.sh``
 
+
+Installing Python
+=================
+
+The most recommended way to install python is to create a virtual environment
+on the top of the conda-based environment provided by the module conda, and install all the extra
+required modules on this virtual environment. Although is very tempting
+to clone the whole base environment and fully customize the installed conda packages, some
+modules like ``mpi4py`` may require access to the MPICH libraries that are tailored to be
+used only within the conda-base environment provided by the conda module.
+
+To create the virtual environment:
+
+.. prompt:: bash
+
+   module use /soft/modulefiles
+   module load conda 
+   conda activate
+   VENV_DIR="venvs/polaris"
+   mkdir -p "${VENV_DIR}"
+   python -m venv "${VENV_DIR}" --system-site-packages
+   source "${VENV_DIR}/bin/activate"
+
+To activate it in a new terminal, if the module path ``/soft/modules``
+is loaded:
+
+.. prompt:: bash
+
+   module load conda 
+   conda activate
+   VENV_DIR="venvs/polaris"
+   source "${VENV_DIR}/bin/activate"
+
+
+Once the virtual environment is active, any extra package can be installed with
+the use of ``pip``:
+
+.. prompt:: bash
+
+   python pip -m install <module>
