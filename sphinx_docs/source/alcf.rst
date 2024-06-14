@@ -47,13 +47,10 @@ Project workspace is at: ``/lus/grand/projects/AstroExplosions/``
 Queues
 ======
 
-https://www.alcf.anl.gov/support/user-guides/polaris/queueing-and-running-jobs/job-and-queue-scheduling/index.html
-
 For production jobs, you submit to the ``prod`` queue.
 
-For debugging jobs, there are two options: the ``debug`` queue for only one node use jobs, and 
-``debug-scaling`` for jobs that require between two nodes and 10-nodes. The former is used mainly for
-tunning the optimal parameters and compare the scalability of the allocated resources.
+For debugging jobs, there are two options: the ``debug``  and ``debug-scaling`` options. More information can be found in:
+https://docs.alcf.anl.gov/polaris/running-jobs/#queues
 
 .. note::
 
@@ -120,7 +117,8 @@ on the top of the conda-based environment provided by the module conda, and inst
 required modules on this virtual environment. Although is very tempting
 to clone the whole base environment and fully customize the installed conda packages, some
 modules like ``mpi4py`` may require access to the MPICH libraries that are tailored to be
-used only within the conda-base environment provided by the conda module.
+used only within the conda-base environment provided by the conda module. All these instructions
+follow the guidelines publish here: https://docs.alcf.anl.gov/polaris/data-science-workflows/python/
 
 To create the virtual environment:
 
