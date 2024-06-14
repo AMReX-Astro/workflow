@@ -149,4 +149,4 @@ the use of ``pip``:
 
 .. prompt:: bash
 
-   python pip -m install <module>
+   python -m pip install <package>
