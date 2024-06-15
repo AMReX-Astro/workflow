@@ -112,13 +112,13 @@ A script that can be used to chain jobs with PBS is:
 Installing Python
 =================
 
-The most recommended way to install python is to create a virtual environment
-on the top of the conda-based environment provided by the module conda, and install all the extra
-required modules on this virtual environment. Although is very tempting
+The most recommended way to install python in polaris is to create a virtual environment
+on the top of the conda-based environment, provided by the module conda, and install all the extra
+required packages on this virtual environment by using ``pip``. Although is very tempting
 to clone the whole base environment and fully customize the installed conda packages, some
-modules like ``mpi4py`` may require access to the MPICH libraries that are tailored to be
+modules like ``mpi4py`` may require access to the MPICH libraries that are only tailored to be
 used only within the conda-base environment provided by the conda module. All these instructions
-follow the guidelines publish here: https://docs.alcf.anl.gov/polaris/data-science-workflows/python/
+follow the guidelines published here: https://docs.alcf.anl.gov/polaris/data-science-workflows/python/
 
 To create the virtual environment:
 
