@@ -16,7 +16,7 @@
   <![endif]-->
   
         <script src="_static/documentation_options.js?v=f2a433a1"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
         <script src="_static/copybutton.js?v=f281be69"></script>
@@ -59,6 +59,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#submitting">Submitting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#automatic-restarting">Automatic Restarting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#job-chaining">Job Chaining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-python">Installing Python</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nersc.html">Working at NERSC</a></li>
@@ -111,12 +112,11 @@ there.  This is read at the end of <code class="docutils literal notranslate"><s
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">module<span class="w"> </span>swap<span class="w"> </span>PrgEnv-nvhpc<span class="w"> </span>PrgEnv-gnu</span>
-<span class="prompt1"><span class="c1"># load gcc/11.2.0 version since CUDA doesn&#39;t support gcc 12 yet</span></span>
-<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>gcc/11.2.0</span>
+</style><span class="prompt1">module<span class="w"> </span>use<span class="w"> </span>/soft/modulefiles</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu</span>
 <span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>nvhpc-mixed</span>
 </pre></div></div><p>Then you can compile via:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">COMP</span><span class="o">=</span>gnu<span class="w"> </span><span class="nv">USE_CUDA</span><span class="o">=</span>TRUE</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">COMP</span><span class="o">=</span>cray<span class="w"> </span><span class="nv">USE_CUDA</span><span class="o">=</span>TRUE</span>
 </pre></div></div></section>
 <section id="disks">
 <h2>Disks<a class="headerlink" href="#disks" title="Link to this heading">¶</a></h2>
@@ -124,8 +124,9 @@ span.prompt1:before {
 </section>
 <section id="queues">
 <h2>Queues<a class="headerlink" href="#queues" title="Link to this heading">¶</a></h2>
-<p><a class="reference external" href="https://www.alcf.anl.gov/support/user-guides/polaris/queueing-and-running-jobs/job-and-queue-scheduling/index.html">https://www.alcf.anl.gov/support/user-guides/polaris/queueing-and-running-jobs/job-and-queue-scheduling/index.html</a></p>
 <p>For production jobs, you submit to the <code class="docutils literal notranslate"><span class="pre">prod</span></code> queue.</p>
+<p>For debugging jobs, there are two options: the <code class="docutils literal notranslate"><span class="pre">debug</span></code>  and <code class="docutils literal notranslate"><span class="pre">debug-scaling</span></code> options. More information can be found in:
+<a class="reference external" href="https://docs.alcf.anl.gov/polaris/running-jobs/#queues">https://docs.alcf.anl.gov/polaris/running-jobs/#queues</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The smallest node count that seems to be allowed in production is 10 nodes.</p>
@@ -322,6 +323,33 @@ mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="si">${</sp
 </div>
 </div>
 </section>
+<section id="installing-python">
+<h2>Installing Python<a class="headerlink" href="#installing-python" title="Link to this heading">¶</a></h2>
+<p>The most recommended way to install python in polaris is to create a virtual environment
+on the top of the conda-based environment, provided by the module conda, and install all the extra
+required packages on this virtual environment by using <code class="docutils literal notranslate"><span class="pre">pip</span></code>. Although is very tempting
+to clone the whole base environment and fully customize the installed conda packages, some
+modules like <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code> may require access to the MPICH libraries that are only tailored to be
+used by the conda-based environment provided by the conda module. All these instructions
+follow the guidelines published here: <a class="reference external" href="https://docs.alcf.anl.gov/polaris/data-science-workflows/python/">https://docs.alcf.anl.gov/polaris/data-science-workflows/python/</a></p>
+<p>To create the virtual environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>use<span class="w"> </span>/soft/modulefiles</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>conda</span>
+<span class="prompt1">conda<span class="w"> </span>activate</span>
+<span class="prompt1"><span class="nv">VENV_DIR</span><span class="o">=</span><span class="s2">&quot;venvs/polaris&quot;</span></span>
+<span class="prompt1">mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">VENV_DIR</span><span class="si">}</span><span class="s2">&quot;</span></span>
+<span class="prompt1">python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">VENV_DIR</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>--system-site-packages</span>
+<span class="prompt1"><span class="nb">source</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">VENV_DIR</span><span class="si">}</span><span class="s2">/bin/activate&quot;</span></span>
+</pre></div></div><p>To activate it in a new terminal, if the module path <code class="docutils literal notranslate"><span class="pre">/soft/modulefiles</span></code>
+is loaded:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>conda</span>
+<span class="prompt1">conda<span class="w"> </span>activate</span>
+<span class="prompt1"><span class="nv">VENV_DIR</span><span class="o">=</span><span class="s2">&quot;venvs/polaris&quot;</span></span>
+<span class="prompt1"><span class="nb">source</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">VENV_DIR</span><span class="si">}</span><span class="s2">/bin/activate&quot;</span></span>
+</pre></div></div><p>Once the virtual environment is active, any extra package can be installed with
+the use of <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>&lt;package&gt;</span>
+</pre></div></div></section>
 </section>
 
 
