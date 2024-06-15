@@ -132,7 +132,7 @@ To create the virtual environment:
    python -m venv "${VENV_DIR}" --system-site-packages
    source "${VENV_DIR}/bin/activate"
 
-To activate it in a new terminal, if the module path ``/soft/modules``
+To activate it in a new terminal, if the module path ``/soft/modulefiles``
 is loaded:
 
 .. prompt:: bash
