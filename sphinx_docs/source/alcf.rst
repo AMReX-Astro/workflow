@@ -117,7 +117,7 @@ on the top of the conda-based environment, provided by the module conda, and ins
 required packages on this virtual environment by using ``pip``. Although is very tempting
 to clone the whole base environment and fully customize the installed conda packages, some
 modules like ``mpi4py`` may require access to the MPICH libraries that are only tailored to be
-used only within the conda-base environment provided by the conda module. All these instructions
+used by the conda-based environment provided by the conda module. All these instructions
 follow the guidelines published here: https://docs.alcf.anl.gov/polaris/data-science-workflows/python/
 
 To create the virtual environment:
