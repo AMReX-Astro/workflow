@@ -100,22 +100,22 @@ span.prompt1:before {
 }
 </style><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>python/3.7-anaconda3</span>
 </pre></div></div><p>then setup <code class="docutils literal notranslate"><span class="pre">conda</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">conda<span class="w"> </span>init<span class="w"> </span>bash</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">conda<span class="w"> </span>init</span>
+<span class="prompt1">conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>myenv<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11</span>
 </pre></div></div><p>this will modify your <cite>.bashrc</cite>, adding code that is specific to andes.</p>
-<p>Then you do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>andes_env<span class="w"> </span>-y<span class="w"> </span>ipykernel<span class="w"> </span>nb_conda_kernels</span>
-<span class="prompt1">conda<span class="w"> </span>install<span class="w"> </span>-n<span class="w"> </span>andes_env<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>yt</span>
-</pre></div></div><div class="admonition note">
+<div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you want to install yt from source, then you would first clone
-the yt repo:</p>
+<p>The version of <code class="docutils literal notranslate"><span class="pre">conda</span></code> install on andes is very own, so it is best
+to install all other packages using pip in your new environment.</p>
+</div>
+<p>To activate the environment, do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1"><span class="nb">source</span><span class="w"> </span>activate<span class="w"> </span>myenv</span>
+</pre></div></div><p>You can then install yt from source:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">git<span class="w"> </span>clone<span class="w"> </span>git@github.com:yt-project/yt</span>
-</pre></div></div><p>Then in the top-level <code class="docutils literal notranslate"><span class="pre">yt/</span></code> directory, do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.</span>
-</pre></div></div><p>If you have an existing yt installation, you can uninstall it first via:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pip<span class="w"> </span>uninstall<span class="w"> </span>yt</span>
-</pre></div></div></div>
-<p>Finally, you can activate the environment as:</p>
+<span class="prompt1"><span class="nb">cd</span><span class="w"> </span>yt</span>
+<span class="prompt1">pip<span class="w"> </span>install<span class="w"> </span>.</span>
+</pre></div></div><p>Each time you log in, if you want to use this environment,
+you need to do:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1"><span class="nb">source</span><span class="w"> </span>activate<span class="w"> </span>andes_env</span>
 </pre></div></div><p>Then you can run a python script that does visualization as with the
 following submission script:</p>
