@@ -14,40 +14,32 @@ then setup ``conda``:
 
 .. prompt:: bash
 
-   conda init bash
+   conda init
+   conda create --name myenv python=3.11
 
 this will modify your `.bashrc`, adding code that is specific to andes.
 
-Then you do:
+.. note::
+
+   The version of ``conda`` install on andes is very own, so it is best
+   to install all other packages using pip in your new environment.
+
+To activate the environment, do:
 
 .. prompt:: bash
 
-   conda create -n andes_env -y ipykernel nb_conda_kernels
-   conda install -n andes_env -c conda-forge yt
+   source activate myenv
 
-.. note::
+You can then install yt from source:
 
-   If you want to install yt from source, then you would first clone
-   the yt repo:
+.. prompt:: bash
 
-   .. prompt:: bash
+   git clone git@github.com:yt-project/yt
+   cd yt
+   pip install .
 
-      git clone git@github.com:yt-project/yt
-
-   Then in the top-level ``yt/`` directory, do:
-
-   .. prompt:: bash
-
-      pip install -e .
-
-   If you have an existing yt installation, you can uninstall it first via:
-
-   .. prompt:: bash
-
-      pip uninstall yt
-
-
-Finally, you can activate the environment as:
+Each time you log in, if you want to use this environment,
+you need to do:
 
 .. prompt:: bash
 
