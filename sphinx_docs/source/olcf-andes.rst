@@ -24,6 +24,11 @@ this will modify your `.bashrc`, adding code that is specific to andes.
    The version of ``conda`` install on andes is very own, so it is best
    to install all other packages using pip in your new environment.
 
+.. note::
+
+   OLCF also has ``miniforge`` installed on Andes, although the documentation
+   is out of date regarding that: https://docs.olcf.ornl.gov/software/python/index.html
+
 To activate the environment, do:
 
 .. prompt:: bash
