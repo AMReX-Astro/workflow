@@ -92,7 +92,7 @@
   <section id="batch-visualization-on-andes">
 <h1>Batch Visualization on Andes<a class="headerlink" href="#batch-visualization-on-andes" title="Link to this heading">¶</a></h1>
 <p>It is best to work on <code class="docutils literal notranslate"><span class="pre">andes.olcf.ornl.gov</span></code>.  You will want to setup
-a new env for andes.  We’ll call it <code class="docutils literal notranslate"><span class="pre">andes_env</span></code>.</p>
+a new env for andes.  We’ll call it <code class="docutils literal notranslate"><span class="pre">myenv</span></code>.</p>
 <p>You need to load python with anaconda support there:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
 span.prompt1:before {
@@ -116,7 +116,7 @@ to install all other packages using pip in your new environment.</p>
 <span class="prompt1">pip<span class="w"> </span>install<span class="w"> </span>.</span>
 </pre></div></div><p>Each time you log in, if you want to use this environment,
 you need to do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1"><span class="nb">source</span><span class="w"> </span>activate<span class="w"> </span>andes_env</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1"><span class="nb">source</span><span class="w"> </span>activate<span class="w"> </span>myenv</span>
 </pre></div></div><p>Then you can run a python script that does visualization as with the
 following submission script:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
@@ -127,7 +127,7 @@ following submission script:</p>
 
 cd $SLURM_SUBMIT_DIR
 
-source activate andes_env
+source activate myenv
 
 srun python vol-xrb-enuc.py flame_wave_1000Hz_25cm_smallplt203204
 </pre></div>
