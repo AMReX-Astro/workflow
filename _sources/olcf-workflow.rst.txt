@@ -502,6 +502,23 @@ https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/frontier/frontier.
 Also see the WarpX docs: https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html
 
 
+GPU-aware MPI
+^^^^^^^^^^^^^
+
+Some codes run better with GPU-aware MPI.  To enable this add the following to your
+submission script:
+
+.. code:: bash
+
+   export MPICH_GPU_SUPPORT_ENABLED=1
+   export FI_MR_CACHE_MONITOR=memhooks
+
+and set the runtime parameter:
+
+.. code::
+
+   amrex.use_gpu_aware_mpi=1
+
 Job Status
 ^^^^^^^^^^
 
