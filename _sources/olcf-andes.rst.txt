@@ -2,7 +2,7 @@ Batch Visualization on Andes
 ============================
 
 It is best to work on ``andes.olcf.ornl.gov``.  You will want to setup
-a new env for andes.  We'll call it ``andes_env``.
+a new env for andes.  We'll call it ``myenv``.
 
 You need to load python with anaconda support there:
 
@@ -24,6 +24,11 @@ this will modify your `.bashrc`, adding code that is specific to andes.
    The version of ``conda`` install on andes is very own, so it is best
    to install all other packages using pip in your new environment.
 
+.. note::
+
+   OLCF also has ``miniforge`` installed on Andes, although the documentation
+   is out of date regarding that: https://docs.olcf.ornl.gov/software/python/index.html
+
 To activate the environment, do:
 
 .. prompt:: bash
@@ -43,7 +48,7 @@ you need to do:
 
 .. prompt:: bash
 
-   source activate andes_env
+   source activate myenv
 
 Then you can run a python script that does visualization as with the
 following submission script::
@@ -56,7 +61,7 @@ following submission script::
 
     cd $SLURM_SUBMIT_DIR
 
-    source activate andes_env
+    source activate myenv
 
     srun python vol-xrb-enuc.py flame_wave_1000Hz_25cm_smallplt203204
 
