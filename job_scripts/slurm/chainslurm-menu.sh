@@ -73,9 +73,13 @@ if [[ "$oldjob" -gt 0 ]]; then
   old_dir=$(readlink -f "$old_dir")
   new_dir=$(readlink -f "$PWD")
   if [[ "$old_dir" != "$new_dir" ]]; then
-    old_pretty="${old_dir/$SCRATCH/\$SCRATCH}"
+    old_pretty=$old_dir
+    new_pretty=$new_dir
+    if [[ -n ${SCRATCH+x} ]]; then
+      old_pretty="${old_pretty/$SCRATCH/\$SCRATCH}"
+      new_pretty="${new_pretty/$SCRATCH/\$SCRATCH}"
+    fi
     old_pretty="${old_pretty/$HOME/\~}"
-    new_pretty="${new_dir/$SCRATCH/\$SCRATCH}"
     new_pretty="${new_pretty/$HOME/\~}"
     echo "Error: selected job was submitted from ${old_pretty}, but you are currently in ${new_pretty}"
     exit 2
