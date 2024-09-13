@@ -22,6 +22,13 @@ includes the restart logic to allow for job chaining.
 .. literalinclude:: ../../job_scripts/perlmutter/perlmutter.submit
    :language: sh
 
+.. note::
+
+   With large reaction networks, you may get GPU out-of-memory errors during
+   the first burner call.  If this happens, you can add
+   ``amrex.the_arena_init_size=0`` after ``${restartString}`` in the srun call
+   so AMReX doesn't reserve 3/4 of the GPU memory for the device arena.
+
 Below is an example that runs on CPU-only nodes. Here ``ntasks-per-node``
 refers to number of MPI processes (used for distributed parallelism) per node,
 and ``cpus-per-task`` refers to number of hyper threads used per task

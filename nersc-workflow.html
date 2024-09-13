@@ -202,6 +202,13 @@ srun<span class="w"> </span>-n<span class="w"> </span><span class="k">$((</span>
 <span class="nb">exit</span><span class="w"> </span><span class="nv">$ret</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>With large reaction networks, you may get GPU out-of-memory errors during
+the first burner call.  If this happens, you can add
+<code class="docutils literal notranslate"><span class="pre">amrex.the_arena_init_size=0</span></code> after <code class="docutils literal notranslate"><span class="pre">${restartString}</span></code> in the srun call
+so AMReX doesn’t reserve 3/4 of the GPU memory for the device arena.</p>
+</div>
 <p>Below is an example that runs on CPU-only nodes. Here <code class="docutils literal notranslate"><span class="pre">ntasks-per-node</span></code>
 refers to number of MPI processes (used for distributed parallelism) per node,
 and <code class="docutils literal notranslate"><span class="pre">cpus-per-task</span></code> refers to number of hyper threads used per task
