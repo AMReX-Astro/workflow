@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -6,20 +8,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Running Jupyter Remotely from OLCF &mdash; AMReX-Astro 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=5694489b" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/documentation_options.js?v=f2a433a1"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="_static/copybutton.js?v=f281be69"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -38,9 +38,6 @@
           <a href="index.html" class="icon icon-home">
             AMReX-Astro
           </a>
-              <div class="version">
-                1.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -93,10 +90,10 @@
            <div itemprop="articleBody">
              
   <section id="running-jupyter-remotely-from-olcf">
-<h1>Running Jupyter Remotely from OLCF<a class="headerlink" href="#running-jupyter-remotely-from-olcf" title="Link to this heading">¶</a></h1>
+<h1>Running Jupyter Remotely from OLCF<a class="headerlink" href="#running-jupyter-remotely-from-olcf" title="Link to this heading"></a></h1>
 <p>To run Jupyter remotely at OLCF, you can use the <a class="reference external" href="https://jupyter.olcf.olrl.gov">OLCF JupyterHub</a>, as described in the <a class="reference external" href="https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#jupyter-at-olcf">OLCF Jupyter documentation</a>. In order to use extra python libraries (e.g. <code class="docutils literal notranslate"><span class="pre">yt</span></code>), it’s best to first install these as part of a conda environment, which can then be loaded when you create your Jupyter notebook.</p>
 <section id="creating-a-conda-environment">
-<h2>Creating a conda environment<a class="headerlink" href="#creating-a-conda-environment" title="Link to this heading">¶</a></h2>
+<h2>Creating a conda environment<a class="headerlink" href="#creating-a-conda-environment" title="Link to this heading"></a></h2>
 <p>If you wish to install extra python libraries (e.g. <code class="docutils literal notranslate"><span class="pre">yt</span></code>), then they can be installed using a conda environment. To do this, make sure you have the correct python module loaded on Summit (e.g. <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">python/3.7.0-anaconda3-5.3.0</span></code>), and create a new conda environment with the modules you require installed. At this point, it’s also a good idea to make sure this environment has the libraries <code class="docutils literal notranslate"><span class="pre">ipykernel</span></code> and <code class="docutils literal notranslate"><span class="pre">nb_conda_kernels</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>my_env<span class="w"> </span>-y<span class="w"> </span>ipykernel<span class="w"> </span>nb_conda_kernels
 conda<span class="w"> </span>install<span class="w"> </span>-n<span class="w"> </span>my_env<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>yt
@@ -128,7 +125,7 @@ conda<span class="w"> </span>install<span class="w"> </span>-n<span class="w"> <
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-2021, AMReX-Astro development tem.</p>
+    <p>&#169; Copyright 2018-2024, AMReX-Astro development tem.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

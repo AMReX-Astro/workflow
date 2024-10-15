@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -6,20 +8,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Working at IACS &mdash; AMReX-Astro 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=5694489b" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/documentation_options.js?v=f2a433a1"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="_static/copybutton.js?v=f281be69"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -38,9 +38,6 @@
           <a href="index.html" class="icon icon-home">
             AMReX-Astro
           </a>
-              <div class="version">
-                1.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -94,21 +91,21 @@
            <div itemprop="articleBody">
              
   <section id="working-at-iacs">
-<h1>Working at IACS<a class="headerlink" href="#working-at-iacs" title="Link to this heading">¶</a></h1>
+<h1>Working at IACS<a class="headerlink" href="#working-at-iacs" title="Link to this heading"></a></h1>
 <section id="ookami">
-<h2>Ookami<a class="headerlink" href="#ookami" title="Link to this heading">¶</a></h2>
+<h2>Ookami<a class="headerlink" href="#ookami" title="Link to this heading"></a></h2>
 <p>Ookami seems to have 48 compute cores grouped into 4 pools of 12
 threads (there is actually a 13th core on each for OS stuff).  So an
 ideal config would be running 4 MPI each with 12 threads.</p>
 <p>Log-in to <code class="docutils literal notranslate"><span class="pre">login.ookami.stonybrook.edu</span></code></p>
 <section id="amrex-setup">
-<h3>AMReX setup<a class="headerlink" href="#amrex-setup" title="Link to this heading">¶</a></h3>
+<h3>AMReX setup<a class="headerlink" href="#amrex-setup" title="Link to this heading"></a></h3>
 <p>We need to tell AMReX about the machine.  Put the following <code class="docutils literal notranslate"><span class="pre">Make.local</span></code> file
 in <code class="docutils literal notranslate"><span class="pre">amrex/Tools/GNUmake</span></code>:</p>
 <p><a class="reference external" href="https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local">https://raw.githubusercontent.com/AMReX-Astro/workflow/main/job_scripts/iacs/Make.local</a></p>
 </section>
 <section id="cray-compilers">
-<h3>Cray compilers<a class="headerlink" href="#cray-compilers" title="Link to this heading">¶</a></h3>
+<h3>Cray compilers<a class="headerlink" href="#cray-compilers" title="Link to this heading"></a></h3>
 <p>You can only access the Cray environment on a compute note:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>srun<span class="w"> </span>-p<span class="w"> </span>short<span class="w"> </span>-N<span class="w"> </span><span class="m">1</span><span class="w"> </span>-n<span class="w"> </span><span class="m">48</span><span class="w"> </span>--pty<span class="w"> </span>bash
 </pre></div>
@@ -146,9 +143,9 @@ module is commented out above).</p>
 </div>
 </section>
 <section id="gcc">
-<h3>GCC<a class="headerlink" href="#gcc" title="Link to this heading">¶</a></h3>
+<h3>GCC<a class="headerlink" href="#gcc" title="Link to this heading"></a></h3>
 <section id="gcc-10-2">
-<h4>GCC 10.2<a class="headerlink" href="#gcc-10-2" title="Link to this heading">¶</a></h4>
+<h4>GCC 10.2<a class="headerlink" href="#gcc-10-2" title="Link to this heading"></a></h4>
 <p>This needs to be done on the compute notes.</p>
 <p>Load modules as:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>load<span class="w"> </span>slurm
@@ -184,7 +181,7 @@ mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-2021, AMReX-Astro development tem.</p>
+    <p>&#169; Copyright 2018-2024, AMReX-Astro development tem.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
