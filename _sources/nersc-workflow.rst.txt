@@ -29,6 +29,13 @@ includes the restart logic to allow for job chaining.
    ``amrex.the_arena_init_size=0`` after ``${restartString}`` in the srun call
    so AMReX doesn't reserve 3/4 of the GPU memory for the device arena.
 
+.. note::
+
+   If the job times out before writing out a checkpoint (leaving a
+   ``dump_and_stop`` file behind), you can give it more time between the
+   warning signal and the end of the allocation by adjusting the
+   ``#SBATCH --signal=B:URG@<n>`` line at the top of the script.
+
 Below is an example that runs on CPU-only nodes. Here ``ntasks-per-node``
 refers to number of MPI processes (used for distributed parallelism) per node,
 and ``cpus-per-task`` refers to number of hyper threads used per task
