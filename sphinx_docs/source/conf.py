@@ -19,7 +19,6 @@
 #
 import os
 import sys
-import sphinx_rtd_theme
 sys.path.insert(0, os.path.abspath('../../'))
 
 
@@ -40,6 +39,7 @@ extensions = ['sphinx.ext.autodoc',
     'numpydoc',
     'sphinx_copybutton',
     'sphinx-prompt',
+    'sphinx_rtd_theme',
     'sphinx.ext.githubpages']
 
 # Add any paths that contain templates here, relative to this directory.
@@ -59,7 +59,7 @@ main_doc = 'index'
 
 # General information about the project.
 project = 'AMReX-Astro'
-copyright = '2018-2021, AMReX-Astro development tem'
+copyright = '2018-2024, AMReX-Astro development tem'
 author = 'AMReX-Astro development team'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -96,7 +96,6 @@ todo_include_todos = False
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
