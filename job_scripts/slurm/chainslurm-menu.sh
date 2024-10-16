@@ -44,6 +44,8 @@ if [[ $job_count -gt 0 ]]; then
   # (${#job_count} gets the length of the string "$job_count")
   printf '%*s  %s\n' ${#job_count} '' "$header"
   PS3='> '
+  # override the terminal width so select displays all options in one column
+  COLUMNS=1
   select line in "${job_lines[@]}"; do
     # If the user entered a valid option number, the full contents of that line
     # will be placed in $line. Otherwise, $line will be empty and the entered
