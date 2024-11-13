@@ -52,7 +52,6 @@
 <li class="toctree-l1"><a class="reference internal" href="nersc.html">Working at NERSC</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="olcf.html">Working at OLCF</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Compiling at OLCF</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#summit">Summit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#frontier">Frontier</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#hip-function-inlining">HIP Function Inlining</a></li>
 </ul>
@@ -95,54 +94,16 @@
              
   <section id="compiling-at-olcf">
 <h1>Compiling at OLCF<a class="headerlink" href="#compiling-at-olcf" title="Link to this heading"></a></h1>
-<section id="summit">
-<h2>Summit<a class="headerlink" href="#summit" title="Link to this heading"></a></h2>
-<p>In order to compile you will need to swap the xl module with gcc (you need to use atleast gcc/7.4.0 due to C++17 support):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
-span.prompt1:before {
-  content: "$ ";
-}
-</style><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>gcc/10.2.0</span>
-</pre></div></div><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>You will need to load the same module you use for compiling in your
-submissions script, otherwise the code won’t find the shared
-libraries at runtime.</p>
-</div>
-<p>Then load CUDA:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>cuda/11.5.2</span>
-</pre></div></div><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Presently you will see a warning when you load a CUDA 11 module, but the packages
-should work fine.</p>
-</div>
-<p>You also need to make sure you have the python module loaded:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>python</span>
-</pre></div></div><p>Compile with <code class="docutils literal notranslate"><span class="pre">USE_CUDA=TRUE</span></code> (and <code class="docutils literal notranslate"><span class="pre">COMP=gnu</span></code> which is usually the default).
-Is important to setup <code class="docutils literal notranslate"><span class="pre">USE_OMP=FALSE</span></code>, since the <code class="docutils literal notranslate"><span class="pre">TRUE</span></code> option is currently disallowed by Castro.
-An example compilation line is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">COMP</span><span class="o">=</span>gnu<span class="w"> </span><span class="nv">USE_MPI</span><span class="o">=</span>TRUE<span class="w"> </span><span class="nv">USE_CUDA</span><span class="o">=</span>TRUE<span class="w"> </span>-j<span class="w"> </span><span class="m">4</span></span>
-</pre></div></div><p>The recommended/tested version pairs are:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">gcc/10.2.0</span></code> + <code class="docutils literal notranslate"><span class="pre">cuda/11.5.2</span></code></p></li>
-</ul>
-</div></blockquote>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>OpenMP offloading to the GPU is controlled by
-<code class="docutils literal notranslate"><span class="pre">USE_OMP_OFFLOAD</span></code>, which will default to <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>, AMReX-Astro
-doesn’t use this feature.</p></li>
-</ul>
-</div>
-</section>
 <section id="frontier">
 <h2>Frontier<a class="headerlink" href="#frontier" title="Link to this heading"></a></h2>
 <p>log into: <code class="docutils literal notranslate"><span class="pre">frontier.olcf.ornl.gov</span></code></p>
 <p>see: <a class="reference external" href="https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#programming-environment">https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#programming-environment</a></p>
 <p>load modules:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
+span.prompt1:before {
+  content: "$ ";
+}
+</style><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu</span>
 <span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>cray-mpich/8.1.28</span>
 <span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>craype-accel-amd-gfx90a</span>
 <span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>amd-mixed/6.1.3</span>
