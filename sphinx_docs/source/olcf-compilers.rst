@@ -64,15 +64,33 @@ see: https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#programming-env
 
 load modules:
 
-.. prompt:: bash
+* ROCm 6.1.3:
 
-   module load PrgEnv-gnu
-   module load cray-mpich/8.1.28
-   module load craype-accel-amd-gfx90a
-   module load amd-mixed/6.1.3
-   module unload darshan-runtime
+  .. prompt:: bash
 
-this will load ROCm 6.1.3
+     module load PrgEnv-gnu
+     module load cray-mpich/8.1.28
+     module load craype-accel-amd-gfx90a
+     module load amd-mixed/6.1.3
+
+* ROCm 6.2.4:
+
+  There is an additional step with later versions of ROCm.  First load the modules:
+
+  .. prompt:: bash
+
+     module load cpe/24.07
+     module load PrgEnv-gnu
+     module load cray-mpich
+     module load craype-accel-amd-gfx90a
+     module load amd-mixed/6.2.4
+
+  Then you need to modify the library include path to include ``CRAY_LD_LIBRARY_PATH``
+  since the module wrappers do not do this:
+
+  .. prompt:: bash
+
+     export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
 
 .. note::
 
