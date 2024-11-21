@@ -208,7 +208,16 @@ If it doesn't crash with the trace, then try:
    interrupt
    bt
 
+It might say that the memory location is not precise, to enable precise
+memory, in the debugger, do:
 
+.. prompt::
+   :prompts: (gdb)
+
+   set amdgpu precise-memory on
+   show amdgpu precise-memory
+
+and rerun.
 
 
 
@@ -222,11 +231,11 @@ Workaround to prevent hangs for collectives:
  export FI_MR_CACHE_MONITOR=memhooks
 
 
-Some AMReX reports are that it hangs if the initial Arena size is too big, and we should do
+Some AMReX reports are that it hangs if the initial Arena size is too
+big, and we should do
 
 ::
 
   amrex.the_arena_init_size=0
 
-The arena size would then grow as needed with time.  There is a suggestion that if the size is
-larger than
+The arena size would then grow as needed with time.

@@ -229,19 +229,24 @@ span.prompt2:before {
 </pre></div></div><p>If it doesn’t crash with the trace, then try:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt2">interrupt</span>
 <span class="prompt2">bt</span>
-</pre></div></div></section>
+</pre></div></div><p>It might say that the memory location is not precise, to enable precise
+memory, in the debugger, do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt2">set amdgpu precise-memory on</span>
+<span class="prompt2">show amdgpu precise-memory</span>
+</pre></div></div><p>and rerun.</p>
+</section>
 <section id="troubleshooting">
 <h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h3>
 <p>Workaround to prevent hangs for collectives:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FI_MR_CACHE_MONITOR</span><span class="o">=</span>memhooks
 </pre></div>
 </div>
-<p>Some AMReX reports are that it hangs if the initial Arena size is too big, and we should do</p>
+<p>Some AMReX reports are that it hangs if the initial Arena size is too
+big, and we should do</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>amrex.the_arena_init_size<span class="o">=</span><span class="m">0</span>
 </pre></div>
 </div>
-<p>The arena size would then grow as needed with time.  There is a suggestion that if the size is
-larger than</p>
+<p>The arena size would then grow as needed with time.</p>
 </section>
 </section>
 </section>
