@@ -1,0 +1,11 @@
+#!/bin/bash
+#SBATCH -A ast106
+#SBATCH -t 02:00:00
+#SBATCH --cluster dtn
+#SBATCH -N 1
+
+# do our archiving
+cd "$SLURM_SUBMIT_DIR" || exit
+
+# use srun so any control signals get sent to the child too
+srun ./kronos_process.sh once
