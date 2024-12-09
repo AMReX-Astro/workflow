@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Working at OLCF &mdash; AMReX-Astro 1.0 documentation</title>
+  <title>Archiving Data on Kronos &mdash; AMReX-Astro 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -23,8 +23,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Compiling at OLCF" href="olcf-compilers.html" />
-    <link rel="prev" title="Visualization at NERSC" href="nersc-visualization.html" /> 
+    <link rel="next" title="Batch Visualization on Andes" href="olcf-andes.html" />
+    <link rel="prev" title="Running Jupyter Remotely from OLCF" href="olcf-jupyter.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -50,11 +50,11 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="alcf.html">Working at ALCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nersc.html">Working at NERSC</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Working at OLCF</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="olcf.html">Working at OLCF</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="olcf-compilers.html">Compiling at OLCF</a></li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-workflow.html">Managing Jobs at OLCF</a></li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-jupyter.html">Running Jupyter Remotely from OLCF</a></li>
-<li class="toctree-l2"><a class="reference internal" href="olcf-kronos.html">Archiving Data on Kronos</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Archiving Data on Kronos</a></li>
 <li class="toctree-l2"><a class="reference internal" href="olcf-andes.html">Batch Visualization on Andes</a></li>
 </ul>
 </li>
@@ -76,9 +76,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Working at OLCF</li>
+          <li class="breadcrumb-item"><a href="olcf.html">Working at OLCF</a></li>
+      <li class="breadcrumb-item active">Archiving Data on Kronos</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/olcf.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/olcf-kronos.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -86,37 +87,43 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="working-at-olcf">
-<h1>Working at OLCF<a class="headerlink" href="#working-at-olcf" title="Link to this heading"></a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="olcf-compilers.html">Compiling at OLCF</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="olcf-compilers.html#frontier">Frontier</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="olcf-compilers.html#hip-function-inlining">HIP Function Inlining</a></li>
+  <section id="archiving-data-on-kronos">
+<h1>Archiving Data on Kronos<a class="headerlink" href="#archiving-data-on-kronos" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://docs.olcf.ornl.gov/data/#kronos-nearline-archival-storage-system">Kronos</a>
+is the mass storage system at OLCF.  Each user has a directory of the form:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/nl/kronos/olcf/&lt;projectID&gt;/users/&lt;userID&gt;
+</pre></div>
+</div>
+<p>and data can be transferred there using standard Unix commands.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You need to be logged into <code class="docutils literal notranslate"><span class="pre">dtn.olcf.ornl.gov</span></code> to access kronos.  It is
+not visible directly from Frontier or Andes.</p>
+</div>
+<p>A submission / shell script pair that automates the transfer of data is available in
+<a class="reference external" href="https://github.com/AMReX-Astro/workflow/tree/main/job_scripts/hpss">workflow/job_scripts/hpss</a> as:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">olcf_kronos.submit</span></code> : the slurm submission script</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kronos_process.sh</span></code> : a BASH script that finds output and automates the archiving.</p></li>
 </ul>
-</li>
+<p>You submit the job from the directory containing the plotfiles you wish to archive.
+It will then:</p>
+<ul class="simple">
+<li><p>tar up the diagnostic files, inputs, and other metadata into a file with the
+date-stamp in the file name and copy that to kronos</p></li>
+<li><p>find all of the plotfiles and tar them directly to kronos.  If the tar is successful,
+it will move the plotfile into a <code class="docutils literal notranslate"><span class="pre">plotfiles/</span></code> subdirectory and add a <code class="docutils literal notranslate"><span class="pre">.processed</span></code>
+file so the script knows it was archived already.</p></li>
+<li><p>find the checkpoint files matching a pattern (currently defaults to every 5000 steps)
+and archive those in the same fashion, moving them to a <code class="docutils literal notranslate"><span class="pre">checkfiles/</span></code> subdirectory
+once archived.</p></li>
+<li><p>loop, looking for new output files</p></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="olcf-workflow.html">Managing Jobs at OLCF</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="olcf-workflow.html#frontier">Frontier</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="olcf-workflow.html#machine-details">Machine details</a></li>
-<li class="toctree-l3"><a class="reference internal" href="olcf-workflow.html#submitting-jobs">Submitting jobs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="olcf-workflow.html#gpu-aware-mpi">GPU-aware MPI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="olcf-workflow.html#job-status">Job Status</a></li>
-<li class="toctree-l3"><a class="reference internal" href="olcf-workflow.html#job-chaining">Job Chaining</a></li>
-<li class="toctree-l3"><a class="reference internal" href="olcf-workflow.html#debugging">Debugging</a></li>
-<li class="toctree-l3"><a class="reference internal" href="olcf-workflow.html#troubleshooting">Troubleshooting</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="olcf-jupyter.html">Running Jupyter Remotely from OLCF</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="olcf-jupyter.html#creating-a-conda-environment">Creating a conda environment</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="olcf-kronos.html">Archiving Data on Kronos</a></li>
-<li class="toctree-l1"><a class="reference internal" href="olcf-andes.html">Batch Visualization on Andes</a></li>
-</ul>
+<p>By default, it will not transfer the last file, in case it is actively being written to.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">olcf_kronos_once.submit</span></code> can be used to just transfer without the loop
+waiting for new files.</p>
 </div>
 </section>
 
@@ -124,8 +131,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="nersc-visualization.html" class="btn btn-neutral float-left" title="Visualization at NERSC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="olcf-compilers.html" class="btn btn-neutral float-right" title="Compiling at OLCF" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="olcf-jupyter.html" class="btn btn-neutral float-left" title="Running Jupyter Remotely from OLCF" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="olcf-andes.html" class="btn btn-neutral float-right" title="Batch Visualization on Andes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
