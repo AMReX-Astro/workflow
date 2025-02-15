@@ -7,6 +7,9 @@ Managing Jobs at NERSC
 Perlmutter
 ----------
 
+GPU jobs
+^^^^^^^^
+
 Perlmutter has 1536 GPU nodes, each with 4 NVIDIA A100 GPUs -- therefore it is best to use
 4 MPI tasks per node.
 
@@ -35,6 +38,9 @@ includes the restart logic to allow for job chaining.
    ``dump_and_stop`` file behind), you can give it more time between the
    warning signal and the end of the allocation by adjusting the
    ``#SBATCH --signal=B:URG@<n>`` line at the top of the script.
+
+CPU jobs
+^^^^^^^^
 
 Below is an example that runs on CPU-only nodes. Here ``ntasks-per-node``
 refers to number of MPI processes (used for distributed parallelism) per node,
