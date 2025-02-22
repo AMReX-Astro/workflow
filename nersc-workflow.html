@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Managing Jobs at NERSC &mdash; AMReX-Astro 1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=5694489b" />
@@ -53,6 +53,8 @@
 <li class="toctree-l2"><a class="reference internal" href="nersc-compilers.html">Compiling at NERSC</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Managing Jobs at NERSC</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#perlmutter">Perlmutter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gpu-jobs">GPU jobs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cpu-jobs">CPU jobs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#filesystems">Filesystems</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#chaining">Chaining</a></li>
 </ul>
@@ -97,6 +99,8 @@
 <h1>Managing Jobs at NERSC<a class="headerlink" href="#managing-jobs-at-nersc" title="Link to this heading"></a></h1>
 <section id="perlmutter">
 <h2>Perlmutter<a class="headerlink" href="#perlmutter" title="Link to this heading"></a></h2>
+<section id="gpu-jobs">
+<h3>GPU jobs<a class="headerlink" href="#gpu-jobs" title="Link to this heading"></a></h3>
 <p>Perlmutter has 1536 GPU nodes, each with 4 NVIDIA A100 GPUs – therefore it is best to use
 4 MPI tasks per node.</p>
 <div class="admonition note">
@@ -118,7 +122,7 @@ includes the restart logic to allow for job chaining.</p>
 <span class="c1">#SBATCH -N 16</span>
 <span class="c1">#SBATCH --ntasks-per-node=4</span>
 <span class="c1">#SBATCH --gpus-per-task=1</span>
-<span class="c1">#SBATCH --gpu-bind=map_gpu:0,1,2,3</span>
+<span class="c1">#SBATCH --gpu-bind=none</span>
 <span class="c1">#SBATCH --signal=B:URG@120</span>
 
 <span class="nb">export</span><span class="w"> </span><span class="nv">CASTRO_EXEC</span><span class="o">=</span>./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
@@ -213,6 +217,9 @@ so AMReX doesn’t reserve 3/4 of the GPU memory for the device arena.</p>
 warning signal and the end of the allocation by adjusting the
 <code class="docutils literal notranslate"><span class="pre">#SBATCH</span> <span class="pre">--signal=B:URG&#64;&lt;n&gt;</span></code> line at the top of the script.</p>
 </div>
+</section>
+<section id="cpu-jobs">
+<h3>CPU jobs<a class="headerlink" href="#cpu-jobs" title="Link to this heading"></a></h3>
 <p>Below is an example that runs on CPU-only nodes. Here <code class="docutils literal notranslate"><span class="pre">ntasks-per-node</span></code>
 refers to number of MPI processes (used for distributed parallelism) per node,
 and <code class="docutils literal notranslate"><span class="pre">cpus-per-task</span></code> refers to number of hyper threads used per task
@@ -336,6 +343,7 @@ span.prompt1:before {
 </pre></div></div><p>and an estimate of the start time can be found via:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">squeue<span class="w"> </span>--me<span class="w"> </span>--start</span>
 </pre></div></div><p>to cancel a job, you would use <code class="docutils literal notranslate"><span class="pre">scancel</span></code>.</p>
+</section>
 <section id="filesystems">
 <h3>Filesystems<a class="headerlink" href="#filesystems" title="Link to this heading"></a></h3>
 <p>We can run on the common filesystem, CFS, to share files with everyone
