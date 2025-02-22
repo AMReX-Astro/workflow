@@ -9,7 +9,7 @@
 #SBATCH -N 16
 #SBATCH --ntasks-per-node=4
 #SBATCH --gpus-per-task=1
-#SBATCH --gpu-bind=map_gpu:0,1,2,3
+#SBATCH --gpu-bind=none
 #SBATCH --signal=B:URG@120
 
 export CASTRO_EXEC=./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
