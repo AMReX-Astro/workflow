@@ -10,41 +10,27 @@ log into: ``frontier.olcf.ornl.gov``
 
 see: https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#programming-environment
 
-load modules:
+.. important::
 
-* ROCm 6.1.3:
+   ROCm versions prior to 6.3.1 had a register allocation bug that caused problems
+   with large kernels.  They should not be used.
 
-  .. prompt:: bash
+Load modules:
 
-     module load PrgEnv-gnu
-     module load cray-mpich/8.1.28
-     module load craype-accel-amd-gfx90a
-     module load amd-mixed/6.1.3
+.. prompt:: bash
 
-* ROCm 6.2.4:
+   module load cpe
+   module load PrgEnv-gnu
+   module load cray-mpich
+   module load craype-accel-amd-gfx90a
+   module load rocm/6.3.1
 
-  There is an additional step with later versions of ROCm.  First load the modules:
+Then you need to modify the library include path to include ``CRAY_LD_LIBRARY_PATH``
+since the module wrappers do not do this:
 
-  .. prompt:: bash
+.. prompt:: bash
 
-     module load cpe/24.07
-     module load PrgEnv-gnu
-     module load cray-mpich
-     module load craype-accel-amd-gfx90a
-     module load amd-mixed/6.2.4
-
-  Then you need to modify the library include path to include ``CRAY_LD_LIBRARY_PATH``
-  since the module wrappers do not do this:
-
-  .. prompt:: bash
-
-     export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
-
-.. note::
-
-   In the past, tabulated rates seem to exhibit a strange slow down on
-   Frontier, so it is best to run test with and without rate
-   tabulation to see if there is a performance issue.
+   export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
 
 build via:
 
