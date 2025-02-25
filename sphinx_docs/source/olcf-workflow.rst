@@ -43,21 +43,40 @@ Here's a script that runs with 2 nodes using all 8 GPUs per node:
    EXEC=Castro3d.hip.x86-trento.MPI.HIP.ex
    INPUTS=inputs.3d.sph
 
+   module load cpe
    module load PrgEnv-gnu
+   module load cray-mpich
    module load craype-accel-amd-gfx90a
-   module load cray-mpich/8.1.27
-   module load amd-mixed/6.0.0
+   module load rocm/6.3.1
+
+   export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
+
+   # set the file system striping
+   echo $SLURM_SUBMIT_DIR
+   module load lfs-wrapper
+   lfs setstripe -c 32 -S 10M $SLURM_SUBMIT_DIR
 
    export OMP_NUM_THREADS=1
    export NMPI_PER_NODE=8
    export TOTAL_NMPI=$(( ${SLURM_JOB_NUM_NODES} * ${NMPI_PER_NODE} ))
 
-   srun -n${TOTAL_NMPI} -N${SLURM_JOB_NUM_NODES} --ntasks-per-node=8 --gpus-per-task=1 ./$EXEC $INPUTS
+   FILE_IO_PARAMS="
+   amr.plot_nfiles = -1
+   amr.checkpoint_nfiles = -1
+   amrex.async_out_nfiles = ${TOTAL_NMPI}
+   "
+
+   echo appending parameters: ${FILE_IO_PARAMS}
+
+   srun -n${TOTAL_NMPI} -N${SLURM_JOB_NUM_NODES} --ntasks-per-node=8 --gpus-per-task=1 ./$EXEC $INPUTS ${FILE_IO_PARAMS}
 
 
 .. note::
 
-   As of June 2023, it is necessary to explicitly use ``-n`` and ``-N`` on the ``srun`` line.
+   The Orion filesystem on Frontier can suffer from very poor performance.  The above
+   submission script explicitly sets the striping on the filesystem and also tells
+   OLCF to create one file per process for checkpoints and plotfiles and also
+   turns on `asynchronous output <https://amrex-codes.github.io/amrex/docs_html/IO.html#async-output>`_.
 
 The job is submitted as:
 
