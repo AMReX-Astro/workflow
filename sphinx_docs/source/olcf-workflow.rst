@@ -18,65 +18,30 @@ Filesystem is called ``orion``, and is Lustre:
 https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#data-and-storage
 
 
+.. warning::
+
+   The Orion / Lustre filesystem has been broken since Jan 2025 making I/O performance
+   very unstable.  To work around this problem we currently advise having each MPI
+   process write its own file.  This is enabled automatically in the submission script
+   below.  Restarting is also an issue, with 50% of restarts hanging due to filesystem
+   issues.  The script below will kill the job after 5 minutes if it detects that the
+   restart has failed.
+
+.. note::
+
+   We also explicitly set the filesystem striping using the LFS tools to help I/O
+   performance.
+
+
 Submitting jobs
 ^^^^^^^^^^^^^^^
 
 Frontier uses SLURM.
 
-Here's a script that runs with 2 nodes using all 8 GPUs per node:
+Here's a script that runs on GPUs and has the I/O fixes described above.
 
-.. code:: bash
-
-   #!/bin/bash
-   #SBATCH -A AST106
-   #SBATCH -J testing
-   #SBATCH -o %x-%j.out
-   #SBATCH -t 00:05:00
-   #SBATCH -p batch
-   # here N is the number of compute nodes
-   #SBATCH -N 2
-   #SBATCH --ntasks-per-node=8
-   #SBATCH --cpus-per-task=7
-   #SBATCH --gpus-per-task=1
-   #SBATCH --gpu-bind=closest
-
-   EXEC=Castro3d.hip.x86-trento.MPI.HIP.ex
-   INPUTS=inputs.3d.sph
-
-   module load cpe
-   module load PrgEnv-gnu
-   module load cray-mpich
-   module load craype-accel-amd-gfx90a
-   module load rocm/6.3.1
-
-   export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
-
-   # set the file system striping
-   echo $SLURM_SUBMIT_DIR
-   module load lfs-wrapper
-   lfs setstripe -c 32 -S 10M $SLURM_SUBMIT_DIR
-
-   export OMP_NUM_THREADS=1
-   export NMPI_PER_NODE=8
-   export TOTAL_NMPI=$(( ${SLURM_JOB_NUM_NODES} * ${NMPI_PER_NODE} ))
-
-   FILE_IO_PARAMS="
-   amr.plot_nfiles = -1
-   amr.checkpoint_nfiles = -1
-   amrex.async_out_nfiles = ${TOTAL_NMPI}
-   "
-
-   echo appending parameters: ${FILE_IO_PARAMS}
-
-   srun -n${TOTAL_NMPI} -N${SLURM_JOB_NUM_NODES} --ntasks-per-node=8 --gpus-per-task=1 ./$EXEC $INPUTS ${FILE_IO_PARAMS}
-
-
-.. note::
-
-   The Orion filesystem on Frontier can suffer from very poor performance.  The above
-   submission script explicitly sets the striping on the filesystem and also tells
-   OLCF to create one file per process for checkpoints and plotfiles and also
-   turns on `asynchronous output <https://amrex-codes.github.io/amrex/docs_html/IO.html#async-output>`_.
+.. literalinclude:: ../../job_scripts/frontier/frontier.slurm
+   :language: bash
 
 The job is submitted as:
 
@@ -85,9 +50,6 @@ The job is submitted as:
    sbatch frontier.slurm
 
 where ``frontier.slurm`` is the name of the submission script.
-
-A sample job script that includes the automatic restart functions can be found here:
-https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/frontier/frontier.slurm
 
 
 Also see the WarpX docs: https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html
