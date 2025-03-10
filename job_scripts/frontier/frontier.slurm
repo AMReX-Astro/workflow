@@ -5,14 +5,14 @@
 #SBATCH -t 02:00:00
 #SBATCH -p batch
 # here N is the number of compute nodes
-#SBATCH -N 4
+#SBATCH -N 64
 #SBATCH --ntasks-per-node=8
 #SBATCH --cpus-per-task=7
 #SBATCH --gpus-per-task=1
 #SBATCH --gpu-bind=closest
 
-EXEC=./Castro2d.hip.x86-trento.MPI.HIP.SMPLSDC.ex
-INPUTS=inputs_2d.N14.coarse
+EXEC=./Castro3d.hip.x86-trento.MPI.HIP.SMPLSDC.ex
+INPUTS=inputs_3d.N14.coarse
 
 module load cpe
 module load PrgEnv-gnu
@@ -21,6 +21,9 @@ module load craype-accel-amd-gfx90a
 module load rocm/6.3.1
 
 export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
+
+# libfabric workaround
+export FI_MR_CACHE_MONITOR=memhooks
 
 # set the file system striping
 
@@ -77,16 +80,32 @@ export OMP_NUM_THREADS=1
 export NMPI_PER_NODE=8
 export TOTAL_NMPI=$(( ${SLURM_JOB_NUM_NODES} * ${NMPI_PER_NODE} ))
 
+function check_restart {
+    echo "RESTART CHECK!!!"
+    outfile="${SLURM_JOB_NAME}-${SLURM_JOB_ID}.out"
+    echo "RESTART CHECK: checking ${outfile}"
+    restart_success=$(grep "Restart time" ${outfile})
+    if [ $? == "1" ]; then
+       echo "RESTART CHECK: canceling job"
+       date
+       scancel $SLURM_JOB_ID
+    else
+       echo "RESTART CHECK: restart appears to be successful"
+    fi
+}
+
+
 # frontier's file system is troublesome, so modify the way
 # we have AMReX does I/O
 
 FILE_IO_PARAMS="
 amr.plot_nfiles = -1
 amr.checkpoint_nfiles = -1
-amrex.async_out_nfiles = ${TOTAL_NMPI}
 "
 
 echo appending parameters: ${FILE_IO_PARAMS}
+
+(sleep 300; check_restart ) &
 
 srun -n${TOTAL_NMPI} -N${SLURM_JOB_NUM_NODES} --ntasks-per-node=8 --gpus-per-task=1 ./$EXEC $INPUTS ${restartString} ${FILE_IO_PARAMS}
 
