@@ -109,42 +109,136 @@
 <a class="reference external" href="https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#scheduling-policy">https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#scheduling-policy</a></p>
 <p>Filesystem is called <code class="docutils literal notranslate"><span class="pre">orion</span></code>, and is Lustre:
 <a class="reference external" href="https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#data-and-storage">https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#data-and-storage</a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The Orion / Lustre filesystem has been broken since Jan 2025 making I/O performance
+very unstable.  To work around this problem we currently advise having each MPI
+process write its own file.  This is enabled automatically in the submission script
+below.  Restarting is also an issue, with 50% of restarts hanging due to filesystem
+issues.  The script below will kill the job after 5 minutes if it detects that the
+restart has failed.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We also explicitly set the filesystem striping using the LFS tools to help I/O
+performance.</p>
+</div>
 </section>
 <section id="submitting-jobs">
 <h3>Submitting jobs<a class="headerlink" href="#submitting-jobs" title="Link to this heading"></a></h3>
 <p>Frontier uses SLURM.</p>
-<p>Here’s a script that runs with 2 nodes using all 8 GPUs per node:</p>
+<p>Here’s a script that runs on GPUs and has the I/O fixes described above.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#SBATCH -A AST106</span>
-<span class="c1">#SBATCH -J testing</span>
+<span class="c1">#SBATCH -J subch</span>
 <span class="c1">#SBATCH -o %x-%j.out</span>
-<span class="c1">#SBATCH -t 00:05:00</span>
+<span class="c1">#SBATCH -t 02:00:00</span>
 <span class="c1">#SBATCH -p batch</span>
 <span class="c1"># here N is the number of compute nodes</span>
-<span class="c1">#SBATCH -N 2</span>
+<span class="c1">#SBATCH -N 64</span>
 <span class="c1">#SBATCH --ntasks-per-node=8</span>
 <span class="c1">#SBATCH --cpus-per-task=7</span>
 <span class="c1">#SBATCH --gpus-per-task=1</span>
 <span class="c1">#SBATCH --gpu-bind=closest</span>
 
-<span class="nv">EXEC</span><span class="o">=</span>Castro3d.hip.x86-trento.MPI.HIP.ex
-<span class="nv">INPUTS</span><span class="o">=</span>inputs.3d.sph
+<span class="nv">EXEC</span><span class="o">=</span>./Castro3d.hip.x86-trento.MPI.HIP.SMPLSDC.ex
+<span class="nv">INPUTS</span><span class="o">=</span>inputs_3d.N14.coarse
 
+module<span class="w"> </span>load<span class="w"> </span>cpe
 module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu
+module<span class="w"> </span>load<span class="w"> </span>cray-mpich
 module<span class="w"> </span>load<span class="w"> </span>craype-accel-amd-gfx90a
-module<span class="w"> </span>load<span class="w"> </span>cray-mpich/8.1.27
-module<span class="w"> </span>load<span class="w"> </span>amd-mixed/6.0.0
+module<span class="w"> </span>load<span class="w"> </span>rocm/6.3.1
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$CRAY_LD_LIBRARY_PATH</span>:<span class="nv">$LD_LIBRARY_PATH</span>
+
+<span class="c1"># libfabric workaround</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FI_MR_CACHE_MONITOR</span><span class="o">=</span>memhooks
+
+<span class="c1"># set the file system striping</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$SLURM_SUBMIT_DIR</span>
+
+module<span class="w"> </span>load<span class="w"> </span>lfs-wrapper
+lfs<span class="w"> </span>setstripe<span class="w"> </span>-c<span class="w"> </span><span class="m">32</span><span class="w"> </span>-S<span class="w"> </span>10M<span class="w"> </span><span class="nv">$SLURM_SUBMIT_DIR</span>
+
+module<span class="w"> </span>list
+
+<span class="k">function</span><span class="w"> </span>find_chk_file<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># find_chk_file takes a single argument -- the wildcard pattern</span>
+<span class="w">    </span><span class="c1"># for checkpoint files to look through</span>
+<span class="w">    </span><span class="nv">chk</span><span class="o">=</span><span class="nv">$1</span>
+
+<span class="w">    </span><span class="c1"># find the latest 2 restart files.  This way if the latest didn&#39;t</span>
+<span class="w">    </span><span class="c1"># complete we fall back to the previous one.</span>
+<span class="w">    </span><span class="nv">temp_files</span><span class="o">=</span><span class="k">$(</span>find<span class="w"> </span>.<span class="w"> </span>-maxdepth<span class="w"> </span><span class="m">1</span><span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">chk</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>-print<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-2<span class="k">)</span>
+<span class="w">    </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span>f<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">temp_files</span><span class="si">}</span>
+<span class="w">    </span><span class="k">do</span>
+<span class="w">        </span><span class="c1"># the Header is the last thing written -- check if it&#39;s there, otherwise,</span>
+<span class="w">        </span><span class="c1"># fall back to the second-to-last check file written</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">f</span><span class="si">}</span>/Header<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">            </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="w">            </span><span class="nv">restartFile</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">f</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">fi</span>
+<span class="w">    </span><span class="k">done</span>
+
+<span class="o">}</span>
+
+<span class="c1"># look for 7-digit chk files</span>
+find_chk_file<span class="w"> </span><span class="s2">&quot;*chk???????&quot;</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="c1"># look for 6-digit chk files</span>
+<span class="w">    </span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk??????&quot;</span>
+<span class="k">fi</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="c1"># look for 5-digit chk files</span>
+<span class="w">    </span>find_chk_file<span class="w"> </span><span class="s2">&quot;*chk?????&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># restartString will be empty if no chk files are found -- i.e. new run</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="k">else</span>
+<span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;amr.restart=</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">fi</span>
 
 <span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">NMPI_PER_NODE</span><span class="o">=</span><span class="m">8</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">TOTAL_NMPI</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="si">${</span><span class="nv">SLURM_JOB_NUM_NODES</span><span class="si">}</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="si">${</span><span class="nv">NMPI_PER_NODE</span><span class="si">}</span><span class="w"> </span><span class="k">))</span>
 
-srun<span class="w"> </span>-n<span class="si">${</span><span class="nv">TOTAL_NMPI</span><span class="si">}</span><span class="w"> </span>-N<span class="si">${</span><span class="nv">SLURM_JOB_NUM_NODES</span><span class="si">}</span><span class="w"> </span>--ntasks-per-node<span class="o">=</span><span class="m">8</span><span class="w"> </span>--gpus-per-task<span class="o">=</span><span class="m">1</span><span class="w"> </span>./<span class="nv">$EXEC</span><span class="w"> </span><span class="nv">$INPUTS</span>
+<span class="k">function</span><span class="w"> </span>check_restart<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;RESTART CHECK!!!&quot;</span>
+<span class="w">    </span><span class="nv">outfile</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">SLURM_JOB_NAME</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">SLURM_JOB_ID</span><span class="si">}</span><span class="s2">.out&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;RESTART CHECK: checking </span><span class="si">${</span><span class="nv">outfile</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nv">restart_success</span><span class="o">=</span><span class="k">$(</span>grep<span class="w"> </span><span class="s2">&quot;Restart time&quot;</span><span class="w"> </span><span class="si">${</span><span class="nv">outfile</span><span class="si">}</span><span class="k">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;1&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">       </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;RESTART CHECK: canceling job&quot;</span>
+<span class="w">       </span>date
+<span class="w">       </span>scancel<span class="w"> </span><span class="nv">$SLURM_JOB_ID</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">       </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;RESTART CHECK: restart appears to be successful&quot;</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="o">}</span>
+
+
+<span class="c1"># frontier&#39;s file system is troublesome, so modify the way</span>
+<span class="c1"># we have AMReX does I/O</span>
+
+<span class="nv">FILE_IO_PARAMS</span><span class="o">=</span><span class="s2">&quot;</span>
+<span class="s2">amr.plot_nfiles = -1</span>
+<span class="s2">amr.checkpoint_nfiles = -1</span>
+<span class="s2">&quot;</span>
+
+<span class="nb">echo</span><span class="w"> </span>appending<span class="w"> </span>parameters:<span class="w"> </span><span class="si">${</span><span class="nv">FILE_IO_PARAMS</span><span class="si">}</span>
+
+<span class="o">(</span>sleep<span class="w"> </span><span class="m">300</span><span class="p">;</span><span class="w"> </span>check_restart<span class="w"> </span><span class="o">)</span><span class="w"> </span><span class="p">&amp;</span>
+
+srun<span class="w"> </span>-n<span class="si">${</span><span class="nv">TOTAL_NMPI</span><span class="si">}</span><span class="w"> </span>-N<span class="si">${</span><span class="nv">SLURM_JOB_NUM_NODES</span><span class="si">}</span><span class="w"> </span>--ntasks-per-node<span class="o">=</span><span class="m">8</span><span class="w"> </span>--gpus-per-task<span class="o">=</span><span class="m">1</span><span class="w"> </span>./<span class="nv">$EXEC</span><span class="w"> </span><span class="nv">$INPUTS</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">FILE_IO_PARAMS</span><span class="si">}</span>
 </pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>As of June 2023, it is necessary to explicitly use <code class="docutils literal notranslate"><span class="pre">-n</span></code> and <code class="docutils literal notranslate"><span class="pre">-N</span></code> on the <code class="docutils literal notranslate"><span class="pre">srun</span></code> line.</p>
 </div>
 <p>The job is submitted as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
@@ -153,8 +247,6 @@ span.prompt1:before {
 }
 </style><span class="prompt1">sbatch<span class="w"> </span>frontier.slurm</span>
 </pre></div></div><p>where <code class="docutils literal notranslate"><span class="pre">frontier.slurm</span></code> is the name of the submission script.</p>
-<p>A sample job script that includes the automatic restart functions can be found here:
-<a class="reference external" href="https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/frontier/frontier.slurm">https://github.com/AMReX-Astro/workflow/blob/main/job_scripts/frontier/frontier.slurm</a></p>
 <p>Also see the WarpX docs: <a class="reference external" href="https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html">https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html</a></p>
 </section>
 <section id="gpu-aware-mpi">
