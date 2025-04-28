@@ -1,31 +1,39 @@
 #!/bin/sh
-#PBS -l select=2:system=polaris
+#PBS -l select=64:system=polaris
+#PBS -l filesystems=home:eagle:grand
 #PBS -l place=scatter
-#PBS -l walltime=6:00:00
+#PBS -l walltime=00:30:00
 #PBS -q prod
 #PBS -A AstroExplosions
-#PBS -j eo
 
-EXEC=./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
-INPUTS=inputs_2d.N14.coarse
-
-module swap PrgEnv-nvhpc PrgEnv-gnu
-module load nvhpc-mixed
+EXEC=./Castro3d.cray.MPI.CUDA.ex
+INPUTS=inputs_nova_t7
 
 # Enable GPU-MPI (if supported by application)
 ##export MPICH_GPU_SUPPORT_ENABLED=1
+
+module use /soft/modulefiles
+module load PrgEnv-gnu
+module load nvhpc-mixed
+module load craype-accel-nvidia80
+module unload nvhpc-mixed
+module load cray-libsci
+module load craype-x86-milan
+module load PrgEnv-gnu
+module load nvhpc-mixed
 
 # Change to working directory
 cd ${PBS_O_WORKDIR}
 
 # MPI and OpenMP settings
 NNODES=`wc -l < $PBS_NODEFILE`
-NRANKS_PER_NODE=4
+NRANKS_PER_NODE=$(nvidia-smi -L | wc -l)
 NDEPTH=8
 NTHREADS=1
-
 NTOTRANKS=$(( NNODES * NRANKS_PER_NODE ))
 
+# If you need to start from the latest chk file, please uncomment the function
+# and the lines below:
 
 function find_chk_file {
     # find_chk_file takes a single argument -- the wildcard pattern
@@ -38,7 +46,8 @@ function find_chk_file {
     restartFile=""
     for f in ${temp_files}
     do
-        # the Header is the last thing written -- if it's there, update the restart file
+        # the Header is the last thing written -- check if it's there, otherwise,
+        # fall back to the second-to-last check file written
         if [ -f ${f}/Header ]; then
             restartFile="${f}"
         fi
@@ -66,6 +75,11 @@ else
     restartString="amr.restart=${restartFile}"
 fi
 
+# If you need to restart from an specific chk file, please uncomment
+# the two lines below:
+
+# restartFile="chk2740664"
+# restartString="amr.restart=${restartFile}"
 
 # For applications that need mpiexec to bind MPI ranks to GPUs
-mpiexec -n ${NTOTRANKS} --ppn ${NRANKS_PER_NODE} --depth=${NDEPTH} --cpu-bind depth --env OMP_NUM_THREADS=${NTHREADS} -env OMP_PLACES=threads ./set_affinity_gpu_polaris.sh ${EXEC} ${INPUTS} ${restartString}
+mpiexec -n ${NTOTRANKS} --ppn ${NRANKS_PER_NODE} --depth=${NDEPTH} --cpu-bind depth --env OMP_NUM_THREADS=${NTHREADS} -env OMP_PLACES=threads ./set_affinity_gpu_polaris.sh ${EXEC} ${INPUTS} ${restartString} amrex.the_arena_init_size = 0
