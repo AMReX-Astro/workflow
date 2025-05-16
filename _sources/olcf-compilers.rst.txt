@@ -44,11 +44,11 @@ HIP Function Inlining
 
 By default, the ROCm compiler inlines all function calls in device code
 (for better compatibility with codes that use file- or function-scoped
-``__shared__`` variables). This greatly increases the time it takes to
-compile and link, and may be detrimental for the templated Microphysics
-networks with lots of compile-time loop unrolling.
+``__shared__`` variables).  This used to cause problems with older
+versions of ROCm (< 6.3.1), but with recent versions it seems to work
+fine.
 
-This can be disabled by passing flags to ``hipcc`` to allow non-inlined
+If desired this can be disabled by passing flags to ``hipcc`` to allow non-inlined
 function calls:
 
 .. prompt:: bash
@@ -57,7 +57,9 @@ function calls:
 
 See also https://rocm.docs.amd.com/en/docs-5.3.3/reference/rocmcc/rocmcc.html#rocm-compiler-interfaces
 
-.. note::
+Microphysics has an option to set these flags, which can be activated by building
+as:
 
-   Inline is automatically disabled via our ``Microphysics`` repository
-   when it detects a HIP build.
+.. prompt:: bash
+
+   make DISABLE_HIP_INLINE=TRUE

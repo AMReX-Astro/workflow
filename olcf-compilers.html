@@ -123,19 +123,17 @@ since the module wrappers do not do this:</p>
 <h3>HIP Function Inlining<a class="headerlink" href="#hip-function-inlining" title="Link to this heading"></a></h3>
 <p>By default, the ROCm compiler inlines all function calls in device code
 (for better compatibility with codes that use file- or function-scoped
-<code class="docutils literal notranslate"><span class="pre">__shared__</span></code> variables). This greatly increases the time it takes to
-compile and link, and may be detrimental for the templated Microphysics
-networks with lots of compile-time loop unrolling.</p>
-<p>This can be disabled by passing flags to <code class="docutils literal notranslate"><span class="pre">hipcc</span></code> to allow non-inlined
+<code class="docutils literal notranslate"><span class="pre">__shared__</span></code> variables).  This used to cause problems with older
+versions of ROCm (&lt; 6.3.1), but with recent versions it seems to work
+fine.</p>
+<p>If desired this can be disabled by passing flags to <code class="docutils literal notranslate"><span class="pre">hipcc</span></code> to allow non-inlined
 function calls:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE<span class="w"> </span><span class="nv">EXTRACXXFLAGS</span><span class="o">=</span><span class="s1">&#39;-mllvm -amdgpu-function-calls=true&#39;</span></span>
 </pre></div></div><p>See also <a class="reference external" href="https://rocm.docs.amd.com/en/docs-5.3.3/reference/rocmcc/rocmcc.html#rocm-compiler-interfaces">https://rocm.docs.amd.com/en/docs-5.3.3/reference/rocmcc/rocmcc.html#rocm-compiler-interfaces</a></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Inline is automatically disabled via our <code class="docutils literal notranslate"><span class="pre">Microphysics</span></code> repository
-when it detects a HIP build.</p>
-</div>
-</section>
+<p>Microphysics has an option to set these flags, which can be activated by building
+as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">DISABLE_HIP_INLINE</span><span class="o">=</span>TRUE</span>
+</pre></div></div></section>
 </section>
 </section>
 
