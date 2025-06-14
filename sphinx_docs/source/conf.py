@@ -45,6 +45,9 @@ extensions = ['sphinx.ext.autodoc',
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
+# Don't include the extra CSS from sphinx-prompt when using the copy button
+copybutton_exclude = 'style'
+
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
