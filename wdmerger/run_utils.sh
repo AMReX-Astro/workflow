@@ -434,7 +434,7 @@ function get_remaining_walltime {
 
   elif [ $batch_system == "SLURM" ]; then
 
-      # For SLURM we need to subtract the run time from the total alloted time.
+      # For SLURM we need to subtract the run time from the total allotted time.
 
       total_time=$(squeue -l -u $USER | grep $job_number | awk '{ print $7 }')
       total_time=$(hours_to_seconds $total_time)
