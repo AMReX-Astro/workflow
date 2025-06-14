@@ -224,7 +224,7 @@ var copyTargetText = (trigger) => {
   var target = document.querySelector(trigger.attributes['data-clipboard-target'].value);
 
   // get filtered text
-  let exclude = 'style';
+  let exclude = '.linenos';
 
   let text = filterText(target, exclude);
   return formatCopyText(text, '', false, true, true, true, '', '')
