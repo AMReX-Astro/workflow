@@ -1,4 +1,4 @@
-# workflow
+# AMReX-Astro workflow
 
 Common information and workflow scripts for running jobs at HPC centers
 
