@@ -5,3 +5,5 @@ numpydoc
 more_itertools
 sphinx-prompt
 sphinx-copybutton
+
+codespell

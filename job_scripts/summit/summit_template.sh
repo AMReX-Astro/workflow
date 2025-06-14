@@ -21,7 +21,7 @@ INPUTS=inputs_luna
 n_res=480                # The max allocated number of resource sets is
 n_cpu_cores_per_res=1    # nnodes * n_max_res_per_node. In this case we will
 n_mpi_per_res=1          # use all the allocated resource sets to run the job below,
-n_gpu_per_res=1          # however we can define more enviroment variables to allocate two jobs
+n_gpu_per_res=1          # however we can define more environment variables to allocate two jobs
 n_max_res_per_node=6     # simultaneous jobs, where n_res = n_res_1 + n_res2 allocates for two jobs.
 
 function find_chk_file {
