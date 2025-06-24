@@ -38,7 +38,7 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'numpydoc',
     'sphinx_copybutton',
-    'sphinx-prompt',
+    'sphinx_prompt',
     'sphinx_rtd_theme',
     'sphinx.ext.githubpages']
 
