@@ -49,7 +49,11 @@ if [ -f "$jobidfile" ]; then
 fi
 
 # create the lock file
-echo "$SLURM_JOB_ID" > "$jobidfile"
+if [[ "${SLURM_JOB_ID:-}" ]]; then
+   echo "$SLURM_JOB_ID" > "$jobidfile"
+else
+   echo $$ > "$jobidfile"
+fi
 
 # if our process is killed, remove the lock file first
 function cleanup() {
@@ -237,8 +241,11 @@ mapfile -t all_files < <(
 )
 
 # create the destination directory if it doesn't already exist
-mkdir -p "$KRONOS_DIR"
-
+echo "trying to create directory: " "$KRONOS_DIR" "$USER" "$dest_dir"
+ls -l ${KRONOS_DIR}
+if [ ! -d ${KRONOS_DIR} ]; then
+  mkdir -p "$KRONOS_DIR"
+fi
 tar -cvf "${KRONOS_DIR}/diag_files_${datestr}.tar" "${all_files[@]}"
 
 
