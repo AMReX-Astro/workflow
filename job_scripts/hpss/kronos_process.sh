@@ -241,9 +241,8 @@ mapfile -t all_files < <(
 )
 
 # create the destination directory if it doesn't already exist
-echo "trying to create directory: " "$KRONOS_DIR" "$USER" "$dest_dir"
-ls -l ${KRONOS_DIR}
 if [ ! -d ${KRONOS_DIR} ]; then
+  echo "trying to create directory: " "$KRONOS_DIR"
   mkdir -p "$KRONOS_DIR"
 fi
 tar -cvf "${KRONOS_DIR}/diag_files_${datestr}.tar" "${all_files[@]}"
