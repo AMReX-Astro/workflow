@@ -38,7 +38,30 @@ Submitting jobs
 
 Frontier uses SLURM.
 
-Here's a script that runs on GPUs and has the I/O fixes described above.
+Here's a script that uses our best practices on Frontier.  It uses 64 nodes (512 GPUs)
+and does the following:
+
+* Sets the filesystem striping (see https://docs.olcf.ornl.gov/data/index.html#lfs-setstripe-wrapper)
+
+* Includes logic for automatically restarting from the last checkpoint file
+  (useful for job-chaining).  This is done via the ``find_chk_file`` function.
+
+* Installs a signal handler to create a ``dump_and_stop`` file shortly before
+  the queue window ends.  This ensures that we get a checkpoint at the very
+  end of the queue window.
+
+* Can do a special check on restart to ensure that we don't hang on
+  reading the initial checkpoint file (uncomment out the line):
+
+  ::
+
+      (sleep 300; check_restart ) &
+
+  This uses the ``check_restart`` function and will kill the job if it doesn't
+  detect a successful restart within 5 minutes.
+
+* Adds special I/O parameters to the job to work around filesystem issues
+  (these are defined in ``FILE_IO_PARAMS``.
 
 .. literalinclude:: ../../job_scripts/frontier/frontier.slurm
    :language: bash
@@ -51,6 +74,20 @@ The job is submitted as:
 
 where ``frontier.slurm`` is the name of the submission script.
 
+.. note::
+
+   If the job times out before writing out a checkpoint (leaving a
+   ``dump_and_stop`` file behind), you can give it more time between the
+   warning signal and the end of the allocation by adjusting the
+   ``#SBATCH --signal=B:URG@<n>`` line at the top of the script.
+
+   Also, by default, AMReX will output a plotfile at the same time as a checkpoint file,
+   which means you'll get one from the ``dump_and_stop``, which may not be at the same
+   time intervals as your ``amr.plot_per``.  To suppress this, set:
+
+   ::
+
+      amr.write_plotfile_with_checkpoint = 0
 
 Also see the WarpX docs: https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html
 
