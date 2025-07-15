@@ -78,13 +78,18 @@ each OpenMP thread per physical core, so it is best to set ``OMP_NUM_THREADS`` t
 .. literalinclude:: ../../job_scripts/perlmutter-cpu/perlmutter_cpu.slurm
    :language: sh
 
+
+Submitting and checking status
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 .. note::
 
-   Jobs should be run in your ``$SCRATCH`` directory. By default,
-   SLURM will change directory into the submission directory.
+   Jobs should be run in your ``$SCRATCH`` directory and not
+   your home directory.
 
-   Alternately, you can run in the common file system, ``$CFS/m3018``,
-   which everyone in the project has access to.
+   By default, SLURM will change directory into the submission
+   directory.
+
 
 Jobs are submitted as:
 
@@ -110,7 +115,8 @@ to cancel a job, you would use ``scancel``.
 Filesystems
 ^^^^^^^^^^^
 
-We can run on the common filesystem, CFS, to share files with everyone
+In addition to ``$SCRATCH``, there is a project-wide directory
+on the common filesystem, CFS.  This allows us to share files with everyone
 in the project.  For instance, for project ``m3018``, we would do:
 
 .. prompt:: bash
@@ -153,9 +159,7 @@ You can view the job dependency using:
 
    squeue -l -j job-id
 
-where ``job-id`` is the number of the job.  A job can be canceled
-using ``scancel``, and the status can be checked using ``squeue -u
-username`` or ``squeue --me``.
+where ``job-id`` is the number of the job. 
 
 
 
