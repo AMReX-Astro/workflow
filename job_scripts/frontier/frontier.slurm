@@ -10,6 +10,7 @@
 #SBATCH --cpus-per-task=7
 #SBATCH --gpus-per-task=1
 #SBATCH --gpu-bind=closest
+#SBATCH --signal=B:URG@300
 
 EXEC=./Castro3d.hip.x86-trento.MPI.HIP.SMPLSDC.ex
 INPUTS=inputs_3d.N14.coarse
@@ -22,17 +23,12 @@ module load rocm/6.3.1
 
 export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
 
-# libfabric workaround
-export FI_MR_CACHE_MONITOR=memhooks
-
 # set the file system striping
 
 echo $SLURM_SUBMIT_DIR
 
 module load lfs-wrapper
 lfs setstripe -c 32 -S 10M $SLURM_SUBMIT_DIR
-
-module list
 
 function find_chk_file {
     # find_chk_file takes a single argument -- the wildcard pattern
@@ -76,6 +72,21 @@ else
     restartString="amr.restart=${restartFile}"
 fi
 
+
+# clean up any run management files left over from previous runs
+rm -f dump_and_stop
+
+# The `--signal=B:URG@<n>` option tells slurm to send SIGURG to this batch
+# script n seconds before the runtime limit, so we can exit gracefully.
+function sig_handler {
+    touch dump_and_stop
+    # disable this signal handler
+    trap - URG
+    echo "BATCH: allocation ending soon; telling Castro to dump a checkpoint and stop"
+}
+trap sig_handler URG
+
+
 export OMP_NUM_THREADS=1
 export NMPI_PER_NODE=8
 export TOTAL_NMPI=$(( ${SLURM_JOB_NUM_NODES} * ${NMPI_PER_NODE} ))
@@ -107,5 +118,18 @@ echo appending parameters: ${FILE_IO_PARAMS}
 
 (sleep 300; check_restart ) &
 
-srun -n${TOTAL_NMPI} -N${SLURM_JOB_NUM_NODES} --ntasks-per-node=8 --gpus-per-task=1 ./$EXEC $INPUTS ${restartString} ${FILE_IO_PARAMS}
+# execute srun in the background then use the builtin wait so the shell can
+# handle the signal
+srun -n${TOTAL_NMPI} -N${SLURM_JOB_NUM_NODES} --ntasks-per-node=8 --gpus-per-task=1 ./$EXEC $INPUTS ${restartString} ${FILE_IO_PARAMS} &
+pid=$!
+wait $pid
+ret=$?
+
+if (( ret == 128 + 23 )); then
+    # received SIGURG, keep waiting
+    wait $pid
+    ret=$?
+fi
+
+exit $ret
 
