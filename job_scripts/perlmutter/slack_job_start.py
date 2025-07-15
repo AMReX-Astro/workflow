@@ -10,17 +10,18 @@ def slack_post(name, channel, message, webhook):
     payload = {}
 
     payload["channel"] = channel
-    payload["username"] = name
+    #payload["username"] = name
     payload["text"] = message
-
+    payload["link_names"] = 1
     s = json.dumps(payload)
 
-    cmd = "curl -X POST --data-urlencode 'payload={}' {}".format(s, webhook)
+    cmd = f"curl -X POST --data-urlencode 'payload={s}' {webhook}"
 
-    so = run(cmd)
+    run(cmd)
 
 
-def run(string, stdin=False, outfile=None, store_command=False, env=None, outfile_mode="a", log=None):
+def run(string, stdin=False, outfile=None, store_command=False, env=None,
+        outfile_mode="a", log=None):
 
     # shlex.split will preserve inner quotes
     prog = shlex.split(string)
@@ -33,13 +34,15 @@ def run(string, stdin=False, outfile=None, store_command=False, env=None, outfil
                               stderr=subprocess.STDOUT, env=env)
 
     stdout0, stderr0 = p0.communicate()
-    if stdin: p0.stdin.close()
+    if stdin:
+        p0.stdin.close()
     rc = p0.returncode
     p0.stdout.close()
 
-    if not outfile == None:
-        try: cf = open(outfile, outfile_mode)
-        except IOError:
+    if outfile is not None:
+        try:
+            cf = open(outfile, outfile_mode)
+        except OSError:
             log.fail("  ERROR: unable to open file for writing")
         else:
             if store_command:
@@ -51,10 +54,11 @@ def run(string, stdin=False, outfile=None, store_command=False, env=None, outfil
     return stdout0, stderr0, rc
 
 
-if __name__ == "__main__":
+def doit():
+
     try:
         f = open(os.path.expanduser("~/.slack.webhook"))
-    except:
+    except OSError:
         sys.exit("ERROR: unable to open webhook file")
     else:
         webhook = str(f.readline())
@@ -63,7 +67,11 @@ if __name__ == "__main__":
     message = sys.argv[1]
     channel = sys.argv[2]
 
-    if not channel.startswith("#"):
-        channel = "#{}".format(channel)
+    if not (channel.startswith("#") or channel.startswith("@")):
+        channel = f"#{channel}"
 
     slack_post("bender", channel, message, webhook)
+
+
+if __name__ == "__main__":
+    doit()
