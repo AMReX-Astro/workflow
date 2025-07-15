@@ -101,16 +101,25 @@
 <h2>Perlmutter<a class="headerlink" href="#perlmutter" title="Link to this heading"></a></h2>
 <section id="gpu-jobs">
 <h3>GPU jobs<a class="headerlink" href="#gpu-jobs" title="Link to this heading"></a></h3>
-<p>Perlmutter has 1536 GPU nodes, each with 4 NVIDIA A100 GPUs – therefore it is best to use
-4 MPI tasks per node.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
+<p>Perlmutter has 1536 GPU nodes, each with 4 NVIDIA A100
+GPUs—therefore it is best to use 4 MPI tasks per node.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
 <p>you need to load the same modules used to compile the executable in
 your submission script, otherwise, it will fail at runtime because
 it can’t find the CUDA libraries.</p>
 </div>
-<p>Below is an example that runs on 16 nodes with 4 GPUs per node, and also
-includes the restart logic to allow for job chaining.</p>
+<p>Below is an example that runs on 16 nodes with 4 GPUs per node.  It also
+does the following:</p>
+<ul class="simple">
+<li><p>Includes logic for automatically restarting from the last checkpoint file
+(useful for job-chaining).  This is done via the <code class="docutils literal notranslate"><span class="pre">find_chk_file</span></code> function.</p></li>
+<li><p>Installs a signal handler to create a <code class="docutils literal notranslate"><span class="pre">dump_and_stop</span></code> file shortly before
+the queue window ends.  This ensures that we get a checkpoint at the very
+end of the queue window.</p></li>
+<li><p>Can post to slack using the <a class="reference download internal" download="" href="_downloads/c53bd1bdacf589e2364025328a42f45c/slack_job_start.py"><code class="xref download docutils literal notranslate"><span class="pre">slack_job_start.py</span></code></a> script—this
+requires a webhook to be installed (in a file <code class="docutils literal notranslate"><span class="pre">~/.slack.webhook</span></code>).</p></li>
+</ul>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 
 <span class="c1">#SBATCH -A m3018_g</span>
@@ -206,8 +215,11 @@ srun<span class="w"> </span>-n<span class="w"> </span><span class="k">$((</span>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>With large reaction networks, you may get GPU out-of-memory errors during
-the first burner call.  If this happens, you can add
-<code class="docutils literal notranslate"><span class="pre">amrex.the_arena_init_size=0</span></code> after <code class="docutils literal notranslate"><span class="pre">${restartString}</span></code> in the srun call
+the first burner call.  If this happens, you can add</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>amrex.the_arena_init_size<span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<p>after <code class="docutils literal notranslate"><span class="pre">${restartString}</span></code> in the srun call
 so AMReX doesn’t reserve 3/4 of the GPU memory for the device arena.</p>
 </div>
 <div class="admonition note">
@@ -216,6 +228,12 @@ so AMReX doesn’t reserve 3/4 of the GPU memory for the device arena.</p>
 <code class="docutils literal notranslate"><span class="pre">dump_and_stop</span></code> file behind), you can give it more time between the
 warning signal and the end of the allocation by adjusting the
 <code class="docutils literal notranslate"><span class="pre">#SBATCH</span> <span class="pre">--signal=B:URG&#64;&lt;n&gt;</span></code> line at the top of the script.</p>
+<p>Also, by default, AMReX will output a plotfile at the same time as a checkpoint file,
+which means you’ll get one from the <code class="docutils literal notranslate"><span class="pre">dump_and_stop</span></code>, which may not be at the same
+time intervals as your <code class="docutils literal notranslate"><span class="pre">amr.plot_per</span></code>.  To suppress this, set:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>amr.write_plotfile_with_checkpoint<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>
+</pre></div>
+</div>
 </div>
 </section>
 <section id="cpu-jobs">
