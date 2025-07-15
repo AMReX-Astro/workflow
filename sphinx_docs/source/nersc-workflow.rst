@@ -10,17 +10,28 @@ Perlmutter
 GPU jobs
 ^^^^^^^^
 
-Perlmutter has 1536 GPU nodes, each with 4 NVIDIA A100 GPUs -- therefore it is best to use
-4 MPI tasks per node.
+Perlmutter has 1536 GPU nodes, each with 4 NVIDIA A100
+GPUs---therefore it is best to use 4 MPI tasks per node.
 
-.. note::
+.. important::
 
    you need to load the same modules used to compile the executable in
    your submission script, otherwise, it will fail at runtime because
    it can't find the CUDA libraries.
 
-Below is an example that runs on 16 nodes with 4 GPUs per node, and also
-includes the restart logic to allow for job chaining.
+Below is an example that runs on 16 nodes with 4 GPUs per node.  It also
+does the following:
+
+* Includes logic for automatically restarting from the last checkpoint file
+  (useful for job-chaining).  This is done via the ``find_chk_file`` function.
+
+* Installs a signal handler to create a ``dump_and_stop`` file shortly before
+  the queue window ends.  This ensures that we get a checkpoint at the very
+  end of the queue window.
+
+* Can post to slack using the :download:`slack_job_start.py
+  <../../job_scripts/perlmutter/slack_job_start.py>` script---this
+  requires a webhook to be installed (in a file ``~/.slack.webhook``).
 
 .. literalinclude:: ../../job_scripts/perlmutter/perlmutter.submit
    :language: sh
@@ -29,7 +40,12 @@ includes the restart logic to allow for job chaining.
 
    With large reaction networks, you may get GPU out-of-memory errors during
    the first burner call.  If this happens, you can add
-   ``amrex.the_arena_init_size=0`` after ``${restartString}`` in the srun call
+
+   ::
+
+      amrex.the_arena_init_size=0
+
+   after ``${restartString}`` in the srun call
    so AMReX doesn't reserve 3/4 of the GPU memory for the device arena.
 
 .. note::
@@ -38,6 +54,14 @@ includes the restart logic to allow for job chaining.
    ``dump_and_stop`` file behind), you can give it more time between the
    warning signal and the end of the allocation by adjusting the
    ``#SBATCH --signal=B:URG@<n>`` line at the top of the script.
+
+   Also, by default, AMReX will output a plotfile at the same time as a checkpoint file,
+   which means you'll get one from the ``dump_and_stop``, which may not be at the same
+   time intervals as your ``amr.plot_per``.  To suppress this, set:
+
+   ::
+
+      amr.write_plotfile_with_checkpoint = 0
 
 CPU jobs
 ^^^^^^^^
