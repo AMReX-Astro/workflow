@@ -127,7 +127,26 @@ performance.</p>
 <section id="submitting-jobs">
 <h3>Submitting jobs<a class="headerlink" href="#submitting-jobs" title="Link to this heading"></a></h3>
 <p>Frontier uses SLURM.</p>
-<p>Here’s a script that runs on GPUs and has the I/O fixes described above.</p>
+<p>Here’s a script that uses our best practices on Frontier.  It uses 64 nodes (512 GPUs)
+and does the following:</p>
+<ul>
+<li><p>Sets the filesystem striping (see <a class="reference external" href="https://docs.olcf.ornl.gov/data/index.html#lfs-setstripe-wrapper">https://docs.olcf.ornl.gov/data/index.html#lfs-setstripe-wrapper</a>)</p></li>
+<li><p>Includes logic for automatically restarting from the last checkpoint file
+(useful for job-chaining).  This is done via the <code class="docutils literal notranslate"><span class="pre">find_chk_file</span></code> function.</p></li>
+<li><p>Installs a signal handler to create a <code class="docutils literal notranslate"><span class="pre">dump_and_stop</span></code> file shortly before
+the queue window ends.  This ensures that we get a checkpoint at the very
+end of the queue window.</p></li>
+<li><p>Can do a special check on restart to ensure that we don’t hang on
+reading the initial checkpoint file (uncomment out the line):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>sleep<span class="w"> </span><span class="m">300</span><span class="p">;</span><span class="w"> </span>check_restart<span class="w"> </span><span class="o">)</span><span class="w"> </span><span class="p">&amp;</span>
+</pre></div>
+</div>
+<p>This uses the <code class="docutils literal notranslate"><span class="pre">check_restart</span></code> function and will kill the job if it doesn’t
+detect a successful restart within 5 minutes.</p>
+</li>
+<li><p>Adds special I/O parameters to the job to work around filesystem issues
+(these are defined in <code class="docutils literal notranslate"><span class="pre">FILE_IO_PARAMS</span></code>.</p></li>
+</ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#SBATCH -A AST106</span>
 <span class="c1">#SBATCH -J subch</span>
@@ -140,6 +159,7 @@ performance.</p>
 <span class="c1">#SBATCH --cpus-per-task=7</span>
 <span class="c1">#SBATCH --gpus-per-task=1</span>
 <span class="c1">#SBATCH --gpu-bind=closest</span>
+<span class="c1">#SBATCH --signal=B:URG@300</span>
 
 <span class="nv">EXEC</span><span class="o">=</span>./Castro3d.hip.x86-trento.MPI.HIP.SMPLSDC.ex
 <span class="nv">INPUTS</span><span class="o">=</span>inputs_3d.N14.coarse
@@ -152,17 +172,12 @@ module<span class="w"> </span>load<span class="w"> </span>rocm/6.3.1
 
 <span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$CRAY_LD_LIBRARY_PATH</span>:<span class="nv">$LD_LIBRARY_PATH</span>
 
-<span class="c1"># libfabric workaround</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">FI_MR_CACHE_MONITOR</span><span class="o">=</span>memhooks
-
 <span class="c1"># set the file system striping</span>
 
 <span class="nb">echo</span><span class="w"> </span><span class="nv">$SLURM_SUBMIT_DIR</span>
 
 module<span class="w"> </span>load<span class="w"> </span>lfs-wrapper
 lfs<span class="w"> </span>setstripe<span class="w"> </span>-c<span class="w"> </span><span class="m">32</span><span class="w"> </span>-S<span class="w"> </span>10M<span class="w"> </span><span class="nv">$SLURM_SUBMIT_DIR</span>
-
-module<span class="w"> </span>list
 
 <span class="k">function</span><span class="w"> </span>find_chk_file<span class="w"> </span><span class="o">{</span>
 <span class="w">    </span><span class="c1"># find_chk_file takes a single argument -- the wildcard pattern</span>
@@ -206,6 +221,21 @@ find_chk_file<span class="w"> </span><span class="s2">&quot;*chk???????&quot;</s
 <span class="w">    </span><span class="nv">restartString</span><span class="o">=</span><span class="s2">&quot;amr.restart=</span><span class="si">${</span><span class="nv">restartFile</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="k">fi</span>
 
+
+<span class="c1"># clean up any run management files left over from previous runs</span>
+rm<span class="w"> </span>-f<span class="w"> </span>dump_and_stop
+
+<span class="c1"># The `--signal=B:URG@&lt;n&gt;` option tells slurm to send SIGURG to this batch</span>
+<span class="c1"># script n seconds before the runtime limit, so we can exit gracefully.</span>
+<span class="k">function</span><span class="w"> </span>sig_handler<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>touch<span class="w"> </span>dump_and_stop
+<span class="w">    </span><span class="c1"># disable this signal handler</span>
+<span class="w">    </span><span class="nb">trap</span><span class="w"> </span>-<span class="w"> </span>URG
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;BATCH: allocation ending soon; telling Castro to dump a checkpoint and stop&quot;</span>
+<span class="o">}</span>
+<span class="nb">trap</span><span class="w"> </span>sig_handler<span class="w"> </span>URG
+
+
 <span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">NMPI_PER_NODE</span><span class="o">=</span><span class="m">8</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">TOTAL_NMPI</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="si">${</span><span class="nv">SLURM_JOB_NUM_NODES</span><span class="si">}</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="si">${</span><span class="nv">NMPI_PER_NODE</span><span class="si">}</span><span class="w"> </span><span class="k">))</span>
@@ -237,7 +267,20 @@ find_chk_file<span class="w"> </span><span class="s2">&quot;*chk???????&quot;</s
 
 <span class="o">(</span>sleep<span class="w"> </span><span class="m">300</span><span class="p">;</span><span class="w"> </span>check_restart<span class="w"> </span><span class="o">)</span><span class="w"> </span><span class="p">&amp;</span>
 
-srun<span class="w"> </span>-n<span class="si">${</span><span class="nv">TOTAL_NMPI</span><span class="si">}</span><span class="w"> </span>-N<span class="si">${</span><span class="nv">SLURM_JOB_NUM_NODES</span><span class="si">}</span><span class="w"> </span>--ntasks-per-node<span class="o">=</span><span class="m">8</span><span class="w"> </span>--gpus-per-task<span class="o">=</span><span class="m">1</span><span class="w"> </span>./<span class="nv">$EXEC</span><span class="w"> </span><span class="nv">$INPUTS</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">FILE_IO_PARAMS</span><span class="si">}</span>
+<span class="c1"># execute srun in the background then use the builtin wait so the shell can</span>
+<span class="c1"># handle the signal</span>
+srun<span class="w"> </span>-n<span class="si">${</span><span class="nv">TOTAL_NMPI</span><span class="si">}</span><span class="w"> </span>-N<span class="si">${</span><span class="nv">SLURM_JOB_NUM_NODES</span><span class="si">}</span><span class="w"> </span>--ntasks-per-node<span class="o">=</span><span class="m">8</span><span class="w"> </span>--gpus-per-task<span class="o">=</span><span class="m">1</span><span class="w"> </span>./<span class="nv">$EXEC</span><span class="w"> </span><span class="nv">$INPUTS</span><span class="w"> </span><span class="si">${</span><span class="nv">restartString</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">FILE_IO_PARAMS</span><span class="si">}</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="nv">pid</span><span class="o">=</span><span class="nv">$!</span>
+<span class="nb">wait</span><span class="w"> </span><span class="nv">$pid</span>
+<span class="nv">ret</span><span class="o">=</span><span class="nv">$?</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">((</span><span class="w"> </span><span class="nv">ret</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">128</span><span class="w"> </span>+<span class="w"> </span><span class="m">23</span><span class="w"> </span><span class="o">))</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="c1"># received SIGURG, keep waiting</span>
+<span class="w">    </span><span class="nb">wait</span><span class="w"> </span><span class="nv">$pid</span>
+<span class="w">    </span><span class="nv">ret</span><span class="o">=</span><span class="nv">$?</span>
+<span class="k">fi</span>
+
+<span class="nb">exit</span><span class="w"> </span><span class="nv">$ret</span>
 </pre></div>
 </div>
 <p>The job is submitted as:</p>
@@ -247,6 +290,19 @@ span.prompt1:before {
 }
 </style><span class="prompt1">sbatch<span class="w"> </span>frontier.slurm</span>
 </pre></div></div><p>where <code class="docutils literal notranslate"><span class="pre">frontier.slurm</span></code> is the name of the submission script.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the job times out before writing out a checkpoint (leaving a
+<code class="docutils literal notranslate"><span class="pre">dump_and_stop</span></code> file behind), you can give it more time between the
+warning signal and the end of the allocation by adjusting the
+<code class="docutils literal notranslate"><span class="pre">#SBATCH</span> <span class="pre">--signal=B:URG&#64;&lt;n&gt;</span></code> line at the top of the script.</p>
+<p>Also, by default, AMReX will output a plotfile at the same time as a checkpoint file,
+which means you’ll get one from the <code class="docutils literal notranslate"><span class="pre">dump_and_stop</span></code>, which may not be at the same
+time intervals as your <code class="docutils literal notranslate"><span class="pre">amr.plot_per</span></code>.  To suppress this, set:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>amr.write_plotfile_with_checkpoint<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>
+</pre></div>
+</div>
+</div>
 <p>Also see the WarpX docs: <a class="reference external" href="https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html">https://warpx.readthedocs.io/en/latest/install/hpc/frontier.html</a></p>
 </section>
 <section id="gpu-aware-mpi">
