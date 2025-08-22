@@ -1,0 +1,31 @@
+#!/bin/sh
+#PBS -l select=2:system=polaris
+#PBS -l filesystems=home:grand
+#PBS -l place=scatter
+#PBS -l walltime=01:00:00
+#PBS -q debug
+#PBS -A AstroExplosions
+
+EXEC="python z_series.py"
+#EXEC="python cei_energy.py"
+#EXEC="python test_grad_04.py"
+#EXEC="python plt_slice_vars.py"
+#EXEC="python velocity.py"
+# EXEC="python series_variable.py"
+# EXEC="python plot_compare.py"
+
+module use /soft/modulefiles
+module load conda
+conda activate
+CONDA_NAME=$(echo ${CONDA_PREFIX} | tr '\/' '\t' | sed -E 's/mconda3|\/base//g' | awk '{print $NF}')
+VENV_DIR="$(pwd)/venvs/${CONDA_NAME}"
+source "${VENV_DIR}/bin/activate"
+
+cd ${PBS_O_WORKDIR}
+
+NNODES=`wc -l < $PBS_NODEFILE`
+NRANKS_PER_NODE=32
+NTOTRANKS=$(( NNODES * NRANKS_PER_NODE ))
+
+# ${EXEC}
+mpiexec -n ${NTOTRANKS} -ppn ${NRANKS_PER_NODE} ${EXEC}
