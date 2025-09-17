@@ -108,50 +108,52 @@ look for a line that starts like:</p>
 will pick a higher one.  Make note of the number it picked.</p>
 </li>
 </ul>
-<p>On your local workstation do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  ssh -N -L 8888:127.0.0.1:8888 ahsoka.astro.sunysb.edu
-
-replacing both instances of ``8888`` with the port it selected, if
-it differs.
-
-.. tip::
-
-   If your username on ``ahsoka`` is not the same as on your
-   local machine, then you need to prefix your username to
-   the remote, e.g., as::
-
-     ssh -N -L 8888:127.0.0.1:8888 username@ahsoka.astro.sunysb.edu
-
-   where you replace ``username`` with your ``ahsoka`` username.
-
-Then enter your password.  There will be no output---that command
-will just continue to run in the terminal window.
-
-.. tip::
-
-   This says that port ``8888`` on your local machine will connect (via
-   SSH tunnel) to ``127.0.0.1:8888`` on the remote machine.  Here
-   ``127.0.0.1`` is the *loopback address* (the IP address on the
-   remote machine that resolves to itself)
-
-.. warning::
-
-   If you get an error like::
-
-     bind [127.0.0.1]:8888: Address already in use
-     channel_setup_fwd_listener_tcpip: cannot listen to port: 8888
-     Could not request local forwarding.
-
-   then that means that you are running Jupyter already on your local
-   machine, and it is already using port ``8888``, so kill the local
-   instance of Jupyter and try again.
+<p>On your local workstation</p>
+<ul>
+<li><p>do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">-</span><span class="n">N</span> <span class="o">-</span><span class="n">L</span> <span class="mi">8888</span><span class="p">:</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">8888</span> <span class="n">ahsoka</span><span class="o">.</span><span class="n">astro</span><span class="o">.</span><span class="n">sunysb</span><span class="o">.</span><span class="n">edu</span>
 </pre></div>
 </div>
+<p>replacing both instances of <code class="docutils literal notranslate"><span class="pre">8888</span></code> with the port it selected, if
+it differs.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If your username on <code class="docutils literal notranslate"><span class="pre">ahsoka</span></code> is not the same as on your
+local machine, then you need to prefix your username to
+the remote, e.g., as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">-</span><span class="n">N</span> <span class="o">-</span><span class="n">L</span> <span class="mi">8888</span><span class="p">:</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">8888</span> <span class="n">username</span><span class="nd">@ahsoka</span><span class="o">.</span><span class="n">astro</span><span class="o">.</span><span class="n">sunysb</span><span class="o">.</span><span class="n">edu</span>
+</pre></div>
+</div>
+<p>where you replace <code class="docutils literal notranslate"><span class="pre">username</span></code> with your <code class="docutils literal notranslate"><span class="pre">ahsoka</span></code> username.</p>
+</div>
+<p>Then enter your password.  There will be no output—that command
+will just continue to run in the terminal window.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>This says that port <code class="docutils literal notranslate"><span class="pre">8888</span></code> on your local machine will connect (via
+SSH tunnel) to <code class="docutils literal notranslate"><span class="pre">127.0.0.1:8888</span></code> on the remote machine.  Here
+<code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> is the <em>loopback address</em> (the IP address on the
+remote machine that resolves to itself)</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you get an error like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bind</span> <span class="p">[</span><span class="mf">127.0.0.1</span><span class="p">]:</span><span class="mi">8888</span><span class="p">:</span> <span class="n">Address</span> <span class="n">already</span> <span class="ow">in</span> <span class="n">use</span>
+<span class="n">channel_setup_fwd_listener_tcpip</span><span class="p">:</span> <span class="n">cannot</span> <span class="n">listen</span> <span class="n">to</span> <span class="n">port</span><span class="p">:</span> <span class="mi">8888</span>
+<span class="n">Could</span> <span class="ow">not</span> <span class="n">request</span> <span class="n">local</span> <span class="n">forwarding</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>then that means that you are running Jupyter already on your local
+machine, and it is already using port <code class="docutils literal notranslate"><span class="pre">8888</span></code>, so kill the local
+instance of Jupyter and try again.</p>
+</div>
 <ul>
-<li><p>Finally, on your local machine, point your web browser to the URL
+<li><p>Finally, point your web browser to the URL
 output on ahsoka (we referenced this above as <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:8888/lab?token=8469f3fb822e2a32c94...</span></code>)</p>
 <p>This should open the Jupyter server on the remote machine in your
 local browser.</p>
+</li>
+</ul>
 </li>
 </ul>
 </section>

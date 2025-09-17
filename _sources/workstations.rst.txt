@@ -31,7 +31,9 @@ On ahsoka:
   The ``8888`` there is the port.  If that is being used, Jupyter
   will pick a higher one.  Make note of the number it picked.
 
-On your local workstation do::
+On your local workstation
+
+* do::
 
     ssh -N -L 8888:127.0.0.1:8888 ahsoka.astro.sunysb.edu
 
@@ -70,9 +72,9 @@ On your local workstation do::
      machine, and it is already using port ``8888``, so kill the local
      instance of Jupyter and try again.
 
-* Finally, on your local machine, point your web browser to the URL
-  output on ahsoka (we referenced this above as ``http://127.0.0.1:8888/lab?token=8469f3fb822e2a32c94...``)
+  * Finally, point your web browser to the URL
+    output on ahsoka (we referenced this above as ``http://127.0.0.1:8888/lab?token=8469f3fb822e2a32c94...``)
 
-  This should open the Jupyter server on the remote machine in your
-  local browser.
+    This should open the Jupyter server on the remote machine in your
+    local browser.
 
