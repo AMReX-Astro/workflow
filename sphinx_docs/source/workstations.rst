@@ -35,6 +35,8 @@ On ahsoka:
 
     ssh -N -L 8888:127.0.0.1:8888 ahsoka.astro.sunysb.edu
 
+  replacing the ``8888`` with the port it selected.
+
   .. tip::
 
      If your username on ``ahsoka`` is not the same as on your
@@ -45,10 +47,8 @@ On ahsoka:
 
      where you replace ``username`` with your ``ahsoka`` username.
 
-
-  replacing the ``8888`` with the port it selected.  Then enter your
-  password.  There will be no output---that command will just continue
-  to run in the terminal window.
+  Then enter your password.  There will be no output---that command
+  will just continue to run in the terminal window.
 
   .. tip::
 
@@ -57,18 +57,20 @@ On ahsoka:
      ``127.0.0.1`` is the *loopback address* (the IP address on the
      remote machine that resolves to itself)
 
-  If you get an error like::
+  .. warning::
 
-    bind [127.0.0.1]:8888: Address already in use
-    channel_setup_fwd_listener_tcpip: cannot listen to port: 8888
-    Could not request local forwarding.
+     If you get an error like::
 
-  then that means that you are running Jupyter already on your local
-  machine, and it is already using port ``8888``, so kill the local
-  instance of Jupyter and try again.
+       bind [127.0.0.1]:8888: Address already in use
+       channel_setup_fwd_listener_tcpip: cannot listen to port: 8888
+       Could not request local forwarding.
+
+     then that means that you are running Jupyter already on your local
+     machine, and it is already using port ``8888``, so kill the local
+     instance of Jupyter and try again.
 
 * Finally, on your local machine, point your web browser to the URL
-  output on ahsoka (we referenced this above as ``http://127.0.0.1:8888/lab?token=8469f3fb822e2a32c94...``
+  output on ahsoka (we referenced this above as ``http://127.0.0.1:8888/lab?token=8469f3fb822e2a32c94...``)
 
   This should open the Jupyter server on the remote machine in your
   local browser.
