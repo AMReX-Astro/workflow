@@ -31,7 +31,9 @@ On ahsoka:
   The ``8888`` there is the port.  If that is being used, Jupyter
   will pick a higher one.  Make note of the number it picked.
 
-On your local workstation do::
+On your local workstation
+
+* do::
 
     ssh -N -L 8888:127.0.0.1:8888 ahsoka.astro.sunysb.edu
 
