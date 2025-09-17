@@ -35,6 +35,17 @@ On ahsoka:
 
     ssh -N -L 8888:127.0.0.1:8888 ahsoka.astro.sunysb.edu
 
+  .. tip::
+
+     If your username on ``ahsoka`` is not the same as on your
+     local machine, then you need to prefix your username to
+     the remote, e.g., as::
+
+       ssh -N -L 8888:127.0.0.1:8888 username@ahsoka.astro.sunysb.edu
+
+     where you replace ``username`` with your ``ahsoka`` username.
+
+
   replacing the ``8888`` with the port it selected.  Then enter your
   password.  There will be no output---that command will just continue
   to run in the terminal window.
