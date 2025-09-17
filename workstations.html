@@ -52,11 +52,6 @@
 <li class="toctree-l1"><a class="reference internal" href="olcf.html">Working at OLCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="iacs.html">Working at IACS</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Linux Workstations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#gpu-offloading">GPU offloading</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#bender">bender</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#groot">groot</a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="#remote-vis-with-jupyter">Remote vis with Jupyter</a></li>
 </ul>
 </li>
@@ -89,51 +84,72 @@
   <section id="linux-workstations">
 <h1>Linux Workstations<a class="headerlink" href="#linux-workstations" title="Link to this heading"></a></h1>
 <p>In general GCC 10.x works well on Linux workstations.</p>
-<section id="gpu-offloading">
-<h2>GPU offloading<a class="headerlink" href="#gpu-offloading" title="Link to this heading"></a></h2>
-<p>We use the GNU compilers to build with nvcc and CUDA.</p>
-<section id="bender">
-<h3>bender<a class="headerlink" href="#bender" title="Link to this heading"></a></h3>
-<p>Compile as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">7.3</span>
-
-<span class="n">make</span> <span class="n">CUDA_VERSION</span><span class="o">=</span><span class="n">cc60</span> <span class="n">COMPILE_CUDA_PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">cuda</span><span class="o">-</span><span class="mf">11.3</span> \
-  <span class="n">USE_CUDA</span><span class="o">=</span><span class="n">TRUE</span> <span class="n">COMP</span><span class="o">=</span><span class="n">gnu</span> <span class="o">-</span><span class="n">j</span> <span class="mi">4</span>
-</pre></div>
-</div>
-<p>To run the CUDA code path without GPU launching, add:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NO_DEVICE_LAUNCH</span><span class="o">=</span><span class="n">TRUE</span>
-</pre></div>
-</div>
-</section>
-<section id="groot">
-<h3>groot<a class="headerlink" href="#groot" title="Link to this heading"></a></h3>
-<p>We need to work around a bug in the headers in the default GCC 10.2 on groot,
-so we load an older version for the GPU build.</p>
-<p>Compile as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">7.3</span>
-
-<span class="n">make</span> <span class="n">CUDA_VERSION</span><span class="o">=</span><span class="n">cc70</span> <span class="n">COMPILE_CUDA_PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">cuda</span><span class="o">-</span><span class="mf">11.3</span> \
-  <span class="n">USE_CUDA</span><span class="o">=</span><span class="n">TRUE</span> <span class="n">COMP</span><span class="o">=</span><span class="n">gnu</span> <span class="n">USE_MPI</span><span class="o">=</span><span class="n">FALSE</span> <span class="o">-</span><span class="n">j</span> <span class="mi">4</span>
-</pre></div>
-</div>
-</section>
-</section>
 <section id="remote-vis-with-jupyter">
 <h2>Remote vis with Jupyter<a class="headerlink" href="#remote-vis-with-jupyter" title="Link to this heading"></a></h2>
-<p>You can connect to Jupyter on groot to do remote visualization.</p>
-<p>On groot, do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">lab</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">browser</span> <span class="o">--</span><span class="n">ip</span><span class="o">=</span><span class="s2">&quot;groot&quot;</span>
+<p>You can connect to Jupyter on ahsoka via ssh to do remote visualization.</p>
+<p>On ahsoka:</p>
+<ul>
+<li><p>Install jupyter and yt (if you don’t already have them):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">jupyterlab</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">yt</span>
 </pre></div>
 </div>
-<p>on your workstation do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">-</span><span class="n">N</span> <span class="o">-</span><span class="n">L</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">8888</span><span class="p">:</span><span class="n">groot</span><span class="p">:</span><span class="mi">8888</span> <span class="n">groot</span><span class="o">.</span><span class="n">astro</span><span class="o">.</span><span class="n">sunysb</span><span class="o">.</span><span class="n">edu</span>
+</li>
+<li><p>Start up jupyter on the remote (ahsoka) machine:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">lab</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">browser</span> <span class="o">--</span><span class="n">ip</span><span class="o">=</span><span class="mf">127.0.0.1</span>
 </pre></div>
 </div>
-<p>and enter your password.  There will be no output—that command will just continue
-to run in the terminal window.</p>
-<p>Point your web browser to <a class="reference external" href="http://localhost:8888">http://localhost:8888</a> .
-You will be prompted to add the token that appears in the groot window.</p>
+<p>when you do this, it will output a lot to the screen, but
+look for a line that starts like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://127.0.0.1:8888/lab?token=8469f3fb822e2a32c94...
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">8888</span></code> there is the port.  If that is being used, Jupyter
+will pick a higher one.  Make note of the number it picked.</p>
+</li>
+<li><p>On your local workstation do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">-</span><span class="n">N</span> <span class="o">-</span><span class="n">L</span> <span class="mi">8888</span><span class="p">:</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">8888</span> <span class="n">ahsoka</span><span class="o">.</span><span class="n">astro</span><span class="o">.</span><span class="n">sunysb</span><span class="o">.</span><span class="n">edu</span>
+</pre></div>
+</div>
+<p>replacing the <code class="docutils literal notranslate"><span class="pre">8888</span></code> with the port it selected.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If your username on <code class="docutils literal notranslate"><span class="pre">ahsoka</span></code> is not the same as on your
+local machine, then you need to prefix your username to
+the remote, e.g., as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">-</span><span class="n">N</span> <span class="o">-</span><span class="n">L</span> <span class="mi">8888</span><span class="p">:</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">8888</span> <span class="n">username</span><span class="nd">@ahsoka</span><span class="o">.</span><span class="n">astro</span><span class="o">.</span><span class="n">sunysb</span><span class="o">.</span><span class="n">edu</span>
+</pre></div>
+</div>
+<p>where you replace <code class="docutils literal notranslate"><span class="pre">username</span></code> with your <code class="docutils literal notranslate"><span class="pre">ahsoka</span></code> username.</p>
+</div>
+<p>Then enter your password.  There will be no output—that command
+will just continue to run in the terminal window.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>This says that port <code class="docutils literal notranslate"><span class="pre">8888</span></code> on your local machine will connect (via
+SSH tunnel) to <code class="docutils literal notranslate"><span class="pre">127.0.0.1:8888</span></code> on the remote machine.  Here
+<code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> is the <em>loopback address</em> (the IP address on the
+remote machine that resolves to itself)</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you get an error like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bind</span> <span class="p">[</span><span class="mf">127.0.0.1</span><span class="p">]:</span><span class="mi">8888</span><span class="p">:</span> <span class="n">Address</span> <span class="n">already</span> <span class="ow">in</span> <span class="n">use</span>
+<span class="n">channel_setup_fwd_listener_tcpip</span><span class="p">:</span> <span class="n">cannot</span> <span class="n">listen</span> <span class="n">to</span> <span class="n">port</span><span class="p">:</span> <span class="mi">8888</span>
+<span class="n">Could</span> <span class="ow">not</span> <span class="n">request</span> <span class="n">local</span> <span class="n">forwarding</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>then that means that you are running Jupyter already on your local
+machine, and it is already using port <code class="docutils literal notranslate"><span class="pre">8888</span></code>, so kill the local
+instance of Jupyter and try again.</p>
+</div>
+</li>
+<li><p>Finally, on your local machine, point your web browser to the URL
+output on ahsoka (we referenced this above as <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:8888/lab?token=8469f3fb822e2a32c94...</span></code>)</p>
+<p>This should open the Jupyter server on the remote machine in your
+local browser.</p>
+</li>
+</ul>
 </section>
 </section>
 
