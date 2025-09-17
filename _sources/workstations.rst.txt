@@ -72,9 +72,9 @@ On your local workstation
      machine, and it is already using port ``8888``, so kill the local
      instance of Jupyter and try again.
 
-  * Finally, point your web browser to the URL
-    output on ahsoka (we referenced this above as ``http://127.0.0.1:8888/lab?token=8469f3fb822e2a32c94...``)
+* Finally, on your local machine, point your web browser to the URL
+  output on ahsoka (we referenced this above as ``http://127.0.0.1:8888/lab?token=8469f3fb822e2a32c94...``)
 
-    This should open the Jupyter server on the remote machine in your
-    local browser.
+  This should open the Jupyter server on the remote machine in your
+  local browser.
 
