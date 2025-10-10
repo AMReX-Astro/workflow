@@ -19,6 +19,22 @@ On ahsoka:
     pip install jupyterlab
     pip install yt
 
+  .. tip::
+
+     if you want to instead use a later version of python (python 3.12 is installed)
+     then do::
+
+       pip3.12 install ipykernel
+       python3.12 -m ipykernel install --user --name mypython312 --display-name "Python 3.12 (Custom)"
+
+     then make sure that the kernel is installed by checking::
+
+       jupyter kernelspec list
+
+     you can then use ``pip3.12`` to install any packages for python 3.12, e.g.::
+
+       pip3.12 install yt
+
 * Start up jupyter on the remote (ahsoka) machine::
 
     jupyter lab --no-browser --ip=127.0.0.1
@@ -72,9 +88,14 @@ On your local workstation
      machine, and it is already using port ``8888``, so kill the local
      instance of Jupyter and try again.
 
-* Finally, on your local machine, point your web browser to the URL
+* Finally, point your web browser to the URL
   output on ahsoka (we referenced this above as ``http://127.0.0.1:8888/lab?token=8469f3fb822e2a32c94...``)
 
   This should open the Jupyter server on the remote machine in your
   local browser.
+
+  .. tip::
+
+     If you installed a python 3.12 kernel, then when Jupyter launches, select
+     that kernel on the launcher screen.
 
