@@ -104,14 +104,17 @@ there.  This is read at the end of <code class="docutils literal notranslate"><s
 </section>
 <section id="compiling">
 <h2>Compiling<a class="headerlink" href="#compiling" title="Link to this heading"></a></h2>
-<p>Load the modules:</p>
+<p>Load the modules and set the <cite>CRAY_ACCEL_TARGET</cite> environment variable as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
 span.prompt1:before {
   content: "$ ";
 }
 </style><span class="prompt1">module<span class="w"> </span>use<span class="w"> </span>/soft/modulefiles</span>
 <span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu</span>
-<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>nvhpc-mixed</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>cudatoolkit-standalone</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>cpe-cuda</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>gcc-native/12.3</span>
+<span class="prompt1"><span class="nv">CRAY_ACCEL_TARGET</span><span class="o">=</span>nvidia80</span>
 </pre></div></div><p>Then you can compile via:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">COMP</span><span class="o">=</span>cray<span class="w"> </span><span class="nv">USE_CUDA</span><span class="o">=</span>TRUE</span>
 </pre></div></div></section>
@@ -142,8 +145,9 @@ span.prompt1:before {
 <div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">polaris.submit</span></code></span><a class="headerlink" href="#id1" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
 <span class="c1">#PBS -l select=2:system=polaris</span>
+<span class="c1">#PBS -l filesystems=home:eagle:grand</span>
 <span class="c1">#PBS -l place=scatter</span>
-<span class="c1">#PBS -l walltime=0:30:00</span>
+<span class="c1">#PBS -l walltime=00:30:00</span>
 <span class="c1">#PBS -q debug</span>
 <span class="c1">#PBS -A AstroExplosions</span>
 
@@ -151,20 +155,26 @@ span.prompt1:before {
 <span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.N14.coarse
 
 <span class="c1"># Enable GPU-MPI (if supported by application)</span>
-<span class="c1">##export MPICH_GPU_SUPPORT_ENABLED=1</span>
+
+module<span class="w"> </span>use<span class="w"> </span>/soft/modulefiles
+module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu
+module<span class="w"> </span>load<span class="w"> </span>cudatoolkit-standalone
+module<span class="w"> </span>load<span class="w"> </span>cpe-cuda
+module<span class="w"> </span>load<span class="w"> </span>gcc-native/12.3
+<span class="nv">CRAY_ACCEL_TARGET</span><span class="o">=</span>nvidia80
 
 <span class="c1"># Change to working directory</span>
 <span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">PBS_O_WORKDIR</span><span class="si">}</span>
 
-<span class="c1"># MPI and OpenMP settings</span>
+<span class="c1"># MPI and OpenMP settings.  A total of 64 logical cores are available or 32 physical.</span>
 <span class="nv">NNODES</span><span class="o">=</span><span class="sb">`</span>wc<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span><span class="nv">$PBS_NODEFILE</span><span class="sb">`</span>
-<span class="nv">NRANKS_PER_NODE</span><span class="o">=</span><span class="m">4</span>
-<span class="nv">NDEPTH</span><span class="o">=</span><span class="m">8</span>
-<span class="nv">NTHREADS</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">NRANKS_PER_NODE</span><span class="o">=</span><span class="k">$(</span>nvidia-smi<span class="w"> </span>-L<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="k">)</span><span class="w">  </span><span class="c1"># We set this up For GPU simulations (4 GPUS thus 4 NRANKS_PER_NODE).</span>
+<span class="nv">NDEPTH</span><span class="o">=</span><span class="m">8</span><span class="w">                                  </span><span class="c1"># Number of CPU logical cores tied to each MPI-process.</span>
+<span class="nv">NTHREADS</span><span class="o">=</span><span class="m">1</span><span class="w">                                </span><span class="c1"># Number of OpenMP processes tied to each MPI process.</span>
 
 <span class="nv">NTOTRANKS</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="nv">NNODES</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">NRANKS_PER_NODE</span><span class="w"> </span><span class="k">))</span>
 
-<span class="c1"># For applications that need mpiexec to bind MPI ranks to GPUs</span>
+<span class="c1"># For applications that need mpiexec to bind MPI ranks to GPUs. This is done by the script set_affinity_gpu_polaris.sh</span>
 mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="si">${</span><span class="nv">NTOTRANKS</span><span class="si">}</span><span class="w"> </span>--ppn<span class="w"> </span><span class="si">${</span><span class="nv">NRANKS_PER_NODE</span><span class="si">}</span><span class="w"> </span>--depth<span class="o">=</span><span class="si">${</span><span class="nv">NDEPTH</span><span class="si">}</span><span class="w"> </span>--cpu-bind<span class="w"> </span>depth<span class="w"> </span>--env<span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="si">${</span><span class="nv">NTHREADS</span><span class="si">}</span><span class="w"> </span>-env<span class="w"> </span><span class="nv">OMP_PLACES</span><span class="o">=</span>threads<span class="w"> </span>./set_affinity_gpu_polaris.sh<span class="w"> </span><span class="si">${</span><span class="nv">EXEC</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">INPUTS</span><span class="si">}</span>
 </pre></div>
 </div>
@@ -182,29 +192,32 @@ the last checkpoint is:</p>
 <div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">polaris.submit</span></code></span><a class="headerlink" href="#id2" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
 <span class="c1">#PBS -l select=2:system=polaris</span>
+<span class="c1">#PBS -l filesystems=home:eagle:grand</span>
 <span class="c1">#PBS -l place=scatter</span>
-<span class="c1">#PBS -l walltime=6:00:00</span>
+<span class="c1">#PBS -l walltime=06:00:00</span>
 <span class="c1">#PBS -q prod</span>
 <span class="c1">#PBS -A AstroExplosions</span>
-<span class="c1">#PBS -j eo</span>
 
 <span class="nv">EXEC</span><span class="o">=</span>./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
 <span class="nv">INPUTS</span><span class="o">=</span>inputs_2d.N14.coarse
 
-module<span class="w"> </span>swap<span class="w"> </span>PrgEnv-nvhpc<span class="w"> </span>PrgEnv-gnu
-module<span class="w"> </span>load<span class="w"> </span>nvhpc-mixed
-
 <span class="c1"># Enable GPU-MPI (if supported by application)</span>
-<span class="c1">##export MPICH_GPU_SUPPORT_ENABLED=1</span>
+
+module<span class="w"> </span>use<span class="w"> </span>/soft/modulefiles
+module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu
+module<span class="w"> </span>load<span class="w"> </span>cudatoolkit-standalone
+module<span class="w"> </span>load<span class="w"> </span>cpe-cuda
+module<span class="w"> </span>load<span class="w"> </span>gcc-native/12.3
+<span class="nv">CRAY_ACCEL_TARGET</span><span class="o">=</span>nvidia80
 
 <span class="c1"># Change to working directory</span>
 <span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">PBS_O_WORKDIR</span><span class="si">}</span>
 
-<span class="c1"># MPI and OpenMP settings</span>
+<span class="c1"># MPI and OpenMP settings.  A total of 64 logical cores are available or 32 physical.</span>
 <span class="nv">NNODES</span><span class="o">=</span><span class="sb">`</span>wc<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span><span class="nv">$PBS_NODEFILE</span><span class="sb">`</span>
-<span class="nv">NRANKS_PER_NODE</span><span class="o">=</span><span class="m">4</span>
-<span class="nv">NDEPTH</span><span class="o">=</span><span class="m">8</span>
-<span class="nv">NTHREADS</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">NRANKS_PER_NODE</span><span class="o">=</span><span class="k">$(</span>nvidia-smi<span class="w"> </span>-L<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="k">)</span><span class="w">  </span><span class="c1"># We set this up For GPU simulations (4 GPUS thus 4 NRANKS_PER_NODE).</span>
+<span class="nv">NDEPTH</span><span class="o">=</span><span class="m">8</span><span class="w">                                  </span><span class="c1"># Number of CPU logical cores tied to each MPI-process.</span>
+<span class="nv">NTHREADS</span><span class="o">=</span><span class="m">1</span><span class="w">                                </span><span class="c1"># Number of OpenMP processes tied to each MPI process.</span>
 
 <span class="nv">NTOTRANKS</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="nv">NNODES</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">NRANKS_PER_NODE</span><span class="w"> </span><span class="k">))</span>
 
