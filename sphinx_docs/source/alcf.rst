@@ -23,13 +23,16 @@ there.  This is read at the end of ``/etc/bash.bashrc``
 Compiling
 =========
 
-Load the modules:
+Load the modules and set the `CRAY_ACCEL_TARGET` environment variable as follows:
 
 .. prompt:: bash
 
    module use /soft/modulefiles
    module load PrgEnv-gnu
-   module load nvhpc-mixed
+   module load cudatoolkit-standalone
+   module load cpe-cuda
+   module load gcc-native/12.3
+   CRAY_ACCEL_TARGET=nvidia80
 
 Then you can compile via:
 
@@ -125,7 +128,7 @@ To create the virtual environment:
 .. prompt:: bash
 
    module use /soft/modulefiles
-   module load conda 
+   module load conda
    conda activate
    VENV_DIR="venvs/polaris"
    mkdir -p "${VENV_DIR}"
@@ -137,7 +140,7 @@ is loaded:
 
 .. prompt:: bash
 
-   module load conda 
+   module load conda
    conda activate
    VENV_DIR="venvs/polaris"
    source "${VENV_DIR}/bin/activate"
