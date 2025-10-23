@@ -1,28 +1,31 @@
 #!/bin/sh
 #PBS -l select=2:system=polaris
+#PBS -l filesystems=home:eagle:grand
 #PBS -l place=scatter
-#PBS -l walltime=6:00:00
+#PBS -l walltime=06:00:00
 #PBS -q prod
 #PBS -A AstroExplosions
-#PBS -j eo
 
 EXEC=./Castro2d.gnu.MPI.CUDA.SMPLSDC.ex
 INPUTS=inputs_2d.N14.coarse
 
-module swap PrgEnv-nvhpc PrgEnv-gnu
-module load nvhpc-mixed
-
 # Enable GPU-MPI (if supported by application)
-##export MPICH_GPU_SUPPORT_ENABLED=1
+
+module use /soft/modulefiles
+module load PrgEnv-gnu
+module load cudatoolkit-standalone
+module load cpe-cuda
+module load gcc-native/12.3
+CRAY_ACCEL_TARGET=nvidia80
 
 # Change to working directory
 cd ${PBS_O_WORKDIR}
 
-# MPI and OpenMP settings
+# MPI and OpenMP settings.  A total of 64 logical cores are available or 32 physical.
 NNODES=`wc -l < $PBS_NODEFILE`
-NRANKS_PER_NODE=4
-NDEPTH=8
-NTHREADS=1
+NRANKS_PER_NODE=$(nvidia-smi -L | wc -l)  # We set this up For GPU simulations (4 GPUS thus 4 NRANKS_PER_NODE).
+NDEPTH=8                                  # Number of CPU logical cores tied to each MPI-process.
+NTHREADS=1                                # Number of OpenMP processes tied to each MPI process.
 
 NTOTRANKS=$(( NNODES * NRANKS_PER_NODE ))
 
