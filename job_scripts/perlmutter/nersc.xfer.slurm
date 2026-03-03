@@ -3,6 +3,7 @@
 #SBATCH -J xrb-hpss-xfer
 #SBATCH -t 12:00:00
 #SBATCH --licenses=SCRATCH
+#SBATCH -C cron
 
 # do our archiving
 cd "$SLURM_SUBMIT_DIR" || exit
