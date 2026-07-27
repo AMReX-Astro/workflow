@@ -15,22 +15,52 @@ see: https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#programming-env
    ROCm versions prior to 6.3.1 had a register allocation bug that caused problems
    with large kernels.  They should not be used.
 
-Load modules:
+ROCm
+^^^^
 
-.. prompt:: bash
+There are 2 different versions of ROCm that seem to work well now:
 
-   module load cpe
-   module load PrgEnv-gnu
-   module load cray-mpich
-   module load craype-accel-amd-gfx90a
-   module load rocm/6.3.1
+* ROCm 6.3.1
 
-Then you need to modify the library include path to include ``CRAY_LD_LIBRARY_PATH``
-since the module wrappers do not do this:
+  Load modules:
 
-.. prompt:: bash
+  .. prompt:: bash
 
-   export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
+     module load cpe
+     module load PrgEnv-gnu
+     module load cray-mpich
+     module load craype-accel-amd-gfx90a
+     module load rocm/6.3.1
+
+
+* ROCm 7.2.0
+
+  Load modules:
+
+  .. prompt:: bash
+
+     module load cpe/26.03
+     module load PrgEnv-gnu
+     module load craype-accel-amd-gfx90a
+     module load rocm/7.2.0
+
+  .. note::
+
+     Loading ``cpe/26.03`` will also load the version of ``cray-mpich`` that works with
+     ROCm 7.2.0 (it needs to be 9.1.0 or later).
+
+.. tip::
+
+   In the past, we've needed to do:
+
+   .. prompt:: bash
+
+      export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
+
+   but this does not seem necessary anymore.
+
+Building
+^^^^^^^^
 
 build via:
 
