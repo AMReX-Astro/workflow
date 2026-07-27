@@ -53,6 +53,8 @@
 <li class="toctree-l1 current"><a class="reference internal" href="olcf.html">Working at OLCF</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Compiling at OLCF</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#frontier">Frontier</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rocm">ROCm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#building">Building</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#hip-function-inlining">HIP Function Inlining</a></li>
 </ul>
 </li>
@@ -104,6 +106,11 @@
 <p>ROCm versions prior to 6.3.1 had a register allocation bug that caused problems
 with large kernels.  They should not be used.</p>
 </div>
+<section id="rocm">
+<h3>ROCm<a class="headerlink" href="#rocm" title="Link to this heading"></a></h3>
+<p>There are 2 different versions of ROCm that seem to work well now:</p>
+<ul>
+<li><p>ROCm 6.3.1</p>
 <p>Load modules:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
 span.prompt1:before {
@@ -114,12 +121,33 @@ span.prompt1:before {
 <span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>cray-mpich</span>
 <span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>craype-accel-amd-gfx90a</span>
 <span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>rocm/6.3.1</span>
-</pre></div></div><p>Then you need to modify the library include path to include <code class="docutils literal notranslate"><span class="pre">CRAY_LD_LIBRARY_PATH</span></code>
-since the module wrappers do not do this:</p>
+</pre></div></div></li>
+<li><p>ROCm 7.2.0</p>
+<p>Load modules:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>cpe/26.03</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>PrgEnv-gnu</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>craype-accel-amd-gfx90a</span>
+<span class="prompt1">module<span class="w"> </span>load<span class="w"> </span>rocm/7.2.0</span>
+</pre></div></div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Loading <code class="docutils literal notranslate"><span class="pre">cpe/26.03</span></code> will also load the version of <code class="docutils literal notranslate"><span class="pre">cray-mpich</span></code> that works with
+ROCm 7.2.0 (it needs to be 9.1.0 or later).</p>
+</div>
+</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In the past, we’ve needed to do:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1"><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$CRAY_LD_LIBRARY_PATH</span>:<span class="nv">$LD_LIBRARY_PATH</span></span>
-</pre></div></div><p>build via:</p>
+</pre></div></div><p>but this does not seem necessary anymore.</p>
+</div>
+</section>
+<section id="building">
+<h3>Building<a class="headerlink" href="#building" title="Link to this heading"></a></h3>
+<p>build via:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">make<span class="w"> </span><span class="nv">USE_HIP</span><span class="o">=</span>TRUE</span>
-</pre></div></div><section id="hip-function-inlining">
+</pre></div></div></section>
+<section id="hip-function-inlining">
 <h3>HIP Function Inlining<a class="headerlink" href="#hip-function-inlining" title="Link to this heading"></a></h3>
 <p>By default, the ROCm compiler inlines all function calls in device code
 (for better compatibility with codes that use file- or function-scoped
